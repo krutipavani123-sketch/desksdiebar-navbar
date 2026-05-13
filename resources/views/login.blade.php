@@ -21,7 +21,7 @@
     <h2 class="text-3xl font-bold">Welcome back</h2>
     <p class="text-gray-500 mt-1">Sign in to your support desk account to continue.</p>
 
-    <form class="mt-8 space-y-5" method="post" action="{{ url('welcome') }}">
+    <form class="mt-8 space-y-5" method="post" action="{{ url('login') }}">
         @csrf
 
         
@@ -31,6 +31,7 @@
             <label class="text-sm font-medium">Email Address</label>
             <input type="email"
                    placeholder="you@company.com"
+                     name="email"
                    class="w-full mt-2 px-4 py-3 border rounded-xl">
         </div>
 
@@ -39,19 +40,20 @@
             <label class="text-sm font-medium">Password</label>
             <input type="password"
                    placeholder="Enter your password"
+                      name="password" 
                    class="w-full mt-2 px-4 py-3 border rounded-xl">
         </div>
 
-        <a href="/welcome"
-   class="w-full block text-center bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
-    
-   Login In →
-</a>
+            {{-- <input type="submit" name="submit" value="submit"> --}}
 
-        <p class="text-center text-sm text-gray-500 mt-4">
-            Don’t have an account?
-            <a href="#" class="text-indigo-600 font-medium">Create an account</a>
-        </p>
+        <button type="submit"  class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
+            Login→
+        </button>
+
+          <p class="text-center text-sm text-gray-500 mt-4">
+        Don’t have an account?
+        <a href="{{ url('register') }}" class="text-indigo-600 font-medium">Create an account</a>
+    </p>
 
     </form>
 

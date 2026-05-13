@@ -20,6 +20,7 @@ class LoginService
             "password" => Hash::make($data['password']),
         ]);
 
+
         if ($user->id == 1) {
             $user->assignRole('admin');
         } else {
@@ -33,14 +34,7 @@ class LoginService
 
     public function login(array $data)
     {
-        if (!Auth::attempt([
-            'email' => $data['email'],
-            'password' => $data['password']
-        ])) {
-            throw new \Exception("Invalid credentials");
-        }
-
-        return Auth::user();
+        
     }
     public function logout()
     {

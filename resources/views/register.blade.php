@@ -29,7 +29,7 @@
             <label class="text-sm font-medium">Name</label>
             <input type="text"
                    placeholder="xyz"
-                    name="name"
+                   name="name"
                    class="w-full mt-2 px-4 py-3 border rounded-xl">
         </div>
 
@@ -46,15 +46,14 @@
         <div>
             <label class="text-sm font-medium">Password</label>
             <input type="password"
-                   name="password" 
                    placeholder="Enter your password"
+                   name="password"
                    class="w-full mt-2 px-4 py-3 border rounded-xl">
         </div>
 
-     <button type="submit"
-        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
-    Sign Up →
-</button>
+        <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
+            Sign In →
+        </button>
 
         
 
