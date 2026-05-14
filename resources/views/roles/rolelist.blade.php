@@ -54,7 +54,7 @@
         </tr>
     </thead>
 
-    <tbody class="bg-white">
+   <tbody class="bg-white">
         @foreach($roles as $role)
         <tr>
             <td class="px-6 py-3 text-left">{{ $role->id }}</td>
@@ -72,7 +72,7 @@
             </td>
         </tr>
         @endforeach
-    </tbody>
+    </tbody>    
 </table>
 {{-- <div class="my-3">
 {{ $roles->links() }}

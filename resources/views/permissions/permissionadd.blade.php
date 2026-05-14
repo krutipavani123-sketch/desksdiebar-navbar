@@ -29,7 +29,7 @@
                             <label  class="text-gray-500 mt-1">Permission</label>
                             <div class="my-3">
 
-                                <input value="{{ old('name') }}" name="name" type="text" class="w-full mt-2 px-2 py-2 border rounded-xl">
+                                <input value="{{ old('name') }}" name="name" type="text" class="w-full mt-2 px-2 py-2 border rounded-xl">//keep old value after validation error 
 
                                     @error('name')
                                     <p class="text-red-400 font-medium">{{ $message }}</p>
@@ -41,8 +41,7 @@
     Save
 </button>
 
-        Save
-    </button>
+  
                         </div>
                    </form>
                 </div>

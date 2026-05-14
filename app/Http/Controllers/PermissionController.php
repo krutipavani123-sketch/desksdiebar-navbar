@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Validator;
 class PermissionController extends Controller
 {
 
-    // protected $permissionservice;
+    protected $permissionservice;
 
-    // public function __construct(PermissionService $permissionservice)
-    // {
-    //     $this->PermissionService =  $permissionservice;
-    // }
+    public function __construct(PermissionService $permissionservice)
+    {
+        $this->permissionservice =  $permissionservice;
+    }
     public function permissionadd(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -24,18 +24,25 @@ class PermissionController extends Controller
 
         ]);
 
-        if ($validator->passes()) {
-            Permission::create([
-                'name' => $request->name,
-                'guard_name' => 'web',
-            ]);
-            return redirect()->route('permissions.permissionlist')->with('success', 'Permission Added');
-        } else {
-            return redirect()->route('permissions.permissioncreate')
-                ->withErrors($validator)
-                ->withInput()
-                ->with('error', 'Permission validation failed.');
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        $this->permissionservice->permissionadd(request()->all());
+
+        return redirect()->route('permissions.permissionlist')->with('success', 'Permission Added');
+        // if ($validator->passes()) {
+        //     Permission::create([
+        //         'name' => $request->name,
+        //         'guard_name' => 'web',
+        //     ]);
+        // return redirect()->route('permissions.permissionlist')->with('success', 'Permission Added');
+        // } else {
+        //     return redirect()->route('permissions.permissioncreate')
+        //         ->withErrors($validator)
+        //         ->withInput()
+        //         ->with('error', 'Permission validation failed.');
+        // }
         // $this-> PermissionService->addPermission(request()->all());
         // return redirect()->route("permissions.permissionadd");
         // return view('permissions.permissionadd');
@@ -53,9 +60,9 @@ class PermissionController extends Controller
     public function permissionlist()
     {
 
-        $permissions = Permission::all();
-
-        return view('permissions.permissionlist', compact('permissions'));
+        // $permissions = Permission::all();
+        return $this->permissionservice->permissionlist();
+        //  return view('permissions.permissionlist', compact('permissions'));
     }
 
     public function edit($id)

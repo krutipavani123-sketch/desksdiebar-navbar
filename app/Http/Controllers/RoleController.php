@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -13,37 +14,67 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+
+    protected $roleservice;
+    public function __construct(RoleService $roleservice)
+    {
+        $this->roleservice = $roleservice;
+    }
     public function addrole(Request $request)
     {
         $validator = Validator::make(request()->all(), [
             "name" => "required|unique:roles|min:3",
+            'permission' => 'nullable|array',
         ]);
 
-        if ($validator->passes()) {
-            $role = Role::create([
-                "name" => $request->name,
-            ]);
-            if (!empty($request->permission)) {
-                foreach ($request->permission as $name) {
-                    $role->givePermissionTo($name);
-                }
-            }
-            return redirect()->route('roles.list')->with('success', 'Role Added');
-        } else {
-            return redirect()->route('roles.create')->with('error', 'Role Not Added');
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
+        //  if (!empty($request->permission)) {
+        //              foreach ($request->permission as $name) {
+        //             $role->givePermissionTo($name);
+        //         }
+        // $role = $this->roleservice->addrole($request->all());
+        // $permissions = $request->input('permission', []);
+
+
+        // if ($role) {
+        //     $role->syncPermissions($permissions);
+        // }
+        $this->roleservice->addrole($request->all());
+        return redirect()->route('roles.list')->with('success', 'Role Added');
     }
+
+    // if ($validator->passes()) {
+    //     $role = Role::create([
+    //         "name" => $request->name,
+    //     ]);
+
+
+    // }
+    // return redirect()->route('roles.list')->with('success', 'Role Added');
+    // } else {
+    //     return redirect()->route('roles.create')->with('error', 'Role Not Added');
+    // }
+
+
+
 
     public function list(Request $request)
     {
-        $roles = Role::all();
-        return view('roles.rolelist', compact('roles'));
+        return $this->roleservice->list();
     }
+    // public function list(Request $request)
+    // {
+    //     $roles = Role::all();
+    //     return view('roles.rolelist', compact('roles'));
+    // }
 
     public function create(Request $request)
     {
-        $permissions = Permission::all();
-        return view('roles.createrole', compact('permissions'));
+        return $this->roleservice->create();
+        // $permissions = Permission::all();
+        // return view('roles.createrole', compact('permissions'));
     }
     public function edit($id)
     {

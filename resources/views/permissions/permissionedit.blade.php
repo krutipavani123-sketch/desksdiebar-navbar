@@ -26,7 +26,7 @@
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 <form action="{{ route('permissions.update',$permission->id) }}" method="post">
-@csrf
+@csrf //laravel security token
 @method('PUT')
                         <div>
                             <label for="" class="text-lg font-medium">Permission</label>
