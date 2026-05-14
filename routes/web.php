@@ -36,7 +36,7 @@ Route::post('permissions/permissionadd', [PermissionController::class, 'permissi
 
 Route::get('permissions/permissionlist', [PermissionController::class, 'permissionlist'])->name('permissions.permissionlist');
 
-Route::get('permissions/permissionedit/{id}', [PermissionController::class, 'permissionedit'])->name('permissions.permissionedit');
+Route::get('permissions/permissionedit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
 
 Route::put('update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
 

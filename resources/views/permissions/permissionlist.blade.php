@@ -16,20 +16,6 @@
 @endsection
 @section('main')
    
-{{--  
- 
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
-
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.js"></script> --}}
-
-
-
-
 
 
     <div class="py-12">
@@ -43,10 +29,6 @@
        
              <div class="p-2 text-gray-900 dark:text-gray-100">
 
-      {{-- <div class="flex justify-content-end" style="width: 100%;">
-    <a href="{{ url('permissions.permissioncreate') }}" type="submit" class="bg-indigo-600 hover:bg-indigo-400 text-white py-2 rounded-xl font-semibold" style="width: 100px;">Create</a>
-</div>            --}}
-<!-- Cleaned button utility code with built-in margin bottom (mb-4) to separate from table -->
 <div class="mb-4 d-flex justify-content-end">
 
     <button type="button" 
@@ -87,19 +69,17 @@
 
             <td class="px-6 py-3 text-left">
 
-                <a href="{{ url('permissions.edit', $permission->id) }}">
+                <a href="{{ route('permissions.edit', $permission->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
 
-                <a href="{{ url('permissions.delete',$permission->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ route('permissions.delete',$permission->id) }}" ><i class="bi bi-trash2-fill"></i></a>
             </td>
         </tr>
         @endforeach
     </tbody>
 </table>
-{{-- <div class="my-3">
-{{ $permissions->links() }}
-</div> --}}
+
 
             </div>
         </div>
@@ -108,13 +88,7 @@
 
 
 @endsection
-{{-- <table id="table"
-    class="table table-bordered w-full"
-    data-toggle="table"
-    data-search="true"
-    data-pagination="true"
-    data-pagination-server="true"
-    data-page-list="[5,10,25,50,All]"></table> --}}
+
 
 
 
