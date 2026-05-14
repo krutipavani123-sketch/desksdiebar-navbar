@@ -83,7 +83,7 @@
 
      {{-- @can('create task') --}}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('roles/addrole') }}">Add User</a>
+                    <a class="nav-link" href="{{ route('roles.list') }}">Add User</a>
                 </li>
      {{-- @endcan  --}}
  

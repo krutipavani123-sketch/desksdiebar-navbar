@@ -44,8 +44,18 @@ Route::get('delete/{id}', [PermissionController::class, 'delete'])->name('permis
 
 
 
-//Route::get('roles/create', [RoleController::class, 'create'])->name('roles.create');
+// Route::get('roles/createrole', [RoleController::class, 'create'])->name('roles.create');
 // Route::post('roles/addrole', [RoleController::class, 'addrole'])->name('roles.addrole');
-// Route::get('roles/list', [RoleController::class, 'list'])->name('roles.list');
-// Route::get('roles/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+// Route::get('roles/rolelist', [RoleController::class, 'list'])->name('roles.list');
+// Route::get('roles/editrole/{id}', [RoleController::class, 'edit'])->name('roles.edit');
 // Route::post('roles/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+// Route::get('roles/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
+
+
+Route::get('roles/createrole', [RoleController::class, 'create'])->name('roles.create');
+Route::post('roles/addrole', [RoleController::class, 'addrole'])->name('roles.addrole');
+Route::get('roles/rolelist', [RoleController::class, 'list'])->name('roles.list');
+Route::get('roles/editrole/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+Route::post('roles/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+
+Route::get('roles/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
