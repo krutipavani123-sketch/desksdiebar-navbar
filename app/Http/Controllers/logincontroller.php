@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Symfony\Contracts\Service\Attribute\Required;
 use App\Services\LoginService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class logincontroller extends Controller
 {
@@ -29,7 +30,6 @@ class logincontroller extends Controller
     }
 
 
-
     public function register(Request $request)
     {
         $request->validate([
@@ -37,8 +37,12 @@ class logincontroller extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required'
         ]);
-
-        $this->LoginService->register($request->only('name', 'email', 'password'));
+        $user = User::create([
+            "name" => $request->name,
+            "email" =>  $request->email,
+            "password" => Hash::make($request->password),
+        ]);
+        // $this->LoginService->register($request->only('name', 'email', 'password'));
         //       dd($request->only('name', 'email', 'password'));
         return redirect('login')->with('success', 'Account created');
     }
