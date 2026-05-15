@@ -9,3 +9,15 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* @import "tailwindcss"; */
+
+/* To prevent Tailwind from breaking your Bootstrap styles, add this: */
+@layer base {
+
+    *,
+    ::before,
+    ::after {
+        box-sizing: border-box;
+    }
+}

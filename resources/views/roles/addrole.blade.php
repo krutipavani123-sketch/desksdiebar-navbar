@@ -14,15 +14,16 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
     }
 
     .role-card {
         width: 100%;
-        max-width: 650px;
+        max-width: 700px;
         background: #ffffff;
         border-radius: 18px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        padding: 25px;
+        padding: 28px;
         transition: 0.3s;
     }
 
@@ -41,58 +42,77 @@
     .form-label {
         font-weight: 600;
         margin-bottom: 6px;
+        display: block;
+        color: #444;
     }
 
     input[type="text"] {
         width: 100%;
-        padding: 10px 14px;
+        padding: 11px 14px;
         border: 1px solid #ddd;
         border-radius: 10px;
         outline: none;
         transition: 0.2s;
+        font-size: 14px;
     }
 
     input[type="text"]:focus {
         border-color: #0d6efd;
-        box-shadow: 0 0 5px rgba(13,110,253,0.3);
+        box-shadow: 0 0 6px rgba(13,110,253,0.25);
     }
 
     .permission-box {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
         margin-top: 10px;
     }
 
     .permission-item {
         background: #f8f9fa;
-        padding: 8px 10px;
-        border-radius: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
         cursor: pointer;
         transition: 0.2s;
+        border: 1px solid transparent;
     }
 
     .permission-item:hover {
-        background: #e9ecef;
+        background: #eef2ff;
+        border-color: #dbe4ff;
+        transform: scale(1.02);
+    }
+
+    .permission-item input {
+        transform: scale(1.1);
+        cursor: pointer;
     }
 
     .btn-save {
         width: 100%;
         background: linear-gradient(135deg, #0d6efd, #4a90e2);
         border: none;
-        padding: 10px;
+        padding: 12px;
         color: white;
         font-weight: 600;
-        border-radius: 10px;
-        margin-top: 15px;
+        border-radius: 12px;
+        margin-top: 18px;
         transition: 0.3s;
+        letter-spacing: 0.3px;
     }
 
     .btn-save:hover {
         transform: scale(1.02);
+        box-shadow: 0 8px 18px rgba(13,110,253,0.25);
+    }
+
+    .error-text {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
     }
 </style>
 
@@ -109,9 +129,14 @@
 
             <div class="mb-3">
                 <label class="form-label">Role Name</label>
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter role name">
+
+                <input type="text"
+                       name="name"
+                       value="{{ old('name') }}"
+                       placeholder="Enter role name">
+
                 @error('name')
-                    <p class="text-danger mt-1">{{ $message }}</p>
+                    <p class="error-text">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -121,7 +146,9 @@
                 <div class="permission-box">
                     @foreach($permissions as $permission)
                         <label class="permission-item">
-                            <input type="checkbox" name="permission[]" value="{{ $permission->name }}">
+                            <input type="checkbox"
+                                   name="permission[]"
+                                   value="{{ $permission->name }}">
                             <span>{{ $permission->name }}</span>
                         </label>
                     @endforeach

@@ -17,9 +17,11 @@
 <script>
     tailwind.config = {
         corePlugins: {
-            preflight: false, // STOPS Tailwind from breaking Bootstrap styles
+            preflight: false, 
         }
     }
+
+    
 </script>
     <style>
         body {
@@ -47,6 +49,10 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
     </style>
+
+ {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+
+
 </head>
 
 <body>
@@ -77,10 +83,13 @@
 
             <ul class="navbar-nav me-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('list') }}">Home</a>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('customer.ticketlist') }}">Ticket</a>
                 </li>
 
+                <li class="nav-item">   
+                    <a class="nav-link" href="{{ route('users.list') }}">Add User</a>
+                </li>
      {{-- @can('create task') --}}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('roles.list') }}">Add Role</a>

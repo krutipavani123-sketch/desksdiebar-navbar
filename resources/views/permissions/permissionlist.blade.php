@@ -54,7 +54,7 @@
     <thead class="bg-gray-50">
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">No</th>
-            <th class="px-6 py-3 text-left">Name</th>
+            <th class="px-6 py-3 text-left">Permission</th>
             <th class="px-6 py-3 text-left">Created</th>
             <th class="px-6 py-3 text-left">Action</th>
         </tr>

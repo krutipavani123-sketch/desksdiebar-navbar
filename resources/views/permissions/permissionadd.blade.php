@@ -1,52 +1,129 @@
 @extends('layout')
 @section('title', 'Add Permissions')
 
-
-
 @section('header')
      <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Add Permissions') }}
         </h2>
     </x-slot>
-
 @endsection
+
 @section('main')
-   
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-   @include('message')
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                   <form  action='{{ route('permissions.permissionadd') }}' method="post">
-@csrf
-{{-- <div class="flex justify-content-end" style="width: 100%;">
-    <a href="{{ url('permissions.permissioncreate') }}" type="submit" class="bg-indigo-600 hover:bg-indigo-400 text-white py-2 rounded-xl font-semibold" style="width: 100px;">Create</a>
-</div> --}}
+<style>
+    body {
+        background: #f4f6fb;
+    }
 
-                        <div>
-                            <label  class="text-gray-500 mt-1">Permission</label>
-                            <div class="my-3">
+    .permission-wrapper {
+        min-height: 85vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
 
-                                <input value="{{ old('name') }}" name="name" type="text" class="w-full mt-2 px-2 py-2 border rounded-xl">//keep old value after validation error 
+    .permission-card {
+        width: 100%;
+        max-width: 550px;
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        padding: 25px;
+        transition: 0.3s;
+    }
 
-                                    @error('name')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                    @enderror
-                            </div>
+    .permission-card:hover {
+        transform: translateY(-3px);
+    }
 
-                           
-                        <button type="submit" class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
-    Save
-</button>
+    .permission-title {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-  
-                        </div>
-                   </form>
-                </div>
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: block;
+        margin-top: 10px;
+        color: #444;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 5px rgba(13,110,253,0.3);
+    }
+
+    .btn-save {
+        width: 100%;
+        background: linear-gradient(135deg, #0d6efd, #4a90e2);
+        border: none;
+        padding: 10px;
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        margin-top: 20px;
+        transition: 0.3s;
+    }
+
+    .btn-save:hover {
+        transform: scale(1.02);
+    }
+
+    .error-text {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="permission-wrapper">
+
+    <div class="permission-card">
+
+        @include('message')
+
+        <form action="{{ route('permissions.permissionadd') }}" method="post">
+            @csrf
+
+            <div class="permission-title">
+                Add Permission
             </div>
-        </div>
+
+            <div>
+                <label class="form-label">Permission</label>
+
+                <input value="{{ old('name') }}"
+                       name="name"
+                       type="text">
+
+                @error('name')
+                    <p class="error-text">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn-save">
+                Save
+            </button>
+
+        </form>
+
     </div>
+
+</div>
 
 @endsection

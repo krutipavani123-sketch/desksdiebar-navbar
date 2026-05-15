@@ -1,5 +1,5 @@
  @extends('layout')
-@section('title', ' Role List')
+@section('title', ' Ticekt List')
 
 
 
@@ -7,7 +7,7 @@
 @section('header')
      <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Roles') }}
+            {{ __('Ticket') }}
         </h2>
     </x-slot>
 
@@ -27,9 +27,9 @@
    <div class="mb-4 d-flex justify-content-end">
 
     <button type="button" 
-            onclick="window.location.href='{{ route('roles.create') }}'" 
+            onclick="window.location.href='{{ route('customer.createticket') }}'" 
             class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
-         Create Role
+         CreateTicket
     </button>
 </div>
                
@@ -46,29 +46,42 @@
     <thead class="bg-gray-50">
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">No</th>
-            <th class="px-6 py-3 text-left">Role</th>
-            <th class="px-6 py-3 text-left">Permissions</th>
+            <th class="px-6 py-3 text-left">Subject</th>
+            <th class="px-6 py-3 text-left">Description</th>
 
-            <th class="px-6 py-3 text-left">Created</th>
-            <th class="px-6 py-3 text-left">Action</th>
+            <th class="px-6 py-3 text-left">Priority</th>
+            <th class="px-6 py-3 text-left">Category</th>
+            <th class="px-6 py-3 text-left">Attachment</th>
+            <th class="px-6 py-3 text-left">Status</th>
         </tr>
     </thead>
 
    <tbody class="bg-white">
-        @foreach($roles as $role)
+        @foreach($tickets as $ticket)
         <tr>
-            <td class="px-6 py-3 text-left">{{ $role->id }}</td>
-            <td class="px-6 py-3 text-left">{{ $role->name }}</td>
-            <td class="px-6 py-3 text-left">{{ $role->permissions->pluck('name')->implode(',') }}</td>
-            <td class="px-6 py-3 text-left">{{ $role->created_at->format('d M, Y') }}</td>
+            <td class="px-6 py-3 text-left">{{  $ticket->id }}</td>
+            <td class="px-6 py-3 text-left">{{ $ticket->subject }}</td>
+            <td class="px-6 py-3 text-left">{{  $ticket->description }}</td>
+            <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
+          <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
+    
+
+
+<td>
+    <img src="{{ $ticket->attachment ? asset('storage/' . $ticket->attachment) : 'https://via.placeholder.com/80' }}" width="70" height="50">
+</td>
+
+
+<td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
+
 
             <td class="px-6 py-3 text-left">
 
-                <a href="{{ route('roles.edit', $role->id) }}">
+                {{-- <a href="{{ route('roles.edit', $role->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
 
-                <a href="{{ route('roles.delete',$role->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ route('roles.delete',$role->id) }}" ><i class="bi bi-trash2-fill"></i></a> --}}
             </td>
         </tr>
         @endforeach
