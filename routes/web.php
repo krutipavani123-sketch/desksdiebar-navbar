@@ -82,4 +82,6 @@ Route::post('customer/addticket', [TicketController::class, 'addticket'])->name(
 
 Route::get('customer/ticketlist', [TicketController::class, 'ticketlist'])->name('customer.ticketlist');
 
-//Route::post('customer/createticket', [TicketController::class, 'create'])->name('customer.createticket');
+Route::get('customer/editticket/{id}', [TicketController::class, 'edit'])->name('customer.edit');
+Route::put('customer/updateticket/{id}', [TicketController::class, 'update'])->name('customer.update');
+Route::get('customer/deleteticket/{id}', [TicketController::class, 'delete'])->name('customer.delete');

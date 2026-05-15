@@ -44,20 +44,3 @@ class TicketService
         return view("customer.ticketlist", compact("tickets"));
     }
 }
-
-
-//  public function addticket(array $data)
-//     {
-
-
-//         $data = new Ticket;
-//         $path = $data->file('image')->store('images', 'public');
-//         Ticket::create([
-//             "subject" => $data["subject"],
-//             "description" => $data["description"],
-//             "priority" => $data["priority"],
-//             "category" => $data["category"],
-//             "attachment" => $data["attachment"],
-//             "status" => $data["status"],
-//         ]);
-//     }

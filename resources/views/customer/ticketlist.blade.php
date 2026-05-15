@@ -53,6 +53,7 @@
             <th class="px-6 py-3 text-left">Category</th>
             <th class="px-6 py-3 text-left">Attachment</th>
             <th class="px-6 py-3 text-left">Status</th>
+           <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
 
@@ -77,11 +78,11 @@
 
             <td class="px-6 py-3 text-left">
 
-                {{-- <a href="{{ route('roles.edit', $role->id) }}">
+                <a href="{{ route('customer.edit', $ticket->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
 
-                <a href="{{ route('roles.delete',$role->id) }}" ><i class="bi bi-trash2-fill"></i></a> --}}
+                <a href="{{ route('customer.delete',$ticket->id) }}" ><i class="bi bi-trash2-fill"></i></a>
             </td>
         </tr>
         @endforeach
