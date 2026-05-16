@@ -16,7 +16,8 @@ class UserController extends Controller
 {
     public function list()
     {
-        $users = User::with('roles.permissions')->get();
+        //    $users = User::with('roles.permissions')->get();
+        $users = User::with(['permissions', 'roles.permissions'])->get();
 
         return view('users.list', compact('users'));
     }
@@ -24,8 +25,10 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all(); // user ને assign કરવા roles લાવવાના છે
-        return view('users.create', compact('roles'));
+        $roles = Role::all();
+
+        $permissions = Permission::all();
+        return view('users.create', compact('roles', 'permissions'));
         // return view('users.create'); // form page
     }
 
@@ -33,8 +36,13 @@ class UserController extends Controller
     {
         $users = User::findOrFail($id);
         $roles = Role::all();
-        return view('users.edit', compact('users', 'roles'));
+        $hasPermissions = $users->getPermissionNames();
+        $permissions = Permission::all();
+        return view('users.edit', compact('users', 'hasPermissions', 'permissions', 'roles'));
     }
+
+
+
     public function update(Request $request, $id)
     {
 
@@ -43,7 +51,8 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3',
             'email' => 'required|min:3|unique:users,email,' . $id,
-            'role' => 'nullable|array'
+            'permission' => 'nullable|array',
+            'roles' => 'nullable|array'
 
         ]);
 
@@ -52,8 +61,18 @@ class UserController extends Controller
             $users->name = $request->name;
             $users->email = $request->email;
             $users->save();
-            $users->syncRoles($request->role ?? []);
-            return redirect()->route('users.list', $id)
+            if (!empty($request->permission)) {
+                $users->syncPermissions($request->permission);
+            } else {
+                $users->syncPermissions([]);
+            }
+
+            if (!empty($request->roles)) {
+                $users->syncRoles($request->roles);
+            } else {
+                $users->syncRoles([]);
+            }
+            return redirect()->route('users.list')
                 ->with('success', 'Updated');
         } else {
             return redirect()->back()
@@ -69,27 +88,43 @@ class UserController extends Controller
             'name' => 'required|min:3',
             'email' => 'required|min:3|unique:users,email',
             'password' => 'required',
-            'role' => 'nullable|array'
+            'roles' => 'nullable|array',
+            'permission' => 'nullable|array',
         ]);
 
         if ($validator->passes()) {
 
-            $user = User::create([
+            $users = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
 
 
-            if ($request->has('role')) {
-                $user->syncRoles($request->role);
+            if (!empty($request->permission)) {
+                foreach ($request->permission as $name) {
+                    $users->givePermissionTo($name);
+                }
             }
-
-
+            //dd($request->roles);
+            if (!empty($request->roles)) {
+                $users->syncRoles($request->roles);
+            } else {
+                $users->syncRoles([]);
+            }
             return redirect()->route('users.list')->with('success', 'User Added');
         } else {
             return redirect()->route('users.create')->withInput()->withErrors($validator);
         }
+    }
+
+
+
+    public function delete(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('users.list')->with('success', 'Deleted');
     }
 }
     // public function edit($id)

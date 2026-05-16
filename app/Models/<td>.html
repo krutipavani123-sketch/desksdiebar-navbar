@@ -1,0 +1,74 @@
+<td>
+    @if($user->roles->isNotEmpty())
+    @foreach($user->roles as $role)
+    <span class="badge bg-primary">{{ $role->name }}</span>
+    @endforeach
+    @else
+    <span class="text-muted">No Roles</span>
+    @endif
+</td>
+
+
+<td>
+
+    @foreach($user->permissions as $permission)
+    <span class="badge bg-success">{{ $permission->name }}</span>
+    @endforeach
+
+
+    @foreach($user->roles as $role)
+    @foreach($role->permissions as $permission)
+    <span class="badge bg-secondary">{{ $permission->name }} (via {{ $role->name }})</span>
+    @endforeach
+    @endforeach
+</td <td class="px-6 py-3 text-left">
+@if($user->roles->isNotEmpty())
+{{ $user->roles->pluck('name')->implode(', ') }}
+@else
+<span class="text-muted">No Role</span>
+@endif
+</td>
+<td class="px-6 py-3 text-left">
+    @if($user->roles->isNotEmpty())
+    {{ $user->roles->flatMap->permissions->pluck('name')->unique()->implode(', ') }}
+    @else
+    <span class="text-muted">No Permissions</span>
+    @endif
+</td>
+
+
+
+
+
+
+
+
+
+
+<td class="px-6 py-3 text-left">
+    @if($user->roles->isNotEmpty())
+    {{ $user->roles->pluck('name')->implode(', ') }}
+    @else
+    <span class="text-muted">No Role</span>
+    @endif
+</td>
+
+<!-- ૨. પર્મિશન બતાવવા માટે (ફોર્મ માંથી સ્ટોર થયેલી સાદી રીત) -->
+<td class="px-6 py-3 text-left">
+    @if($user->permissions->isNotEmpty())
+    {{ $user->permissions->pluck('name')->implode(', ') }}
+    @else
+    <span class="text-muted">No Permissions</span>
+    @endif
+</td>
+
+<td class="px-6 py-3 text-left">{{ $user->created_at->format('d M, Y') }}</td>
+<td class="px-6 py-3 text-left">
+    <a href="{{ route('users.edit', $user->id) }}" class="me-2">
+        <i class="bi bi-pencil-square"></i>
+    </a>
+    <a href="{{ route('users.delete', $user->id) }}" class="text-danger">
+        <i class="bi bi-trash2-fill"></i>
+    </a>
+</td>
+</tr>

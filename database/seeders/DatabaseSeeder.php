@@ -18,26 +18,26 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        Permission::create(["name" => "create ticket", 'guard_name' => 'web']);
-        Permission::create(['name' => 'view ticket', 'guard_name' => 'web']);
-        Permission::create(["name" => "update ticket", 'guard_name' => 'web']);
-        Permission::create(['name' => 'delete ticket', 'guard_name' => 'web']);
+        // Permission::create(["name" => "create ticket", 'guard_name' => 'web']);
+        // Permission::create(['name' => 'view ticket', 'guard_name' => 'web']);
+        // Permission::create(["name" => "update ticket", 'guard_name' => 'web']);
+        // Permission::create(['name' => 'delete ticket', 'guard_name' => 'web']);
 
-        $superadmin = Role::createOrFirst(['name' => 'superadmin', 'guard_name' => 'web']);
-        $admin = Role::createOrFirst(['name' => 'admin', 'guard_name' => 'web']);
-        $customer = Role::createOrFirst(['name' => 'user', 'guard_name' => 'web']);
+        // $superadmin = Role::createOrFirst(['name' => 'superadmin', 'guard_name' => 'web']);
+        // $admin = Role::createOrFirst(['name' => 'admin', 'guard_name' => 'web']);
+        // $customer = Role::createOrFirst(['name' => 'user', 'guard_name' => 'web']);
 
-        $superadmin->givePermissionTo(Permission::all());
+        // $superadmin->givePermissionTo(Permission::all());
 
-        $customer->givePermissionTo([
-            'view ticket'
-        ]);
+        // $customer->givePermissionTo([
+        //     'view ticket'
+        // ]);
 
-        if ($user->id == 1) {
-            $user->assignRole('admin');
-        } else {
-            $user->assignRole("customer");
-        }
+        // if ($user->id == 1) {
+        //     $user->assignRole('admin');
+        // } else {
+        //     $user->assignRole("customer");
+        // }
 
         // User::factory(10)->create();
 
@@ -47,3 +47,4 @@ class DatabaseSeeder extends Seeder
         // ]);
     }
 }
+

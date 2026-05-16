@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Team;
+use App\Models\User;
+
+class TeamController extends Controller
+{
+    public function create()
+    {
+        $users = User::all();
+        return view("team.teamcreate", compact("users"));
+    }
+
+    public function list()
+    {
+        // Eager load users to optimize query counts inside loop views
+        $teams = Team::with('users')->get();
+        return view("team.listteam", compact('teams'));
+    }
+
+    public function addteam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "teamName" => "required",
+            "users"    => "nullable|array"
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $team = Team::create([
+            "teamName" => $request->teamName,
+        ]);
+
+        if ($request->has('users')) {
+            $team->users()->attach($request->users);
+        }
+
+        return redirect()->route('team.list')->with("success", "Team Created");
+    }
+
+    public function edit($id)
+    {
+        $teams = Team::findOrFail($id);
+        $users = User::all(); // Fixed: Passed users list to populate options
+        return view("team.teamedit", compact("teams", "users"));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $teams = Team::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            "teamName" => "required",
+            "users"    => "nullable|array"
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $teams->teamName = $request->teamName;
+        $teams->save();
+
+        // Sync structure handles both additions and empty array removals safely
+        $teams->users()->sync($request->input('users', []));
+
+        return redirect()->route("team.list")->with("success", "Team Updated");
+    }
+}

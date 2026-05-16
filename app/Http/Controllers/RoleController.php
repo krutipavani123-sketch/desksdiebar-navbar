@@ -78,26 +78,26 @@ class RoleController extends Controller
     }
     public function edit($id)
     {
-        $role = Role::findOrFail($id);
-        $hasPermissions = $role->permissions->pluck('name');
+        $roles = Role::findOrFail($id);
+        $hasPermissions = $roles->permissions->pluck('name');
         $permissions = Permission::all();
-        return view('roles.editrole', compact('permissions', 'hasPermissions', 'role'));
+        return view('roles.editrole', compact('permissions', 'hasPermissions', 'roles'));
     }
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($id);
+        $roles = Role::findOrFail($id);
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:roles,name,' . $id . ',id'
         ]);
 
         if ($validator->passes()) {
-            $role->name = $request->name;
-            $role->save();
+            $roles->name = $request->name;
+            $roles->save();
 
             if (!empty($request->permission)) {
-                $role->syncPermissions($request->permission);
+                $roles->syncPermissions($request->permission);
             } else {
-                $role->syncPermissions([]);
+                $roles->syncPermissions([]);
             }
             return redirect()->route('roles.list')->with('success', 'Updated');
         } else {
@@ -107,9 +107,9 @@ class RoleController extends Controller
 
     public function delete($id)
     {
-        $role = Role::findOrFail($id);
-        $role->delete();
-        if ($role) {
+        $roles = Role::findOrFail($id);
+        $roles->delete();
+        if ($roles) {
             return redirect()->route('roles.list')->with('success', 'Deleted');
         } else {
             return redirect()->route('roles.list')->with('Error', 'Not Deleted');

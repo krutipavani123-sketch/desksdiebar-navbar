@@ -20,17 +20,18 @@ class RoleService
         // ]);
 
 
-        $role = Role::create([
+        $roles = Role::create([
             "name" => $data['name'],
+            'guard_name' => 'web'
         ]);
 
 
         if (!empty($data['permission'])) {
             foreach ($data['permission'] as $name) {
-                $role->givePermissionTo($name);
+                $roles->givePermissionTo($name);
             }
         }
-        return $role;
+        return $roles;
         // if (!empty($request->permission)) {
         //     foreach ($request->permission as $name) {
         //         $role->givePermissionTo($name);
@@ -53,5 +54,4 @@ class RoleService
         $permissions = Permission::all();
         return view('roles.createrole', compact('permissions'));
     }
-    
 }

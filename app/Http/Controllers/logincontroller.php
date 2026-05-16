@@ -75,4 +75,9 @@ class logincontroller extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function  loginmail(Request $request)
+    {
+        return $this->LoginService->loginmail($request);
+    }
 }
