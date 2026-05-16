@@ -96,4 +96,3 @@ Route::get('team/edit/{id}', [TeamController::class, 'edit'])->name('team.edit')
 Route::put('team/update/{id}', [TeamController::class, 'update'])->name('team.update');
 
 Route::get('team/delete/{id}', [TeamController::class, 'delete'])->name('team.delete');
-

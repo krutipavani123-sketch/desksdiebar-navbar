@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Team;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -17,18 +18,18 @@ class UserController extends Controller
     public function list()
     {
         //    $users = User::with('roles.permissions')->get();
-        $users = User::with(['permissions', 'roles.permissions'])->get();
-
-        return view('users.list', compact('users'));
+        $users = User::with(['permissions', 'roles.permissions', 'teams'])->get();
+        $teams = Team::all();
+        return view('users.list', compact('users', 'teams'));
     }
 
 
     public function create()
     {
         $roles = Role::all();
-
+        $teams = Team::all();
         $permissions = Permission::all();
-        return view('users.create', compact('roles', 'permissions'));
+        return view('users.create', compact('roles', 'permissions', 'teams'));
         // return view('users.create'); // form page
     }
 
@@ -36,9 +37,10 @@ class UserController extends Controller
     {
         $users = User::findOrFail($id);
         $roles = Role::all();
+        $teams = Team::all();
         $hasPermissions = $users->getPermissionNames();
         $permissions = Permission::all();
-        return view('users.edit', compact('users', 'hasPermissions', 'permissions', 'roles'));
+        return view('users.edit', compact('users', 'hasPermissions', 'permissions', 'roles', 'teams'));
     }
 
 
@@ -60,6 +62,7 @@ class UserController extends Controller
             // $permission->update(['name'=> $request->name]);
             $users->name = $request->name;
             $users->email = $request->email;
+            $users->team_id = $request->team_id;
             $users->save();
             if (!empty($request->permission)) {
                 $users->syncPermissions($request->permission);
@@ -90,6 +93,7 @@ class UserController extends Controller
             'password' => 'required',
             'roles' => 'nullable|array',
             'permission' => 'nullable|array',
+            'team_id' => 'nullable|exists:teams,id',
         ]);
 
         if ($validator->passes()) {
@@ -98,6 +102,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'team_id' => $request->team_id,
             ]);
 
 
