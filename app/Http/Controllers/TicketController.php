@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use  App\Services\TicketService;
 use App\Models\Ticket;
 
+use App\Models\Team;
+
 class TicketController extends Controller
 {
     protected $ticketservice;
@@ -45,6 +47,7 @@ class TicketController extends Controller
     public function ticketlist()
     {
         //return view("customer.ticketlist");
+        //  $agents = Team::with('agents')->get();
         return $this->ticketservice->ticketlist();
     }
 
@@ -98,5 +101,15 @@ class TicketController extends Controller
         $tickets = Ticket::findOrFail($id);
         $tickets->delete();
         return redirect()->route("customer.ticketlist")->with("success", "Ticket Deleted");
+    }
+
+    public function assignticket(Request $request)
+    {
+        Ticket::whereIn('id', $request->ticket_ids)
+            ->update([
+                'assigned_team_id' => $request->team_id
+            ]);
+
+        return redirect()->back()->with('success', 'Assigned');
     }
 }

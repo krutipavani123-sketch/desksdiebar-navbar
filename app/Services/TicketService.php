@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Team;
 
 class TicketService
 {
@@ -39,8 +41,13 @@ class TicketService
     public function ticketlist()
     {
         // return view("customer.ticketlist", compact("ticket"));
-        $tickets = Ticket::all();
+        //     $tickets = Ticket::all();
+        //    $agents =Team::with('agents')->get();
         // dd(Ticket::all());
-        return view("customer.ticketlist", compact("tickets"));
+
+
+        $tickets = Ticket::with('team')->get();
+        $teams = Team::all();
+        return view("customer.ticketlist", compact("tickets", "teams"));
     }
 }

@@ -32,11 +32,37 @@
 
     <button type="button" 
             onclick="window.location.href='{{ route('customer.createticket') }}'" 
-            class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
+            class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm me-2">
          CreateTicket
     </button>
+
+      {{-- <button type="button" 
+            onclick="window.location.href='{{ route('customer.assignticket') }}'" 
+            class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
+         Assign Ticket
+    </button> --}}
+
+     <button type="button"
+                        class="btn btn-success btn-sm px-4 py-2 fw-semibold shadow-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#assignModal">
+                        Assign Ticket
+                    </button>
 </div>
-   @endcan         
+   @endcan      
+   
+
+{{-- <button type="button"
+        class="btn btn-primary btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#assignModal">
+    Assign Ticket
+</button>
+   --}}
+
+ <form action="{{ route('customer.assignticket') }}" method="POST">
+
+                    @csrf
 
 <table id="table"
     class="table table-bordered table-sm"   
@@ -49,6 +75,7 @@
 
     <thead class="bg-gray-50">
         <tr class="border-b">
+            <th class="px-6 py-3 text-left" width="60">Select</th>
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Subject</th>
             <th class="px-6 py-3 text-left">Description</th>
@@ -57,6 +84,7 @@
             <th class="px-6 py-3 text-left">Category</th>
             <th class="px-6 py-3 text-left">Attachment</th>
             <th class="px-6 py-3 text-left">Status</th>
+            <th class="px-6 py-3 text-left">Assigned Team</th>
            <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -64,22 +92,21 @@
    <tbody class="bg-white">
         @foreach($tickets as $ticket)
         <tr>
+            <td class="px-6 py-3 text-left">
+     <input type="checkbox" name="ticket_ids[]" value="{{ $ticket->id }}">
+</td>
             <td class="px-6 py-3 text-left">{{  $ticket->id }}</td>
             <td class="px-6 py-3 text-left">{{ $ticket->subject }}</td>
             <td class="px-6 py-3 text-left">{{  $ticket->description }}</td>
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
           <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
-    
-
-
 <td>
     <img src="{{ $ticket->attachment ? asset('storage/' . $ticket->attachment) : 'https://via.placeholder.com/80' }}" width="70" height="50">
 </td>
-
-
 <td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
+ <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 
-@can('update tickets')
+@can('edit ticket')
             <td class="px-6 py-3 text-left">
 
                 <a href="{{ route('customer.edit', $ticket->id) }}">
@@ -94,15 +121,66 @@
         @endforeach
     </tbody>    
 </table>
-{{-- <div class="my-3">
-{{ $roles->links() }}
-</div> --}}
+<div class="modal fade"
+                        id="assignModal"
+                        tabindex="-1"
+                        aria-hidden="true"> // popup
+
+                        <div class="modal-dialog"> //center popup
+
+                            <div class="modal-content"> //main box
+
+                              
+                                <div class="modal-header">
+
+                                    <h5 class="modal-title">
+                                        Assign Team
+                                    </h5>
+
+                                    <button type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal">
+                                    </button>
+
+                                </div>
+
+                         
+                                <div class="modal-body">
+
+                                  <select name="team_id" class="form-control" required>
+                                    <option value="">Select Team</option>
+
+                                    @foreach($teams as $team)
+                                        <option value="{{ $team->id }}">
+                                            {{ $team->teamName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                </div>
+
+                                <div class="modal-footer">
+
+                                    <button type="submit"
+                                        class="btn btn-success">
+                                        Assign
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+             
 
             </div>
         </div>
     </div>
-    </div>
-
+</div>
 
 @endsection
 

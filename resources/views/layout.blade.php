@@ -107,6 +107,12 @@
                     <a class="nav-link" href="{{ route('team.list') }}">Team</a>
                 </li>
 @endcan
+
+    {{-- @role('admin')
+                 <li class="nav-item">
+                    <a class="nav-link" href="">Assign Ticket</a>
+                </li>
+@endrole --}}
  {{-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('permissions.permissionadd') }}">Add Permissions</a>
                 </li> --}}
