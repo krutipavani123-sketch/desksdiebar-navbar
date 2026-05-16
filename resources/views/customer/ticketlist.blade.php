@@ -49,12 +49,7 @@
                         Assign Ticket
                     </button> --}}
 
-                    <button
-    class="btn btn-sm btn-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#assignModal{{ $ticket->id }}">
-    {{ $ticket->team_id ? 'Reassign' : 'Assign' }}
-</button>
+                    
 </div>
    {{-- @endcan       --}}
    
@@ -70,7 +65,7 @@
  <form action="{{ route('customer.assignticket') }}" method="POST">
 
                     @csrf
-<input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+
 <table id="table"
     class="table table-bordered table-sm"   
     data-toggle="table"
@@ -99,8 +94,6 @@
 
    <tbody class="bg-white">
         @foreach($tickets as $ticket)
-        <div class="modal fade" id="assignModal{{ $ticket->id }}" tabindex="-1">
-
         <tr>
             <td class="px-6 py-3 text-left">
      <input type="checkbox" name="ticket_ids[]" value="{{ $ticket->id }}">
@@ -128,7 +121,6 @@
                 {{-- @endcan --}}
             </td>
         </tr>
-        </div>
         @endforeach
     </tbody>    
 </table>
