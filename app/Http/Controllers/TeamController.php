@@ -18,16 +18,18 @@ class TeamController extends Controller
     public function list()
     {
         // $teams = Team::all();
-        $teams = Team::with('users')->get();
+        $teams = Team::with('users', 'leader')->get();
         $users = User::role('support_agent')->get();
         return view("team.listteam", compact('teams', 'users'));
     }
+
 
     public function addteam(Request $request)
     {
         $validator = Validator::make(request()->all(), [
             "teamName" => "required",
-            //  "users" => 'nullable|array'
+            "leader_id" => 'nullable|exists:users,id',
+            "users" => 'nullable|array'
         ]);
 
 
@@ -40,7 +42,8 @@ class TeamController extends Controller
         } else {
             $teams = Team::create([
                 "teamName" => $request->teamName,
-                "leader_id" => $request->leader_id ?? null
+                "leader_id" => $request->leader_id,
+                // $teams->leader_id = $request->leader_id; 
 
             ]);
 
@@ -69,15 +72,16 @@ class TeamController extends Controller
         $teams = Team::findOrFail($id);
         $validator = Validator::make(request()->all(), [
             "teamName" => "required",
-            "users" => 'nullable|array'
+            "users" => 'nullable|array',
+            "leader_id" => 'nullable|exists:users,id'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
 
             $teams->teamName = $request->teamName;
-
-
+            $teams->leader_id = $request->leader_id;
+           // $teams->save();
             if ($request->has('users')) {
                 $teams->users()->sync($request->users);
             } else {

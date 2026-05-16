@@ -129,28 +129,60 @@
                  @error('subject') <p class="error-text">{{ $message }}</p> @enderror
             </div>
 
-         <div class="form-group">
-    <label class="form-label">Select Team Members</label>
+            <div class="form-group">
+    <label class="form-label">Select Team Leader</label>
     
-    <details class="custom-dropdown" style="position: relative; width: 100%; margin-top: 6px;">
+    <details class="custom-dropdown" style="position: relative; width: 100%; margin-top: 6px;"> //hides data
       
         <summary style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border: 1px solid #ddd; border-radius: 10px; background: #fff; font-size: 14px; color: #444; cursor: pointer; user-select: none; list-style: none;">
-            <span>Select Members</span>
+            <span>Select Leader</span>
             <span style="border: solid #666; border-width: 0 2px 2px 0; display: inline-block; padding: 3px; transform: rotate(45deg); margin-bottom: 4px;"></span>
-        </summary>
+        </summary> //visible header btn
 
-       
         <div style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #fff; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-
+            
+      
+            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                <input type="radio" name="leader_id" value="" id="leader_none" 
+                    {{ is_null(old('leader_id', $teams->leader_id)) ? 'checked' : '' }} 
+                    style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
+                <label for="leader_none" style="font-size: 14px; color: #999; cursor: pointer; width: 100%;">No Team Leader</label>
+            </div>
+            
+           
             @foreach($users as $user)
                 <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                    <input type="checkbox" name="users[]" value="{{ $user->id }}" id="check_{{ $user->id }}" style="width: auto; margin-top: 0; cursor: pointer;">
-                    <label for="check_{{ $user->id }}" style="margin-left: 8px; font-size: 14px; color: #444; cursor: pointer; user-select: none; width: 100%;">
+                    <input type="radio" name="leader_id" value="{{ $user->id }}" id="leader_{{ $user->id }}" 
+                        {{ old('leader_id', $teams->leader_id) == $user->id ? 'checked' : '' }} 
+                        style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
+                    <label for="leader_{{ $user->id }}" style="font-size: 14px; color: #444; cursor: pointer; width: 100%;">
                         {{ $user->name }}   
                     </label>
                 </div>
             @endforeach
         </div>
+        
+    </details>
+</div>
+            
+         <div class="form-group">
+        <label class="form-label">Select Team Members</label>
+        <div style="border: 1px solid #ddd; border-radius: 10px; padding: 14px; max-height: 180px; overflow-y: auto; background: #fff; margin-top: 6px;">
+            @php 
+                $currentMemberIds = old('users', $teams->users->pluck('id')->toArray()); 
+            @endphp
+            @foreach($users as $user)
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <input type="checkbox" name="users[]" value="{{ $user->id }}" id="edit_user_{{ $user->id }}" 
+                        {{ in_array($user->id, $currentMemberIds) ? 'checked' : '' }}
+                        style="width: auto; margin-right: 8px; cursor: pointer;">
+                    <label for="edit_user_{{ $user->id }}" style="font-size: 14px; color: #444; cursor: pointer;">
+                        {{ $user->name }}
+                    </label>
+                </div>
+            @endforeach
+       
+
     </details>
 </div>
 

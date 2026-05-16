@@ -57,7 +57,7 @@
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Team Name</th>
-            {{-- <th class="px-6 py-3 text-left">Team Leader</th>--}}
+            <th class="px-6 py-3 text-left">Team Leader</th>
             <th class="px-6 py-3 text-left">Team Member Name</th> 
             <th class="px-6 py-3 text-left">Action</th>
         </tr>
@@ -68,6 +68,13 @@
     <tr>
         <td class="px-6 py-3 text-left">{{ $team->id }}</td>
         <td class="px-6 py-3 text-left">{{ $team->teamName }}</td>
+       <td class="px-6 py-3 text-left">
+            @if($team->leader)
+                {{ $team->leader->name }}
+            @else
+                <span style="color: #999; font-style: italic;">No Leader Assigned</span>
+            @endif
+        </td>
         <td class="px-6 py-3 text-left">
             @if($team->users->isNotEmpty())
                 {{ $team->users->pluck('name')->implode(', ') }}

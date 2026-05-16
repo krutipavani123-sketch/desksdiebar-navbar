@@ -128,7 +128,7 @@
 
                         <div class="modal-dialog"> //center popup
 
-                            <div class="modal-content"> //main box
+                            <div class="modal-content"> //main box  
 
                               
                                 <div class="modal-header">

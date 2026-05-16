@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     protected $table = "teams";
-    protected $fillable = ['teamName'];
+    protected $fillable = ['teamName', 'leader_id'];
 
     public function users()
     {
@@ -18,5 +18,9 @@ class Team extends Model
     public function agents()
     {
         return $this->belongsToMany(User::class);
+    }
+    public function leader()
+    {
+        return $this->belongsTo(User::class, 'leader_id');
     }
 }
