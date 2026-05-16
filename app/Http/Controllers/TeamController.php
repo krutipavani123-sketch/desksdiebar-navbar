@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  App\Models\Team;
 use  App\Models\User;
+use  App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 
 class TeamController extends Controller
 {
@@ -15,17 +17,22 @@ class TeamController extends Controller
         $teams = Team::all();
         return view("team.teamcreate", compact("users", "teams"));
     }
-    public function list()
+    public function list(Request $request)
     {
-        $teams = Team::with('users', 'leader')->get();
-        // $teams = Team::all();
-        if (request()->filled('search')) {
-            $search = request()->search;
+        // $teamId = DB::table('team_user')
+        //     ->where('user_id', auth()->id())
+        //     ->value('team_id');
+
+        $query = Team::with('users', 'leader')
+            ->where('leader_id', auth()->id());
 
 
-            $teams->where('teamName', 'like', "%{$search}%");
+
+        if ($request->filled('search')) {
+            $query->where('teamName', 'like', '%' . request('search') . '%');
         }
 
+        $teams = $query->get();
         //  $teams = Team::with('users', 'leader')->get();
         $users = User::role('support_agent')->get();
         return view("team.listteam", compact('teams', 'users'));
@@ -101,3 +108,38 @@ class TeamController extends Controller
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+    //  public function list()
+    //     {
+
+    //         $teamId = DB::table('team_user')
+    //             ->where('user_id', auth()->id())
+    //             ->value('team_id');
+
+    //         $teams = Team::with('users', 'leader')
+    //             ->where('id', $teamId)
+    //             ->get();
+
+
+    //         $teams = Team::with('users', 'leader')->get();
+    //         // $teams = Team::all();
+    //         if (request()->filled('search')) {
+    //             $search = request()->search;
+
+
+    //             $teams->where('teamName', 'like', "%{$search}%");
+    //         }
+
+    //         //  $teams = Team::with('users', 'leader')->get();
+    //         $users = User::role('support_agent')->get();
+    //         return view("team.listteam", compact('teams', 'users'));
+    //     }

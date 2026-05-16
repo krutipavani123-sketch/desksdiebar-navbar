@@ -1,4 +1,4 @@
- @can('manage team')
+ {{-- @can('manage team') --}}
  
  @extends('layout')
 @section('title', 'Add Team')
@@ -83,19 +83,19 @@
                 <span class="text-gray-400 italic">No members assigned</span>
             @endif
         </td>
-        @can('edit team')
+        {{-- @can('edit team') --}}
         <td class="px-6 py-3 text-left">
             <a href="{{ route('team.edit', $team->id) }}">
                 <i class="bi bi-pencil-square"></i>
             </a>
-            @endcan
-            @can('delete team')
+            {{-- @endcan
+            @can('delete team') --}}
             <a href="{{ route('team.delete', $team->id) }}">
                 <i class="bi bi-trash2-fill"></i>
             </a>
           
         </td> 
-          @endcan
+          {{-- @endcan --}}
     </tr>
     @endforeach
 </tbody>
@@ -123,8 +123,8 @@
 
 
 @endsection
-
-@endcan
+{{-- 
+@endcan --}}
 
 
     <style>

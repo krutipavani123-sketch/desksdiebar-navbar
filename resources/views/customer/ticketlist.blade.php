@@ -1,4 +1,4 @@
- @can('view tickets')
+ {{-- @can('view tickets') --}}
  
  @extends('layout')
 @section('title', ' Ticekt List')
@@ -27,7 +27,7 @@
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-@can('add ticket')
+{{-- @can('add ticket') --}}
    <div class="mb-4 d-flex justify-content-end">
 
     <button type="button" 
@@ -49,7 +49,7 @@
                         Assign Ticket
                     </button>
 </div>
-   @endcan      
+   {{-- @endcan       --}}
    
 
 {{-- <button type="button"
@@ -107,16 +107,16 @@
 <td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 
-@can('edit ticket')
+{{-- @can('edit ticket') --}}
             <td class="px-6 py-3 text-left">
 
                 <a href="{{ route('customer.edit', $ticket->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
-@endcan
-@can('delete ticket')
+{{-- @endcan
+@can('delete ticket') --}}
                 <a href="{{ route('customer.delete',$ticket->id) }}" ><i class="bi bi-trash2-fill"></i></a>
-                @endcan
+                {{-- @endcan --}}
             </td>
         </tr>
         @endforeach
@@ -206,4 +206,4 @@
 </style>
 
 
-@endcan
+{{-- @endcan --}}

@@ -112,4 +112,9 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'Assigned');
     }
+
+    public function reassignteam(Request $request, $ticketId)
+    {
+        return $this->ticketservice->reassignteam($request, $ticketId);
+    }
 }

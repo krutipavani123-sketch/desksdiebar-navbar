@@ -28,6 +28,12 @@ class TicketService
             }
         }
 
+
+
+        $teamId = DB::table('team_user')
+            ->where('user_id', auth()->id())
+            ->value('team_id');
+
         return Ticket::create([
             'subject' => $request->subject,
             'description' => $request->description,
@@ -35,6 +41,8 @@ class TicketService
             'category' => $request->category,
             'attachment' => $path,
             'status' => $request->status,
+            'assigned_team_id' => $teamId,
+            'assigned_agent_id' => null,
         ]);
     }
 
@@ -44,6 +52,17 @@ class TicketService
         //     $tickets = Ticket::all();
         //    $agents =Team::with('agents')->get();
         // dd(Ticket::all());
+
+        // $teamId = DB::table('team_user')
+        //     ->where('user_id', auth()->id())
+        //     ->value('team_id');
+
+        // $tickets = Ticket::where('assigned_team_id', $teamId)
+        //     ->with('team')
+        //     ->get();
+
+
+
         $query = Ticket::with('team');
         if ($request->filled('search')) {
             $search = $request->search;
@@ -59,4 +78,21 @@ class TicketService
         $teams = Team::all();
         return view("customer.ticketlist", compact("tickets", "teams"));
     }
+
+    public function reassignteam(Request $request, $ticketId)
+    {
+        $request->validate([
+            'team_id' => 'required|exists:teams,id',
+        ]);
+
+        $ticket = Ticket::findOrFail($ticketId);
+        $ticket->assigned_team_id = $request->team_id;
+        $ticket->save();
+
+        return back()->with('success', 'Ticket moved to another team');
+    }
 }
+
+// if ($request->assigned_to) {
+//     $ticket->assigned_to = $request->assigned_to;
+// }
