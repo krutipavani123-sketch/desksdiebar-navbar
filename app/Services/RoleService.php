@@ -45,9 +45,19 @@ class RoleService
 
     public function list()
     {
-        $roles = Role::all();
+
+        $query = Role::query();
+        if (request()->filled('search')) {
+            $search = request()->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $roles = $query->get();
+
         return view('roles.rolelist', compact('roles'));
     }
+
+
 
     public function create()
     {

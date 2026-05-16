@@ -44,11 +44,11 @@ class TicketController extends Controller
 
         // dd($result);
     }
-    public function ticketlist()
+    public function ticketlist(Request $request)
     {
         //return view("customer.ticketlist");
         //  $agents = Team::with('agents')->get();
-        return $this->ticketservice->ticketlist();
+        return $this->ticketservice->ticketlist($request);
     }
 
     public function edit(Request $request, $id)

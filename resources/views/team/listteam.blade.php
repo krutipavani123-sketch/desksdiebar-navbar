@@ -49,6 +49,7 @@
     data-page-size="3"
     data-side-pagination="client"
     data-height="auto"
+     data-search="true"
     data-page-list="[3,5,10,25,50,100,200,All]">
 
 

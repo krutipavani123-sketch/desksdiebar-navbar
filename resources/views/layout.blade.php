@@ -62,7 +62,7 @@
     <div class="container">
 
         <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{{ url('list') }}">
+        <a class="navbar-brand fw-bold" href="{{ url('welcome') }}">
            Desk System
         </a>
 
@@ -81,11 +81,11 @@
         <div class="collapse navbar-collapse" id="navbarContent">
 
             <ul class="navbar-nav me-auto">
-@can('add ticket')
+{{-- @can('add ticket') --}}
                  <li class="nav-item">
                     <a class="nav-link" href="{{ route('customer.ticketlist') }}">Ticket</a>
                 </li>
-@endcan
+{{-- @endcan --}}
 @can('manage users')
                 <li class="nav-item">   
                     <a class="nav-link" href="{{ route('users.list') }}">Add User</a>
@@ -102,11 +102,11 @@
                 </li>
                 @endcan
 
-                @can('manage team')
+                {{-- @can('manage team') --}}
                  <li class="nav-item">
                     <a class="nav-link" href="{{ route('team.list') }}">Team</a>
                 </li>
-@endcan
+{{-- @endcan --}}
 
     {{-- @role('admin')
                  <li class="nav-item">

@@ -42,7 +42,14 @@ class PermissionService
         // });
 
 
-        $permissions = Permission::all();
+        // $permissions = Permission::all();
+        $query = Permission::query();
+
+        if (request()->filled('search')) {
+            $search = request()->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+        $permissions = $query->get();
 
         return view('permissions.permissionlist', compact('permissions'));
     }

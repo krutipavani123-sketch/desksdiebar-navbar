@@ -80,4 +80,10 @@ class logincontroller extends Controller
     {
         return $this->LoginService->loginmail($request);
     }
+
+    public function logout()
+    {
+        $this->LoginService->logout();
+        return redirect()->route('login')->with('success', 'Logout');
+    }
 }

@@ -38,15 +38,24 @@ class TicketService
         ]);
     }
 
-    public function ticketlist()
+    public function ticketlist(Request $request)
     {
         // return view("customer.ticketlist", compact("ticket"));
         //     $tickets = Ticket::all();
         //    $agents =Team::with('agents')->get();
         // dd(Ticket::all());
+        $query = Ticket::with('team');
+        if ($request->filled('search')) {
+            $search = $request->search;
 
 
-        $tickets = Ticket::with('team')->get();
+            $query->where(function ($q) use ($search) {
+                $q->where('subject', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        $tickets = $query->get();
+        //   $tickets = Ticket::with('team')->get();
         $teams = Team::all();
         return view("customer.ticketlist", compact("tickets", "teams"));
     }

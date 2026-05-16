@@ -17,8 +17,16 @@ class TeamController extends Controller
     }
     public function list()
     {
-        // $teams = Team::all();
         $teams = Team::with('users', 'leader')->get();
+        // $teams = Team::all();
+        if (request()->filled('search')) {
+            $search = request()->search;
+
+
+            $teams->where('teamName', 'like', "%{$search}%");
+        }
+
+        //  $teams = Team::with('users', 'leader')->get();
         $users = User::role('support_agent')->get();
         return view("team.listteam", compact('teams', 'users'));
     }
@@ -81,7 +89,7 @@ class TeamController extends Controller
 
             $teams->teamName = $request->teamName;
             $teams->leader_id = $request->leader_id;
-           // $teams->save();
+            // $teams->save();
             if ($request->has('users')) {
                 $teams->users()->sync($request->users);
             } else {

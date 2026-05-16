@@ -19,6 +19,14 @@ class UserController extends Controller
     {
         //    $users = User::with('roles.permissions')->get();
         $users = User::with(['permissions', 'roles.permissions', 'teams'])->get();
+
+        if (request()->filled('search')) {
+            $search = request()->search;
+            $users->where('name', 'like', "%{$search}%");
+        }
+        //$users = $users->get
+        $users = User::with(['permissions', 'roles.permissions', 'teams'])->get();
+
         $teams = Team::all();
         return view('users.list', compact('users', 'teams'));
     }

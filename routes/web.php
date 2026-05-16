@@ -28,6 +28,7 @@ Route::middleware('web')->group(function () {
     Route::get('welcome', [WelcomeController::class, 'welcome']);
     Route::middleware('auth')->group(function () {
         Route::get('profile', [ProfileController::class, 'profile']);
+        Route::get('logout', [logincontroller::class, 'logout']);
     });
 });
 
