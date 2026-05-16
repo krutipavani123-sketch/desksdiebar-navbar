@@ -33,6 +33,8 @@ class TicketController extends Controller
             "category" => "required|not_in:Default",
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',
             "status" => "required",
+            // 'team_id' => 'required|exists:teams,id',
+            // 'ticket_id' => 'required|exists:tickets,id',
         ]);
 
         if ($validator->fails()) {
@@ -102,19 +104,19 @@ class TicketController extends Controller
         $tickets->delete();
         return redirect()->route("customer.ticketlist")->with("success", "Ticket Deleted");
     }
-
-    public function assignticket(Request $request)
-    {
-        Ticket::whereIn('id', $request->ticket_ids)
-            ->update([
-                'assigned_team_id' => $request->team_id
-            ]);
-
-        return redirect()->back()->with('success', 'Assigned');
-    }
-
-    public function reassignteam(Request $request, $ticketId)
-    {
-        return $this->ticketservice->reassignteam($request, $ticketId);
-    }
 }
+//     public function assignticket(Request $request)
+//     {
+//         Ticket::whereIn('id', $request->ticket_ids)
+//             ->update([
+//                 'assigned_team_id' => $request->team_id
+//             ]);
+
+//         return redirect()->back()->with('success', 'Assigned');
+//     }
+
+//     public function reassignteam(Request $request, $ticketId)
+//     {
+//         return $this->ticketservice->reassignteam($request, $ticketId);
+//     }
+// }

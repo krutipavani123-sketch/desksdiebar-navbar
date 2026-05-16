@@ -96,3 +96,45 @@ class TicketService
 // if ($request->assigned_to) {
 //     $ticket->assigned_to = $request->assigned_to;
 // }
+
+
+// <button type="submit" class="btn btn-success">
+//     {{ $ticket->team_id ? 'Reassign' : 'Assign' }}
+// </button>
+
+
+// @foreach($tickets as $ticket)
+// <div class="modal fade" id="assignModal{{ $ticket->id }}" tabindex="-1">
+
+
+
+// <form action="{{ route('customer.assignticket') }}" method="POST">
+//     @csrf
+
+//     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+
+
+// public function assignTicket(Request $request)
+// {
+//     $request->validate([
+//         'team_id' => 'required|exists:teams,id',
+//         'ticket_id' => 'required|exists:tickets,id',
+//     ]);
+
+//     $ticket = Ticket::findOrFail($request->ticket_id);
+
+//     $oldTeam = $ticket->team_id;
+
+//     $ticket->update([
+//         'team_id' => $request->team_id,
+//     ]);
+
+//     // Optional log
+//     if ($oldTeam != $request->team_id) {
+//         \Log::info("Ticket {$ticket->id} reassigned from {$oldTeam} to {$request->team_id}");
+//     }
+
+//     return back()->with('success',
+//         $oldTeam ? 'Ticket Reassigned Successfully' : 'Ticket Assigned Successfully'
+//     );
+// }
