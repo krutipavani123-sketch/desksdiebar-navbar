@@ -1,3 +1,5 @@
+ @can('view tickets')
+ 
  @extends('layout')
 @section('title', ' Ticekt List')
 
@@ -24,6 +26,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+
+@can('add ticket')
    <div class="mb-4 d-flex justify-content-end">
 
     <button type="button" 
@@ -32,10 +36,10 @@
          CreateTicket
     </button>
 </div>
-               
+   @endcan         
 
 <table id="table"
-    class="table table-bordered table-sm"
+    class="table table-bordered table-sm"   
     data-toggle="table"
     data-pagination="true"
     data-page-size="3"
@@ -75,14 +79,16 @@
 
 <td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
 
-
+@can('update tickets')
             <td class="px-6 py-3 text-left">
 
                 <a href="{{ route('customer.edit', $ticket->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
-
+@endcan
+@can('delete ticket')
                 <a href="{{ route('customer.delete',$ticket->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                @endcan
             </td>
         </tr>
         @endforeach
@@ -119,3 +125,6 @@
     margin-bottom: 0 !important;
 }
 </style>
+
+
+@endcan

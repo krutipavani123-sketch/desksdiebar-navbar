@@ -1,5 +1,4 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -82,24 +81,32 @@
         <div class="collapse navbar-collapse" id="navbarContent">
 
             <ul class="navbar-nav me-auto">
-
+@can('add ticket')
                  <li class="nav-item">
                     <a class="nav-link" href="{{ route('customer.ticketlist') }}">Ticket</a>
                 </li>
-
+@endcan
+@can('manage users')
                 <li class="nav-item">   
                     <a class="nav-link" href="{{ route('users.list') }}">Add User</a>
                 </li>
-     {{-- @can('create task') --}}
+                @endcan
+     @can('manage roles')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('roles.list') }}">Add Role</a>
                 </li>
-     {{-- @endcan  --}}
- 
+      @endcan 
+ @can('manage permissions')
  <li class="nav-item">
                     <a class="nav-link" href="{{ route('permissions.permissionlist') }}">Add Permissions</a>
                 </li>
+                @endcan
 
+                @can('manage team')
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('team.list') }}">Team</a>
+                </li>
+@endcan
  {{-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('permissions.permissionadd') }}">Add Permissions</a>
                 </li> --}}

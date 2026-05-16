@@ -50,6 +50,17 @@
             Login→
         </button>
 
+       <div class="text-center text-sm text-gray-500 mt-4">
+    <form action="{{ route('loginmail') }}" method="POST" class="inline">
+        @csrf
+        
+        <button type="submit" class="text-indigo-600 font-medium hover:underline">
+            Forgot Password? Reset Password
+        </button>
+    </form>
+</div>
+
+
           <p class="text-center text-sm text-gray-500 mt-4">
         Don’t have an account?
         <a href="{{ url('register') }}" class="text-indigo-600 font-medium">Create an account</a>
@@ -61,3 +72,19 @@
 
 </body>
 </html> 
+
+
+{{-- <div class="text-center text-sm text-gray-500 mt-4">
+    <form action="{{ route('loginmail') }}" method="POST">
+        @csrf
+
+        <input type="hidden" name="email" id="forgot-email">
+
+        <button type="submit"
+            onclick="document.getElementById('forgot-email').value =
+            document.querySelector('input[name=email]').value"
+            class="text-indigo-600 font-medium hover:underline">
+            Forgot Password? Reset Password
+        </button>
+    </form>
+</div> --}}

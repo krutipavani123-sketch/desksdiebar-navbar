@@ -57,7 +57,7 @@
                                   <div class="col-md-3 mt-2">
                                     <div class="form-check">
                                     {{-- {{ $hasPermissions->contains($user->name)? 'checked':'' }}  --}}
-                                    <input type="checkbox" id="role-{{ $role->id }}" class="rounded" name="role[]" value="{{ $role->name }}"
+                                    <input type="checkbox" id="role-{{ $role->id }}" class="rounded" name="roles[]" value="{{ $role->name }}"
                                      {{ $users->roles->contains('name', $role->name) ? 'checked' : '' }}>
                                     <label for="role-{{ $role->id }}" >{{ $role->name }}</label>
                                </div>
@@ -68,7 +68,29 @@
                                 @endif
                           
                            
-                         </div>
+                                
+                    
+{{-- <label class="form-label fw-semibold">Permissions</label>
+ <div class="row">
+     @if($permissions->isNotEmpty())
+                                @foreach($permissions as $permission)
+                                  <div class="col-md-3 mt-2">
+                                    <div class="form-check"> --}}
+                                    {{-- {{ $hasPermissions->contains($user->name)? 'checked':'' }}  --}}
+                                    {{-- <input type="checkbox" id="permission-{{ $permission->id }}" class="rounded" name="permissions[]" value="{{ $permission->name }}"
+                                     {{ $users->permissions->contains('name', $permission->name) ? 'checked' : '' }}>
+                                    <label for="permission-{{ $permission->id }}" >{{ $permission->name }}</label>
+                               </div>
+                                </div>
+                                @endforeach
+ </div>
+                               
+                                @endif
+                          
+                           
+                         </div> --}}
+
+
                           <button class="btn btn-success w-100">
                         Update User
                     </button>

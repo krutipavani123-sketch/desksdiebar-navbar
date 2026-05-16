@@ -21,16 +21,16 @@
 
             <div class="card-body p-4">
 
-                <form action="{{ route('roles.update',$role->id) }}" method="post">
+                <form action="{{ route('roles.update',$roles->id) }}" method="post">
                     @csrf
 
-                    {{-- Role Name --}}
+               
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">
                             Edit Permission
                         </label>
 
-                        <input value="{{ old('name',$role->name) }}"
+                        <input value="{{ old('name',$roles->name) }}"
                                name="name"
                                type="text"
                                class="form-control shadow-sm rounded-3 border-secondary-subtle">
@@ -40,7 +40,7 @@
                         @enderror
                     </div>
 
-                    {{-- Permissions --}}
+            
                     <div class="mt-4">
                         <label class="form-label fw-semibold text-dark mb-2">
                             Permissions

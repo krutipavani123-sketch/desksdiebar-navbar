@@ -8,7 +8,7 @@
     <div class="d-flex justify-content-between mb-3">
         <h4>Users List</h4>
          <button type="button" 
-            onclick="window.location.href='{{ route('roles.create') }}'" 
+            onclick="window.location.href='{{ route('users.create') }}'" 
             class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
          Create USer
     </button>
@@ -40,19 +40,44 @@
                 <td class="px-6 py-3 text-left">{{ $user->id }}</td>
                 <td class="px-6 py-3 text-left">{{ $user->name }}</td>
                 <td class="px-6 py-3 text-left">
-                    @if($user->roles->isNotEmpty())
+    {{ $user->roles->pluck('name')->implode(', ') }}
+
+                     {{-- @forelse($user->roles as $role)
+        <span class="text-muted">{{ $role->name }}</span>
+    @empty
+        <span class="text-muted">No Role</span>
+    @endforelse --}}
+                    {{-- @if($user->roles->isNotEmpty())
                         {{ $user->roles->pluck('name')->implode(', ') }}
                     @else
                         <span class="text-muted">No Role</span>
-                    @endif
+                    @endif --}}
                 </td>
+
+
+
                 <td class="px-6 py-3 text-left">
-                    @if($user->roles->isNotEmpty())
+
+                  
+    {{ $user->getAllPermissions()->pluck('name')->implode(', ') }}
+
+                     {{-- @foreach($user->permissions as $permission)
+ <span class="text-muted">{{ $permission->name }}</span>
+                     @endforeach
+
+                     @foreach($user->roles as $role)
+                     @foreach($role->permissions as $permission)
+                     <span class="text-muted">{{ $permission->name}}@unless($loop->last), @endunless</span>
+                     @endforeach
+                     @endforeach --}}
+                    {{-- @if($user->roles->isNotEmpty())
                         {{ $user->roles->flatMap->permissions->pluck('name')->unique()->implode(', ') }}
                     @else
                         <span class="text-muted">No Permissions</span>
-                    @endif
+                    @endif --}}
                 </td>
+
+
                 <td class="px-6 py-3 text-left">{{ $user->created_at->format('d M, Y') }}</td>
                 <td class="px-6 py-3 text-left">
                     <a href="{{ route('users.edit', $user->id) }}" class="me-2">

@@ -8,11 +8,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\TeamController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/loginmail', [logincontroller::class, 'loginmail'])->name('loginmail');
 
 
 Route::middleware('web')->group(function () {
@@ -46,12 +49,7 @@ Route::get('delete/{id}', [PermissionController::class, 'delete'])->name('permis
 
 
 
-// Route::get('roles/createrole', [RoleController::class, 'create'])->name('roles.create');
-// Route::post('roles/addrole', [RoleController::class, 'addrole'])->name('roles.addrole');
-// Route::get('roles/rolelist', [RoleController::class, 'list'])->name('roles.list');
-// Route::get('roles/editrole/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-// Route::post('roles/update/{id}', [RoleController::class, 'update'])->name('roles.update');
-// Route::get('roles/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
+
 
 
 Route::get('roles/createrole', [RoleController::class, 'create'])->name('roles.create');
@@ -78,10 +76,24 @@ Route::get('users/delete/{id}', [UserController::class, 'delete'])->name('users.
 Route::get('customer/createticket', [TicketController::class, 'create'])->name('customer.createticket');
 Route::post('customer/addticket', [TicketController::class, 'addticket'])->name('customer.addticket');
 
-//Route::view('customer/createticket', 'customer.createticket');
 
 Route::get('customer/ticketlist', [TicketController::class, 'ticketlist'])->name('customer.ticketlist');
 
 Route::get('customer/editticket/{id}', [TicketController::class, 'edit'])->name('customer.edit');
 Route::put('customer/updateticket/{id}', [TicketController::class, 'update'])->name('customer.update');
 Route::get('customer/deleteticket/{id}', [TicketController::class, 'delete'])->name('customer.delete');
+
+
+
+Route::get('team/teamcreate', [TeamController::class, 'create'])->name('team.create');
+
+Route::post('team/addteam', [TeamController::class, 'addteam'])->name('team.addteam');
+
+Route::get('team/listteam', [TeamController::class, 'list'])->name('team.list');
+
+Route::get('team/edit/{id}', [TeamController::class, 'edit'])->name('team.edit');
+
+Route::put('team/update/{id}', [TeamController::class, 'update'])->name('team.update');
+
+Route::get('team/delete/{id}', [TeamController::class, 'delete'])->name('team.delete');
+
