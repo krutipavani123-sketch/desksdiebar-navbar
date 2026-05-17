@@ -25,7 +25,7 @@ class UserController extends Controller
             $users->where('name', 'like', "%{$search}%");
         }
         //$users = $users->get
-        $users = User::with(['permissions', 'roles.permissions', 'teams'])->get();
+       // $users = User::with(['permissions', 'roles.permissions', 'teams'])->get();
 
         $teams = Team::all();
         return view('users.list', compact('users', 'teams'));

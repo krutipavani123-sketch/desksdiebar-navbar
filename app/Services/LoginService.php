@@ -23,11 +23,11 @@ class LoginService
         ]);
 
 
-        if ($user->id == 1) {
-            $user->assignRole('admin');
-        } else {
-            $user->assignRole("customer");
-        }
+        // if ($user->id == 1) {
+        //     $user->assignRole('admin');
+        // } else {
+        //     $user->assignRole("customer");
+        // }
 
 
 

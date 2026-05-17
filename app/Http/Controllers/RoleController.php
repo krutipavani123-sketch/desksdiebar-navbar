@@ -15,7 +15,7 @@ use Spatie\Permission\Models\Permission;
 class RoleController extends Controller
 {
 
-    protected $roleservice;
+    protected $roleservice;     //object
     public function __construct(RoleService $roleservice)
     {
         $this->roleservice = $roleservice;
@@ -24,7 +24,7 @@ class RoleController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             "name" => "required|unique:roles|min:3",
-            'permission' => 'nullable|array',
+            'permission' => 'nullable|array',   //optional or array
         ]);
 
         if ($validator->fails()) {
@@ -79,7 +79,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         $roles = Role::findOrFail($id);
-        $hasPermissions = $roles->permissions->pluck('name');
+        $hasPermissions = $roles->permissions->pluck('name');    //just name give /return
         $permissions = Permission::all();
         return view('roles.editrole', compact('permissions', 'hasPermissions', 'roles'));
     }
@@ -88,16 +88,18 @@ class RoleController extends Controller
         $roles = Role::findOrFail($id);
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:roles,name,' . $id . ',id'
+
+            //unique:table,column,ignore_id,id_column
         ]);
 
         if ($validator->passes()) {
             $roles->name = $request->name;
             $roles->save();
 
-            if (!empty($request->permission)) {
-                $roles->syncPermissions($request->permission);
+            if (!empty($request->permission)) {    // come from form checkbx input
+                $roles->syncPermissions($request->permission);    //remove old , add new
             } else {
-                $roles->syncPermissions([]);
+                $roles->syncPermissions([]);   // remove all
             }
             return redirect()->route('roles.list')->with('success', 'Updated');
         } else {

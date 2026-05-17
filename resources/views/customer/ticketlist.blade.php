@@ -42,12 +42,12 @@
          Assign Ticket
     </button> --}}
 
-     {{-- <button type="button"
+     <button type="button"
                         class="btn btn-success btn-sm px-4 py-2 fw-semibold shadow-sm"
-                        data-bs-toggle="modal"
+                        data-bs-toggle="modal"          {{-- model open --}}
                         data-bs-target="#assignModal">
                         Assign Ticket
-                    </button> --}}
+                    </button> 
 
                     
 </div>

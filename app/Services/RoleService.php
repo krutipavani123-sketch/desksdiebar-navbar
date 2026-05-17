@@ -46,7 +46,7 @@ class RoleService
     public function list()
     {
 
-        $query = Role::query();
+        $query = Role::query();    // query builder(like select query)
         if (request()->filled('search')) {
             $search = request()->search;
             $query->where('name', 'like', "%{$search}%");

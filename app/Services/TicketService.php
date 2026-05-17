@@ -63,7 +63,7 @@ class TicketService
 
 
 
-        $query = Ticket::with('team');
+        $query = Ticket::with('team');    //load with related team - tickets
         if ($request->filled('search')) {
             $search = $request->search;
 

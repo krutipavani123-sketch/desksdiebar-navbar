@@ -43,7 +43,7 @@ class PermissionService
 
 
         // $permissions = Permission::all();
-        $query = Permission::query();
+        $query = Permission::query(); // query builder (like select query)
 
         if (request()->filled('search')) {
             $search = request()->search;

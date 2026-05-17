@@ -60,7 +60,7 @@
         <tr>
             <td class="px-6 py-3 text-left">{{ $role->id }}</td>
             <td class="px-6 py-3 text-left">{{ $role->name }}</td>
-            <td class="px-6 py-3 text-left">{{ $role->permissions->pluck('name')->implode(',') }}</td>
+            <td class="px-6 py-3 text-left">{{ $role->permissions->pluck('name')->implode(',') }}</td>  {{-- convert array into string --}}
             <td class="px-6 py-3 text-left">{{ $role->created_at->format('d M, Y') }}</td>
 
             <td class="px-6 py-3 text-left">

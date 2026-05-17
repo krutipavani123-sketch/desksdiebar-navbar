@@ -43,7 +43,7 @@ class TeamController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             "teamName" => "required",
-            "leader_id" => 'nullable|exists:users,id',
+            "leader_id" => 'nullable|exists:users,id',    //must exists
             "users" => 'nullable|array'
         ]);
 
@@ -63,7 +63,7 @@ class TeamController extends Controller
             ]);
 
             if ($request->filled('users')) {
-                $teams->users()->attach($request->users);
+                $teams->users()->attach($request->users);   //pivot table(many to many)  attach new relation
             }
             // if ($request->has('users')) {
             //     $teams->users()->attach($request->users);

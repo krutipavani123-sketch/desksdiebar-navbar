@@ -70,7 +70,7 @@
         <td class="px-6 py-3 text-left">{{ $team->id }}</td>
         <td class="px-6 py-3 text-left">{{ $team->teamName }}</td>
        <td class="px-6 py-3 text-left">
-            @if($team->leader)
+            @if($team->leader)            {{-- leader model method name  --}}
                 {{ $team->leader->name }}
             @else
                 <span style="color: #999; font-style: italic;">No Leader Assigned</span>

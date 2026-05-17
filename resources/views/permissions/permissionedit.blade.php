@@ -1,10 +1,10 @@
-@extends('layout')
+@extends('layout')               {{-- inherit layout --}}
 @section('title', 'Edit Permissions')
 
 @section('header')
      <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Edit Permissions') }}
+            {{ __('Edit Permissions') }}   {{-- use for multi language --}}
         </h2>
     </x-slot>
 @endsection
@@ -41,8 +41,8 @@
                                    type="text"
                                    class="form-control shadow-sm rounded-3 border-secondary-subtle">
 
-                            @error('name')
-                                <p class="text-danger small mt-1">{{ $message }}</p>
+                            @error('name')           {{-- validation error --}}
+                                 <p class="text-danger small mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 

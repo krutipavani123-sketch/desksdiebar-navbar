@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class login extends Model
 {
-    protected $fillable = ['name', 'email', 'password', ''];
+    protected $fillable = ['name', 'email', 'password'];
 }

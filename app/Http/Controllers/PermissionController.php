@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class PermissionController extends Controller
 {
 
-    protected $permissionservice;
+    protected $permissionservice;   //object
 
     public function __construct(PermissionService $permissionservice)
     {

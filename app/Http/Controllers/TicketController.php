@@ -29,9 +29,9 @@ class TicketController extends Controller
         $validator = Validator::make($request->all(), [
             "subject" => "required",
             "description" => "required",
-            "priority" => "required|not_in:Default",
+            "priority" => "required|not_in:Default",  //must  change 
             "category" => "required|not_in:Default",
-            "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',
+            "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',   //10mb
             "status" => "required",
             // 'team_id' => 'required|exists:teams,id',
             // 'ticket_id' => 'required|exists:tickets,id',

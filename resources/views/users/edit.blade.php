@@ -51,8 +51,8 @@
 
                            <div class="mb-3">
                         <label class="form-label fw-semibold">Roles</label>
- <div class="row">
-     @if($roles->isNotEmpty())
+                        <div class="row">
+                            @if($roles->isNotEmpty())
                                 @foreach($roles as $role)
                                   <div class="col-md-3 mt-2">
                                     <div class="form-check">

@@ -137,13 +137,13 @@
         <summary style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border: 1px solid #ddd; border-radius: 10px; background: #fff; font-size: 14px; color: #444; cursor: pointer; user-select: none; list-style: none;">
             <span>Select Leader</span>
             <span style="border: solid #666; border-width: 0 2px 2px 0; display: inline-block; padding: 3px; transform: rotate(45deg); margin-bottom: 4px;"></span>
-        </summary> //visible header btn
+        </summary> {{--visible header btn--}}
 
         <div style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; padding: 12px; background: #fff; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             
       
             <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                <input type="radio" name="leader_id" value="" id="leader_none" 
+                <input type="radio" name="leader_id"  value="" id="leader_none" 
                     {{ is_null(old('leader_id', $teams->leader_id)) ? 'checked' : '' }} 
                     style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
                 <label for="leader_none" style="font-size: 14px; color: #999; cursor: pointer; width: 100%;">No Team Leader</label>
