@@ -104,7 +104,46 @@ class TicketController extends Controller
         $tickets->delete();
         return redirect()->route("customer.ticketlist")->with("success", "Ticket Deleted");
     }
+
+
+    public function assignticket(Request $request)
+    {
+        $request->validate([
+            'ticket_ids' => 'required|array',
+            'team_id' => 'required|exists:teams,id',
+        ]);
+
+        Ticket::whereIn('id', $request->ticket_ids)
+            ->update([
+                'assigned_team_id' => $request->team_id
+            ]);
+
+        return redirect()->back()->with('success', 'Tickets assigned successfully');
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // public function reassignticket(Request $request)
+    // {
+
+    //     $this->ticketservice->reassignticket($request);
+
+    //     return redirect()->back()->with('success', 'Ticket Reassigned Successfully');
+    // }
+
 //     public function assignticket(Request $request)
 //     {
 //         Ticket::whereIn('id', $request->ticket_ids)

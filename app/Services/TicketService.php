@@ -78,19 +78,20 @@ class TicketService
         $teams = Team::all();
         return view("customer.ticketlist", compact("tickets", "teams"));
     }
+    // public function reassignticket(Request $request)
+    // {
+    //     $request->validate([
+    //         'ticket_ids' => 'required|array',
+    //         'team_id' => 'required|exists:teams,id',
+    //     ]);
 
-    public function reassignteam(Request $request, $ticketId)
-    {
-        $request->validate([
-            'team_id' => 'required|exists:teams,id',
-        ]);
+    //     Ticket::whereIn('id', $request->ticket_ids)
+    //         ->update([
+    //             'assigned_team_id' => $request->team_id
+    //         ]);
 
-        $ticket = Ticket::findOrFail($ticketId);
-        $ticket->assigned_team_id = $request->team_id;
-        $ticket->save();
-
-        return back()->with('success', 'Ticket moved to another team');
-    }
+    //     // return redirect()->back()->with('success', 'Ticket Reassigned Successfully');
+    // }
 }
 
 // if ($request->assigned_to) {

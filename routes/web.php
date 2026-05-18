@@ -85,7 +85,7 @@ Route::put('customer/updateticket/{id}', [TicketController::class, 'update'])->n
 Route::get('customer/deleteticket/{id}', [TicketController::class, 'delete'])->name('customer.delete');
 
 
-// Route::get('customer/assignticket', [TicketController::class, 'assignticket'])->name('customer.assignticket');
+Route::post('customer/reassignticket', [TicketController::class, 'reassignticket'])->name('customer.reassignticket');
 
 
 Route::post('customer/assignticket', [TicketController::class, 'assignticket'])->name('customer.assignticket');

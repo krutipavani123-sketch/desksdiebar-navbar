@@ -195,11 +195,11 @@
                 </select>
             </div>
 
-          @if($ticket->team_id)
+          {{-- @if($ticket->team_id)
     <span class="badge bg-warning">Reassign</span>
 @else
     <span class="badge bg-success">Assign</span>
-@endif
+@endif --}}
             @error('name')
                 <p class="error-text">{{ $message }}</p>
             @enderror

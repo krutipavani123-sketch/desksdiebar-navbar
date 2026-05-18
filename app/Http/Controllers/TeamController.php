@@ -8,9 +8,12 @@ use  App\Models\Team;
 use  App\Models\User;
 use  App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Traits\HasRoles;
 
 class TeamController extends Controller
 {
+
+    use HasRoles;
     public function create()
     {
         $users = User::role('support_agent')->get();
@@ -23,10 +26,17 @@ class TeamController extends Controller
         //     ->where('user_id', auth()->id())
         //     ->value('team_id');
 
-        $query = Team::with('users', 'leader')
-            ->where('leader_id', auth()->id());
 
+        // if superadmin show all team and if leader login show only their team
+        $user = auth()->user();
 
+        if ($user && $user->hasRole('superadmin')) {
+
+            $query = Team::query()->with('users', 'leader');
+        } else {
+            $query = Team::with('users', 'leader')
+                ->where('leader_id', auth()->id());
+        }
 
         if ($request->filled('search')) {
             $query->where('teamName', 'like', '%' . request('search') . '%');
