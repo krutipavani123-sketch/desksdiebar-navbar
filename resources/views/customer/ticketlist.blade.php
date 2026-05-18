@@ -88,6 +88,8 @@
             <th class="px-6 py-3 text-left">Attachment</th>
             <th class="px-6 py-3 text-left">Status</th>
             <th class="px-6 py-3 text-left">Assigned Team</th>
+            <th class="px-6 py-3 text-left">Assigned Agent</th>
+
            <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -108,7 +110,9 @@
 </td>
 <td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
-
+<td>
+    {{ $ticket->agent->name ?? 'Not Assigned' }}
+</td>   
 {{-- @can('edit ticket') --}}
             <td class="px-6 py-3 text-left">
 

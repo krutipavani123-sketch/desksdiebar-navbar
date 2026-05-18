@@ -10,16 +10,16 @@ class Team extends Model
 {
     use HasRoles;
     protected $table = "teams";
-    protected $fillable = ['teamName', 'leader_id'];
+    protected $fillable = ['teamName', 'leader_id', 'assigned_agent_id'];
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'team_user');
     }
 
-    public function agents()
+    public function agent()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class, 'assigned_agent_id');
     }
     public function leader()
     {

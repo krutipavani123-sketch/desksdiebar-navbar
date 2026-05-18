@@ -181,10 +181,26 @@
                     </label>
                 </div>
             @endforeach
-       
-
     </details>
 </div>
+
+
+            <div class="form-group">
+    <label class="form-label">Select Agent</label>
+
+    <select name="assigned_agent_id" class="form-control">
+        <option value="">Select Agent</option>
+
+        @foreach($users as $user)
+            <option value="{{ $user->id }}"
+                {{ old('assigned_agent_id', $teams->assigned_agent_id) == $user->id ? 'selected' : '' }}>
+                {{ $user->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+       
+
 
           
             @error('name')

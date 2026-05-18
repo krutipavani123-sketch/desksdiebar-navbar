@@ -111,12 +111,33 @@ class TicketController extends Controller
         $request->validate([
             'ticket_ids' => 'required|array',
             'team_id' => 'required|exists:teams,id',
+            'agent_id' => 'nullable|exists:users,id',
         ]);
 
-        Ticket::whereIn('id', $request->ticket_ids)
-            ->update([
-                'assigned_team_id' => $request->team_id
-            ]);
+        $user = auth()->user();
+
+        if ($user && $user->hasRole('team_leader')) {
+
+            Ticket::whereIn('id', $request->ticket_ids)
+                ->update([
+                    'assigned_team_id' => $request->team_id,
+                    'assigned_agent_id' => $request->agent_id,
+                ]);
+        } else {
+            Ticket::whereIn('id', $request->ticket_ids)
+                ->update([
+                    'assigned_team_id' => $request->team_id,
+                    'assigned_agent_id' => $request->agent_id,
+                ]);
+        }
+
+
+
+
+        // Ticket::whereIn('id', $request->ticket_ids)
+        //     ->update([
+        //         'assigned_team_id' => $request->team_id
+        //     ]);
 
         return redirect()->back()->with('success', 'Tickets assigned successfully');
     }

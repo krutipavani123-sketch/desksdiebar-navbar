@@ -28,8 +28,6 @@ class TicketService
             }
         }
 
-
-
         $teamId = DB::table('team_user')
             ->where('user_id', auth()->id())
             ->value('team_id');
@@ -48,35 +46,33 @@ class TicketService
 
     public function ticketlist(Request $request)
     {
-        // return view("customer.ticketlist", compact("ticket"));
-        //     $tickets = Ticket::all();
-        //    $agents =Team::with('agents')->get();
-        // dd(Ticket::all());
+        $user = auth()->user();
+        $query = Ticket::with(['team', 'agent']);  // team and agent relation load
+        if ($user->hasRole('team_leader')) {
+            $team = DB::table('team_user')
+                ->where('user_id', $user->id)   
+                ->value('team_id');
 
-        // $teamId = DB::table('team_user')
-        //     ->where('user_id', auth()->id())
-        //     ->value('team_id');
+            $query->where(function ($q) use ($team) {
+                $q->where('assigned_team_id,', $team)
+                    ->orWhereNull('assigned_team_id');
+            });
+        } elseif ($user->hasRole('support_agent')) {
+            $query->where('assigned_agent_id', $user->id);
+        }
 
-        // $tickets = Ticket::where('assigned_team_id', $teamId)
-        //     ->with('team')
-        //     ->get();
-
-
-
-        $query = Ticket::with('team');    //load with related team - tickets
         if ($request->filled('search')) {
             $search = $request->search;
 
-
             $query->where(function ($q) use ($search) {
                 $q->where('subject', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                    ->orwhere('description', 'like', "%{$search}%");
             });
         }
+
         $tickets = $query->get();
-        //   $tickets = Ticket::with('team')->get();
         $teams = Team::all();
-        return view("customer.ticketlist", compact("tickets", "teams"));
+        return view('customer.ticketlist', compact('tickets', 'teams'));
     }
     // public function reassignticket(Request $request)
     // {
@@ -139,3 +135,42 @@ class TicketService
 //         $oldTeam ? 'Ticket Reassigned Successfully' : 'Ticket Assigned Successfully'
 //     );
 // }
+
+
+
+
+
+
+
+    // public function ticketlist(Request $request)
+    // {
+    //     // return view("customer.ticketlist", compact("ticket"));
+    //     //     $tickets = Ticket::all();
+    //     //    $agents =Team::with('agents')->get();
+    //     // dd(Ticket::all());
+
+    //     // $teamId = DB::table('team_user')
+    //     //     ->where('user_id', auth()->id())
+    //     //     ->value('team_id');
+
+    //     // $tickets = Ticket::where('assigned_team_id', $teamId)
+    //     //     ->with('team')
+    //     //     ->get();
+
+
+
+    //     $query = Ticket::with('team');    //load with related team - tickets
+    //     if ($request->filled('search')) {
+    //         $search = $request->search;
+
+
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('subject', 'like', "%{$search}%")
+    //                 ->orWhere('description', 'like', "%{$search}%");
+    //         });
+    //     }
+    //     $tickets = $query->get();
+    //     //   $tickets = Ticket::with('team')->get();
+    //     $teams = Team::all();
+    //     return view("customer.ticketlist", compact("tickets", "teams"));
+    // }

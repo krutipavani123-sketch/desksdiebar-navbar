@@ -60,6 +60,8 @@
             <th class="px-6 py-3 text-left">Team Name</th>
             <th class="px-6 py-3 text-left">Team Leader</th>
             <th class="px-6 py-3 text-left">Team Member Name</th> 
+                        <th class="px-6 py-3 text-left">Agent</th>
+
             <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -83,6 +85,14 @@
                 <span class="text-gray-400 italic">No members assigned</span>
             @endif
         </td>
+
+       <td class="px-6 py-3 text-left">
+    @if($team->agent)
+        {{ $team->agent->name }}
+    @else
+        <span class="text-gray-400 italic">No Agent assigned</span>
+    @endif
+</td>
         {{-- @can('edit team') --}}
         <td class="px-6 py-3 text-left">
             <a href="{{ route('team.edit', $team->id) }}">
