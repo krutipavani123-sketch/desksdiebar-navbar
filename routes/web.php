@@ -103,3 +103,9 @@ Route::get('team/edit/{id}', [TeamController::class, 'edit'])->name('team.edit')
 Route::put('team/update/{id}', [TeamController::class, 'update'])->name('team.update');
 
 Route::get('team/delete/{id}', [TeamController::class, 'delete'])->name('team.delete');
+
+Route::post('customer/comment', [TicketController::class, 'comment'])->name('customer.comment');
+
+Route::get('/customer/{id}', [TicketController::class, 'show'])->name('customer.show');
+
+Route::get('commentlist', [TicketController::class, 'commentlist'])->name('customer.commentlist');

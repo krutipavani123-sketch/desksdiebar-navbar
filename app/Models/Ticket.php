@@ -32,4 +32,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class, 'assigned_agent_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -136,7 +136,18 @@
                 @error('description') <p class="error-text">{{ $message }}</p> @enderror
             </div>
 
-          
+            <div class="form-group">
+                <label class="form-label">comment</label>
+            
+                <input value="{{ old('comment',optional($tickets->comments->first())->comment) }}" name="comment" type="text">
+
+                 {{-- <input value="{{ old('comment',optional($tickets->comments->latest()->first())->comment) }}" name="comment" type="text"> --}}
+            
+                 @error('comment') <p class="error-text">{{ $message }}</p> @enderror
+            </div>
+
+
+
            <div class="form-group">
     <label class="form-label">Priority</label>
     <select name="priority" class="form-control">

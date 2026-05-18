@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\Team;
+use App\Models\Comment;
 
 class TicketController extends Controller
 {
@@ -56,14 +57,18 @@ class TicketController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $tickets = Ticket::findOrFail($id);
+        //        $tickets = Ticket::findOrFail($id);
+
+        $tickets = Ticket::with('comments')->findOrFail($id);
+
         //return redirect()->route('customer.edit', compact('tickets'));
         return view('customer.editticket', compact('tickets'));
     }
 
     public function update(Request $request, $id)
     {
-        $tickets = Ticket::findOrFail($id);
+        //$tickets = Ticket::findOrFail($id);
+        $tickets = Ticket::with('comments')->findOrFail($id);
         $validator = Validator::make($request->all(), [
             "subject" => "required",
             "description" => "required",
@@ -82,7 +87,16 @@ class TicketController extends Controller
             // $tickets->attachment = $request->attachment;
             $tickets->status = $request->status;
 
+            if ($request->filled('comment')) {
+                $latestComment = $tickets->comments();
+                // $latestComment = $tickets->comments()->latest()->first();
 
+                if ($latestComment) {
+                    $latestComment->update([
+                        'comment' => $request->comment
+                    ]);
+                }
+            }
             if ($request->hasFile('attachment')) {
 
                 if ($tickets->attachment) {
@@ -154,6 +168,25 @@ class TicketController extends Controller
         //     ]);
 
         return redirect()->back()->with('success', 'Tickets assigned successfully');
+    }
+
+
+    public function comment(Request $request, $id)
+    {
+        return $this->ticketservice->comment($request, $id);
+    }
+
+
+    public function show($id)
+    {
+        $ticket = Ticket::with('comments.user')->findOrFail($id);
+        return view('customer.comment', compact('ticket'));
+    }
+    public function commentlist()
+
+    {
+        $comments = Comment::all();
+        return view('customer.commentlist', compact('comments'));
     }
 }
 

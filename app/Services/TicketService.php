@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Team;
-
+use App\Models\Comment;
 class TicketService
 {
 
@@ -54,7 +54,7 @@ class TicketService
             'status' => $request->status,
             'assigned_team_id' => $teamId,
             'assigned_agent_id' => $agentId,  // assign automatic agentid 
-        ]);
+        ]); 
     }
 
     public function ticketlist(Request $request)
@@ -86,9 +86,32 @@ class TicketService
 
         $tickets = $query->get();
         $teams = Team::all();
+
+
+        $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
+
+        
         return view('customer.ticketlist', compact('tickets', 'teams'));
         // return view('customer.ticketlist', compact('tickets', 'teams', 'agents'));
     }
+
+
+public function comment(Request $request, $id){
+    $request->validate([
+        'comment'=> 'required',
+    ]);
+
+    Comment::create([
+        'ticket_id'=> $id,
+        'user_id'=> auth()->id(),
+        'comment'=> $request->comment,
+    ]);
+    return back()->with('success','comment added'); 
+}
+
+
+
+}
     // public function reassignticket(Request $request)
     // {
     //     $request->validate([
@@ -103,7 +126,7 @@ class TicketService
 
     //     // return redirect()->back()->with('success', 'Ticket Reassigned Successfully');
     // }
-}
+
 
 // if ($request->assigned_to) {
 //     $ticket->assigned_to = $request->assigned_to;

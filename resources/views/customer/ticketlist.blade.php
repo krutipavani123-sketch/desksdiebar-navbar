@@ -76,11 +76,16 @@
      data-search="true"
     data-page-list="[3,5,10,25,50,100,200,All]">
 <h2>Ticket List</h2>
+
+
+
+
     <thead class="bg-gray-50">
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">Select</th>
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Subject</th>
+<th class="px-6 py-3 text-left">Comment</th> 
             <th class="px-6 py-3 text-left">Description</th>
 
             <th class="px-6 py-3 text-left">Priority</th>
@@ -89,6 +94,7 @@
             <th class="px-6 py-3 text-left">Status</th>
             <th class="px-6 py-3 text-left">Assigned Team</th>
             <th class="px-6 py-3 text-left">Assigned Agent</th>
+                        {{-- <th class="px-6 py-3 text-left">Comment</th> --}}
 
            <th class="px-6 py-3 text-left">Action</th>
         </tr>
@@ -96,12 +102,22 @@
 
    <tbody class="bg-white">
         @foreach($tickets as $ticket)
+
+        
         <tr>
             <td class="px-6 py-3 text-left">
      <input type="checkbox" name="ticket_ids[]" value="{{ $ticket->id }}">
 </td>
             <td class="px-6 py-3 text-left">{{  $ticket->id }}</td>
             <td class="px-6 py-3 text-left">{{ $ticket->subject }}</td>
+
+           
+ <td>
+        <a href="{{ route('customer.show', $ticket->id) }}" class="btn btn-sm btn-info">
+            Comments
+        </a>
+    </td>
+
             <td class="px-6 py-3 text-left">{{  $ticket->description }}</td>
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
           <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
@@ -114,6 +130,20 @@
     
        {{ $ticket->agent->name ?? 'No Agent' }}
 </td>   
+
+        {{-- <td colspan="10">
+
+            <h5>Comments</h5>
+
+            @foreach($ticket->comments as $comment)
+                <div class="border p-2 mb-2">
+                    <b>{{ $comment->user->name }}</b>
+                    <p>{{ $comment->comment }}</p>
+                    <small>{{ $comment->created_at }}</small>
+                </div>
+            @endforeach
+
+        </td> --}}
 {{-- @can('edit ticket') --}}
             <td class="px-6 py-3 text-left">
 
