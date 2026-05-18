@@ -132,7 +132,7 @@ class TicketController extends Controller
         }
 
 
-
+    
 
         // Ticket::whereIn('id', $request->ticket_ids)
         //     ->update([

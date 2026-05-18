@@ -40,7 +40,7 @@ class TicketService
             'attachment' => $path,
             'status' => $request->status,
             'assigned_team_id' => $teamId,
-            'assigned_agent_id' => null,
+            'assigned_agent_id' => $request->assigned_agent_id,
         ]);
     }
 
@@ -50,12 +50,11 @@ class TicketService
         $query = Ticket::with(['team', 'agent']);  // team and agent relation load
         if ($user->hasRole('team_leader')) {
             $team = DB::table('team_user')
-                ->where('user_id', $user->id)   
+                ->where('user_id', $user->id)
                 ->value('team_id');
-
+    
             $query->where(function ($q) use ($team) {
-                $q->where('assigned_team_id,', $team)
-                    ->orWhereNull('assigned_team_id');
+                $q->where('assigned_team_id,', $team);
             });
         } elseif ($user->hasRole('support_agent')) {
             $query->where('assigned_agent_id', $user->id);

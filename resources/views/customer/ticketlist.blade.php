@@ -111,6 +111,7 @@
 <td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 <td>
+    
     {{ $ticket->agent->name ?? 'Not Assigned' }}
 </td>   
 {{-- @can('edit ticket') --}}
