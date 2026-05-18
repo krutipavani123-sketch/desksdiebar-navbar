@@ -75,7 +75,7 @@
     data-height="auto"
      data-search="true"
     data-page-list="[3,5,10,25,50,100,200,All]">
-
+<h2>Ticket List</h2>
     <thead class="bg-gray-50">
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">Select</th>
@@ -112,7 +112,7 @@
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 <td>
     
-    {{ $ticket->agent->name ?? 'Not Assigned' }}
+       {{ $ticket->agent->name ?? 'No Agent' }}
 </td>   
 {{-- @can('edit ticket') --}}
             <td class="px-6 py-3 text-left">
@@ -164,7 +164,15 @@
                                         </option>
                                     @endforeach
                                 </select>
+ {{-- <select name="agent_id" class="form-control">
+        <option value="">Select Agent</option>
 
+        @foreach($agents as $agent)
+            <option value="{{ $agent->id }}">
+                {{ $agent->name }}
+            </option>
+        @endforeach
+    </select> --}}
                                 </div>
 
                                 <div class="modal-footer">

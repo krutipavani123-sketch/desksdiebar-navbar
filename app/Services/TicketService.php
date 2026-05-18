@@ -27,10 +27,23 @@ class TicketService
                 $path = $file->store('images', 'public');
             }
         }
+        // $teamId = $request->team_id;
+        // $agent = User::where('team_id', $teamId)->first(); //find team agent
+        // $teamId = DB::table('team_user')
+        //     ->where('user_id', auth()->id())
+        //     ->value('team_id');
 
-        $teamId = DB::table('team_user')
-            ->where('user_id', auth()->id())
-            ->value('team_id');
+        $teamId = $request->team_id;
+
+        $agentId = DB::table('teams')
+            ->where('id', $teamId)
+            ->value('assigned_agent_id');
+
+
+
+        // $agentId = DB::table('team_user')
+        //    ->where('team_id', $teamId)    //Model::where('column_name', $value)->get();
+        ///   ->value('user_id'); // first agent (assign automatic agentid )
 
         return Ticket::create([
             'subject' => $request->subject,
@@ -40,7 +53,7 @@ class TicketService
             'attachment' => $path,
             'status' => $request->status,
             'assigned_team_id' => $teamId,
-            'assigned_agent_id' => $request->assigned_agent_id,
+            'assigned_agent_id' => $agentId,  // assign automatic agentid 
         ]);
     }
 
@@ -52,9 +65,10 @@ class TicketService
             $team = DB::table('team_user')
                 ->where('user_id', $user->id)
                 ->value('team_id');
-    
+
             $query->where(function ($q) use ($team) {
-                $q->where('assigned_team_id,', $team);
+                $q->where('assigned_team_id', $team)
+                    ->orWhereNull('assigned_agent_id');
             });
         } elseif ($user->hasRole('support_agent')) {
             $query->where('assigned_agent_id', $user->id);
@@ -68,10 +82,12 @@ class TicketService
                     ->orwhere('description', 'like', "%{$search}%");
             });
         }
+        //   $agents = User::role('support_agent')->get();
 
         $tickets = $query->get();
         $teams = Team::all();
         return view('customer.ticketlist', compact('tickets', 'teams'));
+        // return view('customer.ticketlist', compact('tickets', 'teams', 'agents'));
     }
     // public function reassignticket(Request $request)
     // {

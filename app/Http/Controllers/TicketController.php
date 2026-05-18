@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  App\Services\TicketService;
 use App\Models\Ticket;
-
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use App\Models\Team;
 
 class TicketController extends Controller
@@ -114,25 +115,38 @@ class TicketController extends Controller
             'agent_id' => 'nullable|exists:users,id',
         ]);
 
-        $user = auth()->user();
-
-        if ($user && $user->hasRole('team_leader')) {
-
-            Ticket::whereIn('id', $request->ticket_ids)
-                ->update([
-                    'assigned_team_id' => $request->team_id,
-                    'assigned_agent_id' => $request->agent_id,
-                ]);
-        } else {
-            Ticket::whereIn('id', $request->ticket_ids)
-                ->update([
-                    'assigned_team_id' => $request->team_id,
-                    'assigned_agent_id' => $request->agent_id,
-                ]);
-        }
+        $teamId = $request->team_id;
+        $agentId = DB::table('teams')
+            ->where('id', $teamId)
+            ->value('assigned_agent_id');
 
 
-    
+        Ticket::whereIn('id', $request->ticket_ids)
+            ->update([
+                'assigned_team_id' => $request->team_id,
+                'assigned_agent_id' =>  $agentId,
+            ]);
+
+
+
+        // if ($user && $user->hasRole('team_leader')) {
+
+        //     Ticket::whereIn('id', $request->ticket_ids)
+        //         ->update([
+        //             'assigned_team_id' => $request->team_id,
+        //             'assigned_agent_id' => $request->agent_id,
+        //         ]);
+        // } else {
+        //     Ticket::whereIn('id', $request->ticket_ids)
+        //         ->update([
+        //             'assigned_team_id' => $request->team_id,
+        //             'assigned_agent_id' => $request->agent_id,
+        //         ]);
+        // }
+        //dd($request->request->all());
+
+
+
 
         // Ticket::whereIn('id', $request->ticket_ids)
         //     ->update([
