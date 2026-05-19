@@ -20,7 +20,8 @@ class Ticket extends Model
         'attachment',
         'status',
         'assigned_team_id',
-        'assigned_agent_id'
+        'assigned_agent_id',
+        'customer_id',
     ];
 
     public function team()

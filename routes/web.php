@@ -112,20 +112,12 @@ Route::get('team/delete/{id}', [TeamController::class, 'delete'])->name('team.de
 Route::get('comment/{id}', [CommentController::class, 'create'])
     ->name('customer.comment');
 
-Route::post('addcomment', [CommentController::class,'addcomment'])->name('addcomment');
+Route::post('addcomment', [CommentController::class, 'addcomment'])->name('addcomment');
 
 Route::get('commentlist/{id}', [CommentController::class, 'commentlist'])
     ->name('customer.commentlist');
 
-//Route::post('customer/comment', [CommentController::class, 'comment'])->name('comment');
+Route::get('delete/{id}', [CommentController::class, 'delete'])->name('delete');
 
-//Route::get('/customer/{id}', [CommentController::class, 'show'])->name('customer.show');
-
-//Route::get('commentlist', [CommentController::class, 'commentlist'])->name('customer.commentlist');
-
-
-// Route::post('customer/comment', [TicketController::class, 'comment'])->name('customer.comment');
-
-// Route::get('/customer/{id}', [TicketController::class, 'show'])->name('customer.show');
-
-// Route::get('commentlist', [TicketController::class, 'commentlist'])->name('customer.commentlist');
+Route::get('customer/editcomment/{id}', [CommentController::class, 'edit'])->name('edit');
+Route::post('update/{id}', [CommentController::class, 'update'])->name('update');

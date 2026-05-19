@@ -129,7 +129,15 @@
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
           <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
 <td>
+      @if($ticket->attachment)
     <img src="{{ $ticket->attachment ? asset('storage/' . $ticket->attachment) : 'https://via.placeholder.com/80' }}" width="70" height="50">
+      @else
+
+        <span class="text-danger">
+            No Attachment
+        </span>
+
+        @endif
 </td>
 <td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>

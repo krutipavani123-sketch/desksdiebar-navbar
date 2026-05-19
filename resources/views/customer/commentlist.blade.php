@@ -90,11 +90,11 @@
 
         <td class="px-6 py-3 text-left">
 
-                <a href="{{ route('customer.edit', $comment->id) }}">
+                <a href="{{ route('edit', $comment->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
 
-                <a href="{{ route('customer.delete',$comment->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ route('delete',$comment->id) }}" ><i class="bi bi-trash2-fill"></i></a>
               
             </td>
 

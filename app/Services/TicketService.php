@@ -55,6 +55,7 @@ class TicketService
             'status' => $request->status,
             'assigned_team_id' => $teamId,
             'assigned_agent_id' => $agentId,  // assign automatic agentid 
+            'customer_id' => auth()->id(),
         ]);
     }
 
@@ -67,12 +68,16 @@ class TicketService
                 ->where('user_id', $user->id)
                 ->value('team_id');
 
-            $query->where(function ($q) use ($team) {
+            $query->where(function ($q) use ($team) { //team based filtering
                 $q->where('assigned_team_id', $team)
                     ->orWhereNull('assigned_agent_id');
+                // unassigned ticket show   
             });
         } elseif ($user->hasRole('support_agent')) {
             $query->where('assigned_agent_id', $user->id);
+            // show their assigned ticket 
+        } elseif ($user->hasRole('customer')) {
+            $query->where('customer_id', $user->id); // view own ticket
         }
 
         if ($request->filled('search')) {
@@ -85,11 +90,13 @@ class TicketService
         }
         //   $agents = User::role('support_agent')->get();
 
-        $tickets = $query->get();
+        // $tickets = $query->get();
+        $tickets = $query->with('comments.user')->get();
+
         $teams = Team::all();
 
 
-        $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
+        // $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
 
 
         return view('customer.ticketlist', compact('tickets', 'teams'));

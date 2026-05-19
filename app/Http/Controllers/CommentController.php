@@ -35,7 +35,7 @@ class CommentController extends Controller
             'is_internal' => $request->has('is_internal') ? 1 : 0,
         ]);
 
-        return back()->with('success', 'Comment Added');
+        return redirect()->route('customer.ticketlist')->with('success', 'Comment Added');
     }
     //return view('comment', 'comment');
     //  return redirect()->route('customer.comment')->with('success','Comment Add');
@@ -55,5 +55,58 @@ class CommentController extends Controller
         $comments = $ticket->comments;
 
         return view('customer.commentlist', compact('comments', 'ticket'));
+    }
+
+    public function delete($id)
+    {
+        $comment = Comment::findOrFail($id);
+        if (auth()->user()->hasRole('customer')) {
+            if ($comment->user_id != auth()->id()) {
+                abort(403);
+            }
+        }
+        $comment->delete();
+        return redirect()->route('customer.ticketlist')->with('success', 'Comment Deleted');
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $comment = Comment::findOrFail($id);
+        $ticket = Ticket::findOrFail($comment->ticket_id);
+
+        return view('customer.editcomment', compact('comment', 'ticket'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $comment = Comment::findOrFail($id);
+
+
+        $validator = Validator::make($request->all(), [
+            //'ticket_id' => 'required|exists:tickets,id',
+            'comment' => 'required',
+            'is_internal' => 'nullable'
+        ]);
+
+        $ticket = Ticket::findOrFail($comment->ticket_id);
+
+        if (auth()->user()->hasRole('Customer')) {
+
+            // customer can only add comment own ticket 
+            if ($ticket->customer_id != auth()->id()) {
+                abort(403);
+            }
+        }
+
+
+        if ($validator->fails()) {
+            return back()->with('error', $validator->errors()->first());
+        } else {
+            $comment->comment = $request->comment;
+            $comment->is_internal = $request->has('is_internal') ? 1 : 0;;
+            $comment->save();
+        }
+
+        return back()->with('success', 'Updated');
     }
 }
