@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            $table->foreignId('customer_id')
-                ->nullable()
-                ->after('category')
-                ->constrained('users')
-                ->onDelete('cascade');
-        });
+
+
+
+        if (!Schema::hasColumn('tickets', 'customer_id')) {
+            Schema::table('tickets', function (Blueprint $table) {
+                $table->boolean('customer_id')->default(0);
+            });
+        }
     }
 
     /**

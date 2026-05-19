@@ -95,7 +95,7 @@
             <th class="px-6 py-3 text-left">Assigned Team</th>
             <th class="px-6 py-3 text-left">Assigned Agent</th>
                         {{-- <th class="px-6 py-3 text-left">Comment</th> --}}
-
+ <th class="px-6 py-3 text-left">Resolve</th>
            <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -162,7 +162,7 @@
 
         </form> --}}
 
-      @if(auth()->user()->hasRole('support_agent') || auth()->user()->hasRole('admin'))
+      {{-- @if(auth()->user()->hasRole('support_agent') || auth()->user()->hasRole('admin'))
 <form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
     @csrf
 
@@ -173,11 +173,35 @@
         <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
         <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option>
     </select>
-</form>
-
-    @else
+</form> 
+  @else
         {{ $ticket->status }}
-    @endif
+    @endif--}}
+
+@if($ticket->status != 'Closed')
+    <form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
+        @csrf
+
+        <select name="status" onchange="this.form.submit()">
+            <option value="Open" {{ $ticket->status == 'Open' ? 'selected' : '' }}>Open</option>
+            <option value="In Progress" {{ $ticket->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+            <option value="Pending" {{ $ticket->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+            <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
+            <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option>
+        </select>
+    </form>
+@else
+    <span >Closed</span>
+@endif
+
+  
+</td>
+
+<td>
+    <a href="{{ route('customer.resolve', $ticket->id) }}"
+   class="btn btn-sm btn-warning">
+   Resolve
+</a>
 </td>
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 <td>

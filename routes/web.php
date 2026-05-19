@@ -100,6 +100,11 @@ Route::get('customer/editticket/{id}', [TicketController::class, 'edit'])->name(
 Route::put('customer/updateticket/{id}', [TicketController::class, 'update'])->name('customer.update');
 Route::get('customer/deleteticket/{id}', [TicketController::class, 'delete'])->name('customer.delete');
 
+Route::get('customer/resolve/{id}', [TicketController::class, 'resolve'])
+    ->name('customer.resolve');
+
+Route::post('customer/resolve/update/{id}', [TicketController::class, 'updateResolve'])
+    ->name('customer.resolve.update');
 
 
 Route::post('customer/updatestatus/{id}', [TicketController::class, 'updatestatus'])

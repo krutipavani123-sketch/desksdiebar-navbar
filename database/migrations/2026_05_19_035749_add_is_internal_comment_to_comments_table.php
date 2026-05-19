@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->boolean('is_internal')->default(false);
-        });
+        if (!Schema::hasColumn('comments', 'is_internal')) {
+            Schema::table('comments', function (Blueprint $table) {
+                $table->boolean('is_internal')->default(0);
+            });
+        }
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.  
      */
     public function down(): void
     {

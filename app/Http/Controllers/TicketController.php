@@ -83,7 +83,7 @@ class TicketController extends Controller
         } else {
             $tickets->subject = $request->subject;
             $tickets->description = $request->description;
-            $tickets->priority = $request->priority;    
+            $tickets->priority = $request->priority;
             $tickets->category = $request->category;
             // $tickets->attachment = $request->attachment;
             $tickets->status = $request->status;
@@ -206,6 +206,29 @@ class TicketController extends Controller
         $ticket->save();
 
         return redirect()->back()->with('success', 'Status Updated');
+    }
+
+
+
+
+
+    public function resolve($id)
+    {
+        $ticket = Ticket::with('comments')->findOrFail($id);
+        return view('customer.resolve', compact('ticket'));
+    }
+
+    public function updateResolve(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+ $ticket->status = 'Closed';
+      //  $ticket->status = $request->status;
+        $ticket->resolution = $request->resolution;
+        
+  //$ticket->resolved_at = now(); 
+        $ticket->save();
+
+        return redirect()->route('customer.ticketlist')->with('success', 'Ticket Resolved');
     }
 }
 

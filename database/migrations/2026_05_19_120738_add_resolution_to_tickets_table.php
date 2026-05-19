@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('is_internal_comment', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('tickets', function (Blueprint $table) {
+             $table->text('resolution')->nullable();
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('is_internal_comment');
+        Schema::table('tickets', function (Blueprint $table) {
+            //
+        });
     }
 };
