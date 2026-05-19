@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>@yield('title')</title>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
@@ -22,494 +20,128 @@
 
     
 </script>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
-        body {
-            background: #f4f6fb;
-        }
+       body{
+    background:#f4f6fb;
+}
 
-        .app-container {
-            padding: 25px;
-        }
+/* WHITE SIDEBAR */
+.sidebar{
+    width:250px;
+    height:100vh;
+    position:fixed;
+    background:#ffffff;
+    color:#111827;
+    border-right:1px solid #e5e7eb;
+    overflow-y:auto;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+}
 
-        .app-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            padding: 20px;
-        }
+.sidebar a{
+    display:block;
+    padding:12px 15px;
+    color:#374151;
+    text-decoration:none;
+    transition:0.2s;
+    border-radius:6px;
+    margin:2px 8px;
+}
 
-        .app-title {
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
+.sidebar a:hover{
+    background:#f3f4f6;
+    color:#111827;
+}
 
-        .navbar {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+.sidebar h5{
+    color:#111827;
+    font-weight:600;
+}
+
+.content{
+    margin-left:250px;
+    padding:20px;
+}
+
+.topbar{
+    background:white;
+    padding:10px 15px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
     </style>
-
- {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-
-
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
+@php
+$user = auth()->user();
+@endphp
 
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{{ url('welcome') }}">
-           Desk System
-        </a>
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-        <!-- Mobile Menu Button -->
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarContent"
-            aria-controls="navbarContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
+    <h5 class="p-3 border-bottom">Desk System</h5>
 
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <a href="{{ route('dashboard') }}">🏠 Dashboard</a>
 
-        <!-- Navbar Content -->
-        <div class="collapse navbar-collapse" id="navbarContent">
+    @if($user->hasRole('superadmin'))
+        <a href="#">🧠 Super Admin Panel</a>
+        <a href="{{ route('roles.list') }}">Roles</a>
+        <a href="{{ route('permissions.permissionlist') }}">Permissions</a>
+        <a href="{{ route('users.list') }}">Users</a>
+        <a href="{{ route('customer.ticketlist') }}">Ticket</a>
+        <a href="{{ route('team.list') }}">Team</a>
 
-            <ul class="navbar-nav me-auto">
-{{-- @can('add ticket') --}}
-                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('customer.ticketlist') }}">Ticket</a>
-                </li>
-{{-- @endcan --}}
-@can('manage users')
-                <li class="nav-item">   
-                    <a class="nav-link" href="{{ route('users.list') }}">Add User</a>
-                </li>
-                @endcan
-     @can('manage roles')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('roles.list') }}">Add Role</a>
-                </li>
-      @endcan 
- @can('manage permissions')
- <li class="nav-item">
-                    <a class="nav-link" href="{{ route('permissions.permissionlist') }}">Add Permissions</a>
-                </li>
-                @endcan
+    @endif
 
-                {{-- @can('manage team') --}}
-                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('team.list') }}">Team</a>
-                </li>
+    @if($user->hasRole('admin'))
+        <a href="{{ route('team.list') }}">Teams</a>
+        <a href="{{ route('users.list') }}">Users</a>
+        <a href="{{ route('customer.ticketlist') }}">Tickets</a>
 
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" href="{{ route('customer.commentlist') }}">Comments</a>
-                    </li> --}}
-{{-- @endcan --}}
+    @endif
 
-    {{-- @role('admin')
-                 <li class="nav-item">
-                    <a class="nav-link" href="">Assign Ticket</a>
-                </li>
-@endrole --}}
- {{-- <li class="nav-item">
-                    <a class="nav-link" href="{{ route('permissions.permissionadd') }}">Add Permissions</a>
-                </li> --}}
-{{--
-@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage users'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.list') }}">Users</a>
-                </li>
-@endif
+    @if($user->hasRole('team_leader'))
+        <a href="#">My Team</a>
+           {{-- <a href="#">Team Tickets</a> --}}
+<a href="{{ route('customer.ticketlist') }}">Team Tickets</a>
+    @endif
 
-@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage roles'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('roles/list') }}">Roles</a>
-                </li>
-               
-@endif --}}
-            </ul>
+    @if($user->hasRole('support_agent'))
+        <a href="{{ route('customer.ticketlist') }}">My Tickets</a>
+    @endif
 
-            <!-- Right Side Icons -->
-            <div class="d-flex gap-3 mt-3 mt-lg-0">
-                <a href="{{ url('profile') }}">
-                    <i class="bi bi-person-circle"></i>
-                </a>
+    @if($user->hasRole('customer'))
+        <a href="{{ route('customer.ticketlist') }}">Tickets</a>
+        <a href="{{ route('customer.createticket') }}">Create Ticket</a>
+    @endif
 
-                <a href="{{ url('logout') }}">
-                    <i class="bi bi-box-arrow-right"></i>
-                </a>
-            </div>
-
-        </div>
-    </div>
-</nav>
-
-<!-- CONTENT -->
-<div class="container app-container">
-    @yield('main')
 </div>
 
+<!-- CONTENT -->
+<div class="content">
 
+    <div class="topbar d-flex justify-content-between">
+        <h5>@yield('title')</h5>
+
+        <div>
+            <i class="bi bi-bell"></i>
+              <a href="{{ url('profile') }}"><i class="bi bi-person ms-3"></i></a>
+               <a href="{{ url('logout') }}">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+        </div>
+        
+    </div>
+
+    @yield('main')
+
+</div>
 
 </body>
 </html> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>@yield('title')</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.js"></script>
-
-    <style>
-        body {
-            background: #f4f6fb;
-        }
-
-        .app-container {
-            padding: 25px;
-        }
-
-        .app-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            padding: 20px;
-        }
-
-        .app-title {
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .navbar {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-          .sidebar {
-            min-width: 240px;
-            max-width: 240px;
-            background: #fff;
-            min-height: calc(100vh - 56px); /* Full height minus navbar */
-            border-right: 1px solid #e3e6f0;
-        }
-
-        .sidebar .nav-link {
-            color: #333;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar .nav-link:hover {
-            background: #f8f9fc;
-            color: #0d6efd;
-        }
-
-        .sidebar .nav-link.active {
-            background: #e9ecef;
-            font-weight: 600;
-        }
-
-        /* Layout Wrapper */
-.main-wrapper {
-    display: flex;
-    transition: all 0.3s;
-}
-
-/* Sidebar Toggle Logic */
-#sidebar.collapsed {
-    margin-left: -240px;
-}
-
-.content-area {
-    flex-grow: 1;
-    transition: all 0.3s;
-}
-
-
-    </style>
-</head>
-
-<body>
-
-<!-- NAVBAR -->
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{{ url('list') }}">
-           Desk System
-        </a>
-
-        <!-- Mobile Menu Button -->
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarContent"
-            aria-controls="navbarContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar Content -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-
-            <ul class="navbar-nav me-auto">
-
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url('list') }}">Home</a>
-                </li> --}}
-
-    {{-- @can('create task') --}}
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url('roles/addrole') }}">Add User</a>
-                </li> --}}
-    {{-- @endcan --}}
-{{-- 
-
-@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage users'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.list') }}">Users</a>
-                </li>
-@endif
-
-@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage roles'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('roles/list') }}">Roles</a>
-                </li>
-               
-@endif --}}
-            {{-- </ul>
-
-            <!-- Right Side Icons -->
-            <div class="d-flex gap-3 mt-3 mt-lg-0">
-                <a href="{{ url('profile') }}">
-                    <i class="bi bi-person-circle"></i>
-                </a>
-
-                <a href="{{ url('logout') }}">
-                    <i class="bi bi-box-arrow-right"></i>
-                </a>
-            </div>
-
-        </div>
-    </div>
-</nav>
-<div class="main-wrapper">
-    <!-- SIDEBAR -->
-    <nav id="sidebar" class="sidebar">
-        <div class="nav flex-column">
-            <a href="#" class="nav-link active"><i class="bi bi-house"></i> Dashboard</a>
-            <a href="#" class="nav-link"><i class="bi bi-person"></i> Users</a>
-            <a href="#" class="nav-link"><i class="bi bi-gear"></i> Settings</a>
-        </div>
-    </nav>
-
-    <!-- PAGE CONTENT -->
-    <div class="content-area">
-        <div class="app-container">
-            <div class="app-card">
-                <h2 class="app-title">@yield('title')</h2>
-                <!-- Content goes here -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- CONTENT -->
-<div class="container app-container">
-    @yield('main')
-</div>
-
-
-
-</body>
-</html> --}}
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>@yield('title')</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.js"></script>
-
-    <style>
-        body {
-            background: #f4f6fb;
-        }
-
-        .app-container {
-            padding: 25px;
-        }
-
-        .app-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            padding: 20px;
-        }
-
-        .app-title {
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .navbar {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- NAVBAR -->
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{{ url('list') }}">
-           Desk System
-        </a>
-
-        <!-- Mobile Menu Button -->
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarContent"
-            aria-controls="navbarContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar Content -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-
-            <ul class="navbar-nav me-auto">
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('list') }}">Home</a>
-                </li>
-
-    {{-- @can('create task') --}}
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url('roles/addrole') }}">Add User</a>
-                </li> --}}
-    {{-- @endcan --}}
-{{-- 
-
-@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage users'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.list') }}">Users</a>
-                </li>
-@endif
-
-@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage roles'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('roles/list') }}">Roles</a>
-                </li>
-               
-@endif --}}
-            {{-- </ul>
-
-            <!-- Right Side Icons -->
-            <div class="d-flex gap-3 mt-3 mt-lg-0">
-                <a href="{{ url('profile') }}">
-                    <i class="bi bi-person-circle"></i>
-                </a>
-
-                <a href="{{ url('logout') }}">
-                    <i class="bi bi-box-arrow-right"></i>
-                </a>
-            </div>
-
-        </div>
-    </div>
-</nav>
-
-<!-- CONTENT -->
-<div class="container app-container">
-    @yield('main')
-</div>
-
-
-
-</body>
-</html> --}} 

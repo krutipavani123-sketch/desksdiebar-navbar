@@ -13,8 +13,8 @@
         </h2>
     </x-slot>
 
-@endsection
-@section('main')
+    @endsection
+    @section('main')
       
 
     <div class="py-12">

@@ -26,11 +26,14 @@ class TeamController extends Controller
         //     ->where('user_id', auth()->id())
         //     ->value('team_id');
 
+        
 
         // if superadmin show all team and if leader login show only their team
         $user = auth()->user();
-
-        if ($user && $user->hasRole('superadmin')) {
+// if($user->hasRole('superadmin') && $user->hasRole('admin')) {
+//             $teams = Team::all();
+//         }
+        if ($user && $user->hasRole('superadmin') || $user->hasRole('admin')) {
 
             $query = Team::query()->with('users', 'leader', 'agent');
         } else {
