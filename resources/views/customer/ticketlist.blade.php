@@ -115,13 +115,17 @@
 <td>
 
     <a href="{{ route('customer.comment', $ticket->id) }}"
-      <i class="bi bi-file-earmark-plus text-primary" style="font-size: 2rem;"></i>
+      <i class="bi bi-file-earmark-plus text-primary" style="font-size: 1rem;"></i>
     </a>
 
     <a href="{{ route('customer.commentlist', $ticket->id) }}"
-      <i class="bi bi-eye-fill text-success" style="font-size: 2rem;"></i>
+      <i class="bi bi-eye-fill text-success" style="font-size: 1rem;"></i>
   
     </a>
+
+    <a href="{{ route('customer.show', $ticket->id) }}">
+   <i class="bi bi-reply-fill"></i>
+</a>
 
 </td>
 
@@ -139,7 +143,42 @@
 
         @endif
 </td>
-<td class="px-6 py-3 text-left">{{ $ticket->status }}</td>
+{{-- <td class="px-6 py-3 text-left">{{ $ticket->status }}</td> --}}
+
+
+<td>
+
+
+        {{-- <form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
+            @csrf
+
+            <select name="status" onchange="this.form.submit()">
+                <option value="Open" {{ $ticket->status == 'Open' ? 'selected' : '' }}>Open</option>
+                <option value="In Progress" {{ $ticket->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                <option value="Pending" {{ $ticket->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
+                <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option>
+            </select>
+
+        </form> --}}
+
+      @if(auth()->user()->hasRole('support_agent') || auth()->user()->hasRole('admin'))
+<form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
+    @csrf
+
+    <select name="status" onchange="this.form.submit()">
+        <option value="Open" {{ $ticket->status == 'Open' ? 'selected' : '' }}>Open</option>
+        <option value="In Progress" {{ $ticket->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+        <option value="Pending" {{ $ticket->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+        <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
+        <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option>
+    </select>
+</form>
+
+    @else
+        {{ $ticket->status }}
+    @endif
+</td>
  <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 <td>
     
@@ -167,7 +206,7 @@
 </a>
 {{-- @endcan
 @can('delete ticket') --}}
-                <a href="{{ route('customer.delete',$ticket->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ route('customer.delete',$ticket->id) }}" ><i class="bi bi-trash2-fill text-danger"></i></a>
                 {{-- @endcan --}}
             </td>
         </tr>

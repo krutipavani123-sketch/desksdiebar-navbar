@@ -46,17 +46,19 @@ class TicketService
         //    ->where('team_id', $teamId)    //Model::where('column_name', $value)->get();
         ///   ->value('user_id'); // first agent (assign automatic agentid )
 
-        return Ticket::create([
+         Ticket::create([
             'subject' => $request->subject,
             'description' => $request->description,
             'priority' => $request->priority,
             'category' => $request->category,
             'attachment' => $path,
-            'status' => $request->status,
+            'status' => 'Open',
             'assigned_team_id' => $teamId,
             'assigned_agent_id' => $agentId,  // assign automatic agentid 
             'customer_id' => auth()->id(),
         ]);
+
+        
     }
 
     public function ticketlist(Request $request)

@@ -167,8 +167,16 @@
                 <input type="file" name="attachment">
             </div>
 
-          
-            <div class="form-group">
+             <div class="form-group">
+                <label class="form-label">Status</label>
+                <input type="text" name="status" value="Open" readonly>
+            </div>
+{{-- 
+  @role('support_agent')  
+  <form action="{{ route('customer.updatestatus',$ticket->id)}}" method="post"> 
+    @csrf
+
+     <div class="form-group">
                 <label class="form-label">Status</label>
                 <select name="status">
                     <option value="">Select Status</option>
@@ -179,8 +187,8 @@
                     <option>Closed</option>
                 </select>
             </div>
-
-          
+</form>      
+           @endrole --}}
             @error('name')
                 <p class="error-text">{{ $message }}</p>
             @enderror

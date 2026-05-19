@@ -194,16 +194,9 @@
 </div>
 
           
-            <div class="form-group">
+              <div class="form-group">
                 <label class="form-label">Status</label>
-                <select name="status" class="form-control">
-                    <option value="">Select Status</option>
-                    <option value="Open" {{ old('status', $tickets->status) == 'Open' ? 'selected' : '' }}>Open</option>
-                    <option value="In Progress" {{ old('status', $tickets->status) == 'In Progress' ? 'selected' : '' }}>In Progress</option>
-                    <option value="Pending" {{ old('status', $tickets->status) == 'Pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="Resolved" {{ old('status', $tickets->status) == 'Resolved' ? 'selected' : '' }}>Resolved</option>
-                    <option value="Closed" {{ old('status', $tickets->status) == 'Closed' ? 'selected' : '' }}>Closed</option>
-                </select>
+                <input type="text" name="status" value="Open" readonly>
             </div>
 
             {{-- @if($ticket->team_id)

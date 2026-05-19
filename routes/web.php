@@ -76,9 +76,12 @@ Route::put('users/update/{id}', [UserController::class, 'update'])->name('users.
 Route::get('users/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
 
 
-Route::get('customer/createticket', [TicketController::class, 'create'])->name('customer.createticket');
-Route::post('customer/addticket', [TicketController::class, 'addticket'])->name('customer.addticket');
 
+Route::get('show', [TicketController::class, 'show'])->name('show');
+
+Route::get('customer/createticket', [TicketController::class, 'create'])->name('customer.createticket');
+
+Route::post('customer/addticket', [TicketController::class, 'addticket'])->name('customer.addticket');
 
 Route::get('customer/ticketlist', [TicketController::class, 'ticketlist'])->name('customer.ticketlist');
 
@@ -87,7 +90,9 @@ Route::put('customer/updateticket/{id}', [TicketController::class, 'update'])->n
 Route::get('customer/deleteticket/{id}', [TicketController::class, 'delete'])->name('customer.delete');
 
 
-Route::post('customer/reassignticket', [TicketController::class, 'reassignticket'])->name('customer.reassignticket');
+
+Route::post('customer/updatestatus/{id}', [TicketController::class, 'updatestatus'])
+    ->name('customer.updatestatus');
 
 
 Route::post('customer/assignticket', [TicketController::class, 'assignticket'])->name('customer.assignticket');
@@ -107,7 +112,8 @@ Route::put('team/update/{id}', [TeamController::class, 'update'])->name('team.up
 Route::get('team/delete/{id}', [TeamController::class, 'delete'])->name('team.delete');
 
 
-
+Route::get('show/{id}', [CommentController::class, 'show'])
+    ->name('customer.show');
 
 Route::get('comment/{id}', [CommentController::class, 'create'])
     ->name('customer.comment');

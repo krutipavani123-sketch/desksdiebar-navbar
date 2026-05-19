@@ -103,10 +103,19 @@ class CommentController extends Controller
             return back()->with('error', $validator->errors()->first());
         } else {
             $comment->comment = $request->comment;
-            $comment->is_internal = $request->has('is_internal') ? 1 : 0;;
+            $comment->is_internal = $request->has('is_internal') ? 1 : 0;
             $comment->save();
         }
 
         return back()->with('success', 'Updated');
+    }
+
+    public function show($id)
+    {
+        $ticket = Ticket::with('comments.user')->findOrFail($id);
+
+        $comments = $ticket->comments;
+
+        return view('customer.show', compact('ticket','comments'));
     }
 }

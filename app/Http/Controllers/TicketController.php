@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\Team;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
@@ -34,7 +35,7 @@ class TicketController extends Controller
             "priority" => "required|not_in:Default",  //must  change 
             "category" => "required|not_in:Default",
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',   //10mb
-            "status" => "required",
+            //"status" => "required",
             // 'team_id' => 'required|exists:teams,id',
             // 'ticket_id' => 'required|exists:tickets,id',
         ]);
@@ -75,7 +76,7 @@ class TicketController extends Controller
             "priority" => "required|not_in:Default",
             "category" => "required|not_in:Default",
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',
-            "status" => "required",
+            //  "status" => "required",
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -88,8 +89,8 @@ class TicketController extends Controller
             $tickets->status = $request->status;
 
             if ($request->filled('comment')) {
-                $latestComment = $tickets->comments();
-                // $latestComment = $tickets->comments()->latest()->first();
+                // $latestComment = $tickets->comments();
+                $latestComment = $tickets->comments()->latest()->first();
 
                 if ($latestComment) {
                     $latestComment->update([
@@ -180,13 +181,30 @@ class TicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::with('comments.user')->findOrFail($id);
-        return view('customer.comment', compact('ticket'));
+        return view('customer.show', compact('ticket'));
     }
     public function commentlist()
 
     {
         $comments = Comment::all();
         return view('customer.commentlist', compact('comments'));
+    }
+    public function updatestatus(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->assigned_agent_id != auth()->id() && !auth()->user()->hasRole('team_leader') && !auth()->user()->hasRole('admin')) {
+            abort(403);
+        }
+
+        $request->validate([
+            'status' => 'required',
+        ]);
+
+        $ticket->status = $request->status;
+        $ticket->save();
+
+        return redirect()->back()->with('success', 'Status Updated');
     }
 }
 

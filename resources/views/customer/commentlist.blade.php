@@ -78,7 +78,7 @@
 
    <td class="px-6 py-3 text-left">
 
- @if($comment->is_internal)
+ @if($comment->is_internal) 
             <span >
                 Internal Note
             </span>

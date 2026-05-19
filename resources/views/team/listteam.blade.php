@@ -101,7 +101,7 @@
             {{-- @endcan
             @can('delete team') --}}
             <a href="{{ route('team.delete', $team->id) }}">
-                <i class="bi bi-trash2-fill"></i>
+                <i class="bi bi-trash2-fill text-danger"></i>
             </a>
           
         </td> 
