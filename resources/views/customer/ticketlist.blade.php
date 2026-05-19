@@ -62,7 +62,7 @@
 </button>
    --}}
 
- <form action="{{ route('customer.assignticket') }}" method="POST">
+ <form action="{{ route('customer.assignticket') }}" method="POST" enctype="multipart/form-data">
 
                     @csrf
 
@@ -133,7 +133,7 @@
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
           <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
 <td>
-      @if($ticket->attachment)
+     @if(!empty($ticket->attachment))
     <img src="{{ $ticket->attachment ? asset('storage/' . $ticket->attachment) : 'https://via.placeholder.com/80' }}" width="70" height="50">
       @else
 

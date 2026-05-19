@@ -48,7 +48,7 @@ Route::get('permissions/permissionedit/{id}', [PermissionController::class, 'edi
 
 Route::put('update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
 
-Route::get('delete/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
+Route::get('delete/{id}', [PermissionController::class, 'delete'])->name('delete');
 
 
 

@@ -68,8 +68,8 @@ class TicketController extends Controller
 
     public function update(Request $request, $id)
     {
-        //$tickets = Ticket::findOrFail($id);
-        $tickets = Ticket::with('comments')->findOrFail($id);
+        $tickets = Ticket::findOrFail($id);
+        //$tickets = Ticket::with('comments')->findOrFail($id);
         $validator = Validator::make($request->all(), [
             "subject" => "required",
             "description" => "required",
@@ -83,7 +83,7 @@ class TicketController extends Controller
         } else {
             $tickets->subject = $request->subject;
             $tickets->description = $request->description;
-            $tickets->priority = $request->priority;
+            $tickets->priority = $request->priority;    
             $tickets->category = $request->category;
             // $tickets->attachment = $request->attachment;
             $tickets->status = $request->status;
@@ -101,7 +101,7 @@ class TicketController extends Controller
             if ($request->hasFile('attachment')) {
 
                 if ($tickets->attachment) {
-                    storage::disk('public')->delete($request->attachment);
+                    Storage::disk('public')->delete($tickets->attachment);
                 }
 
                 $path = $request->file('attachment')->store('images', 'public');
@@ -110,6 +110,7 @@ class TicketController extends Controller
             }
 
             $tickets->save();
+
             return redirect()->route("customer.ticketlist")->with("success", "Ticket Updated");
         }
     }
