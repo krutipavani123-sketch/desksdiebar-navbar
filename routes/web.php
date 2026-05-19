@@ -11,11 +11,17 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
+
 use Dom\Comment;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('dashboard');
 
 Route::post('/loginmail', [logincontroller::class, 'loginmail'])->name('loginmail');
 

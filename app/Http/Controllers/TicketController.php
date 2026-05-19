@@ -76,7 +76,7 @@ class TicketController extends Controller
             "priority" => "required|not_in:Default",
             "category" => "required|not_in:Default",
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',
-            //  "status" => "required",
+            //  "status" => "required", 
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();

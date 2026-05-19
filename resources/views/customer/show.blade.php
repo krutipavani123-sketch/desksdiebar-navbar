@@ -119,6 +119,8 @@
             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
 
             <textarea name="comment"></textarea>
+
+            <input type="file" name="attachment">
  <button class="btn-save" type="submit">Reply</button>
         </form>
             {{-- @foreach($ticket->comments as $comment)
