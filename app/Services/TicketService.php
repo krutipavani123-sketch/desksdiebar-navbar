@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Comment;
+
 class TicketService
 {
 
@@ -54,7 +55,7 @@ class TicketService
             'status' => $request->status,
             'assigned_team_id' => $teamId,
             'assigned_agent_id' => $agentId,  // assign automatic agentid 
-        ]); 
+        ]);
     }
 
     public function ticketlist(Request $request)
@@ -90,27 +91,25 @@ class TicketService
 
         $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
 
-        
+
         return view('customer.ticketlist', compact('tickets', 'teams'));
         // return view('customer.ticketlist', compact('tickets', 'teams', 'agents'));
     }
 
 
-public function comment(Request $request, $id){
-    $request->validate([
-        'comment'=> 'required',
-    ]);
+    public function comment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required',
+        ]);
 
-    Comment::create([
-        'ticket_id'=> $id,
-        'user_id'=> auth()->id(),
-        'comment'=> $request->comment,
-    ]);
-    return back()->with('success','comment added'); 
-}
-
-
-
+        Comment::create([
+            'ticket_id' => $id,
+            'user_id' => auth()->id(),
+            'comment' => $request->comment,
+        ]);
+        return back()->with('success', 'comment added');
+    }
 }
     // public function reassignticket(Request $request)
     // {

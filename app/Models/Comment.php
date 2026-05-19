@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    protected $fillable = ['ticket_id','user_id','comment'];
+    protected $fillable = ['ticket_id','user_id','comment','is_internal'];
 
     public function ticket(){
         return $this->belongsTo(Ticket::class);

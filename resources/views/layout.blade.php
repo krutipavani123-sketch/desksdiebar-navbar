@@ -107,9 +107,9 @@
                     <a class="nav-link" href="{{ route('team.list') }}">Team</a>
                 </li>
 
-                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('customer.commentlist') }}">Comments</a>
-                </li>
+                    {{-- <li class="nav-item">
+                        <a class="nav-link" href="{{ route('customer.commentlist') }}">Comments</a>
+                    </li> --}}
 {{-- @endcan --}}
 
     {{-- @role('admin')

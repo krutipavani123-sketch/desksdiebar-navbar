@@ -112,11 +112,18 @@
             <td class="px-6 py-3 text-left">{{ $ticket->subject }}</td>
 
            
- <td>
-        <a href="{{ route('customer.show', $ticket->id) }}" class="btn btn-sm btn-info">
-            Comments
-        </a>
-    </td>
+<td>
+
+    <a href="{{ route('customer.comment', $ticket->id) }}"
+      <i class="bi bi-file-earmark-plus text-primary" style="font-size: 2rem;"></i>
+    </a>
+
+    <a href="{{ route('customer.commentlist', $ticket->id) }}"
+      <i class="bi bi-eye-fill text-success" style="font-size: 2rem;"></i>
+  
+    </a>
+
+</td>
 
             <td class="px-6 py-3 text-left">{{  $ticket->description }}</td>
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>

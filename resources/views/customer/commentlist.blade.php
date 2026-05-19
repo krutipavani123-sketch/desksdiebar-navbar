@@ -38,7 +38,7 @@
  
 </div>
 
- <form action="{{ route('customer.comment') }}" method="POST">
+ <form action="{{ route('addcomment') }}" method="POST">
 
                     @csrf
 
@@ -60,6 +60,8 @@
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Comment</th> 
+            <th class="px-6 py-3 text-left">User Name</th>
+            <th class="px-6 py-3 text-left">is_internal</th>  
             <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -72,6 +74,19 @@
     
             <td class="px-6 py-3 text-left">{{ $comment->id }}</td>
             <td class="px-6 py-3 text-left">{{ $comment->comment }}</td>
+   <td class="px-6 py-3 text-left">{{ $comment->user->name }}</td>
+
+   <td class="px-6 py-3 text-left">
+
+ @if($comment->is_internal)
+            <span >
+                Internal Note
+            </span>
+              @else
+            Public  
+        @endif
+
+   </td>
 
         <td class="px-6 py-3 text-left">
 

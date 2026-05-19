@@ -10,6 +10,8 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\CommentController;
+use Dom\Comment;
 
 Route::get('/', function () {
     return view('welcome');
@@ -104,8 +106,26 @@ Route::put('team/update/{id}', [TeamController::class, 'update'])->name('team.up
 
 Route::get('team/delete/{id}', [TeamController::class, 'delete'])->name('team.delete');
 
-Route::post('customer/comment', [TicketController::class, 'comment'])->name('customer.comment');
 
-Route::get('/customer/{id}', [TicketController::class, 'show'])->name('customer.show');
 
-Route::get('commentlist', [TicketController::class, 'commentlist'])->name('customer.commentlist');
+
+Route::get('comment/{id}', [CommentController::class, 'create'])
+    ->name('customer.comment');
+
+Route::post('addcomment', [CommentController::class,'addcomment'])->name('addcomment');
+
+Route::get('commentlist/{id}', [CommentController::class, 'commentlist'])
+    ->name('customer.commentlist');
+
+//Route::post('customer/comment', [CommentController::class, 'comment'])->name('comment');
+
+//Route::get('/customer/{id}', [CommentController::class, 'show'])->name('customer.show');
+
+//Route::get('commentlist', [CommentController::class, 'commentlist'])->name('customer.commentlist');
+
+
+// Route::post('customer/comment', [TicketController::class, 'comment'])->name('customer.comment');
+
+// Route::get('/customer/{id}', [TicketController::class, 'show'])->name('customer.show');
+
+// Route::get('commentlist', [TicketController::class, 'commentlist'])->name('customer.commentlist');
