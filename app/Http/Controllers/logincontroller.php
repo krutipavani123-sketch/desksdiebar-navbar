@@ -9,6 +9,9 @@ use Symfony\Contracts\Service\Attribute\Required;
 use App\Services\LoginService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\LoginMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class logincontroller extends Controller
 {
@@ -65,11 +68,11 @@ class logincontroller extends Controller
             ])) {
                 throw new \Exception("Invalid credentials");
             }
-
+            $user = Auth::user();
             $request->session()->regenerate();
-            $request->session()->save();
-            // $user = User::where('email', $request->email)->first();
-            // Auth::login($user);
+            // $request->session()->save();
+            Mail::to($user->email)->queue(new LoginMail($user));
+
             return redirect('welcome')->with('success', 'Login');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

@@ -19,7 +19,7 @@ use Dom\Comment;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/teamleader/dashboard', [TeamLeaderDashboardController::class, 'index']);
+
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])

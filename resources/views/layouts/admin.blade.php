@@ -88,6 +88,12 @@ $user = auth()->user();
 
     @endif
 
+         @if($user->hasRole('team_leader'))
+<a href="{{ route('team.list') }}">Teams</a>
+<a href="{{ route('customer.ticketlist') }}">Team Tickets</a>
+@endif
+
+
     @if($user->hasRole('support_agent'))
         <a href="{{ route('customer.ticketlist') }}">My Tickets</a>
     @endif

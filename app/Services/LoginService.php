@@ -34,21 +34,15 @@ class LoginService
         return $user;
     }
 
-    public function login(array $data) {}
+    public function login(Request $request) {}
 
     public function loginmail(Request $request)
     {
 
-        $request->validate(['email' => 'required|email']);
-
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        return $status === Password::ResetLinkSent
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
-        // ->middleware('guest')->name('password.email');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
     }
 
     public function logout()
