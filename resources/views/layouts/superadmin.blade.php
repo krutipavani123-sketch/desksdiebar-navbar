@@ -72,7 +72,10 @@ $user = auth()->user();
 
     @if($user->hasRole('superadmin'))
         <a href="{{ route('roles.list') }}">Roles</a>
-        <a href="{{ route('permissions.permissionlist') }}">Permissions</a>
+         <a href="{{ route('permissions.permissionlist') }}">Permissions</a>
+        <a href="{{ route('users.list') }}">Users</a>
+        <a href="{{ route('customer.ticketlist') }}">Ticket</a>
+        <a href="{{ route('team.list') }}">Team</a>
     @endif
 
     @if($user->hasRole('admin'))

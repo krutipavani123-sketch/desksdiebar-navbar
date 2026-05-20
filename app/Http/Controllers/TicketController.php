@@ -133,11 +133,11 @@ class TicketController extends Controller
 
         $teamId = $request->team_id;
         $agentId = DB::table('teams')
-            ->where('id', $teamId)
+            ->where('id', $teamId)    //match id    
             ->value('assigned_agent_id');
 
 
-        Ticket::whereIn('id', $request->ticket_ids)
+        Ticket::whereIn('id', $request->ticket_ids)    //find id inside array
             ->update([
                 'assigned_team_id' => $request->team_id,
                 'assigned_agent_id' =>  $agentId,
@@ -194,8 +194,9 @@ class TicketController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        if ($ticket->assigned_agent_id != auth()->id() && !auth()->user()->hasRole('team_leader') && !auth()->user()->hasRole('admin')) {
-            abort(403);
+        if ($ticket->assigned_agent_id != auth()->id() && !auth()->user()->hasAnyRole(['support_agent', 'team_leader', 'admin'])) {
+            return redirect()->back()->with('error', 'You Have Not Permission');
+            // abort(403);
         }
 
         $request->validate([
@@ -214,18 +215,18 @@ class TicketController extends Controller
 
     public function resolve($id)
     {
-        $ticket = Ticket::with('comments')->findOrFail($id);
+        $ticket = Ticket::with('comments')->findOrFail($id);  // load comments
         return view('customer.resolve', compact('ticket'));
     }
 
     public function updateResolve(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);
- $ticket->status = 'Closed';
-      //  $ticket->status = $request->status;
+        $ticket->status = 'Closed';  //permienently close
+        //  $ticket->status = $request->status;
         $ticket->resolution = $request->resolution;
-        
-  //$ticket->resolved_at = now(); 
+
+        //$ticket->resolved_at = now(); 
         $ticket->save();
 
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Resolved');

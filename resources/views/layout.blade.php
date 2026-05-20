@@ -90,7 +90,7 @@ $user = auth()->user();
     <a href="{{ route('dashboard') }}">🏠 Dashboard</a>
 
     @if($user->hasRole('superadmin'))
-        <a href="#">🧠 Super Admin Panel</a>
+        {{-- <a href="#">🧠 Super Admin Panel</a> --}}
         <a href="{{ route('roles.list') }}">Roles</a>
         <a href="{{ route('permissions.permissionlist') }}">Permissions</a>
         <a href="{{ route('users.list') }}">Users</a>

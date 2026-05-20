@@ -41,14 +41,14 @@
             class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
          Assign Ticket
     </button> --}}
-
+@if(!auth()->user()->hasAnyRole(['support_agent', 'customer']))
      <button type="button"
                         class="btn btn-success btn-sm px-4 py-2 fw-semibold shadow-sm"
                         data-bs-toggle="modal"          {{-- model open --}}
                         data-bs-target="#assignModal">
                         Assign Ticket
                     </button> 
-
+@endif
                     
 </div>
    {{-- @endcan       --}}
@@ -85,17 +85,22 @@
             <th class="px-6 py-3 text-left" width="60">Select</th>
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Subject</th>
+             @if(auth()->user()->hasAnyRole(['support_agent','customer']))    
 <th class="px-6 py-3 text-left">Comment</th> 
+@endif
             <th class="px-6 py-3 text-left">Description</th>
 
             <th class="px-6 py-3 text-left">Priority</th>
             <th class="px-6 py-3 text-left">Category</th>
             <th class="px-6 py-3 text-left">Attachment</th>
             <th class="px-6 py-3 text-left">Status</th>
+            @if(auth()->user()->hasRole('support_agent'))
+             <th class="px-6 py-3 text-left">Resolve</th>
+             @endif
             <th class="px-6 py-3 text-left">Assigned Team</th>
             <th class="px-6 py-3 text-left">Assigned Agent</th>
                         {{-- <th class="px-6 py-3 text-left">Comment</th> --}}
- <th class="px-6 py-3 text-left">Resolve</th>
+
            <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -111,7 +116,7 @@
             <td class="px-6 py-3 text-left">{{  $ticket->id }}</td>
             <td class="px-6 py-3 text-left">{{ $ticket->subject }}</td>
 
-           
+    @if(auth()->user()->hasAnyRole(['support_agent','customer']))       
 <td>
 
     <a href="{{ route('customer.comment', $ticket->id) }}"
@@ -128,7 +133,7 @@
 </a>
 
 </td>
-
+@endif
             <td class="px-6 py-3 text-left">{{  $ticket->description }}</td>
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
           <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
@@ -146,7 +151,7 @@
 {{-- <td class="px-6 py-3 text-left">{{ $ticket->status }}</td> --}}
 
 
-<td>
+
 
 
         {{-- <form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
@@ -177,7 +182,8 @@
   @else
         {{ $ticket->status }}
     @endif--}}
-
+<td>
+@if(auth()->user()->hasRole('support_agent'))
 @if($ticket->status != 'Closed')
     <form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
         @csrf
@@ -193,17 +199,27 @@
 @else
     <span >Closed</span>
 @endif
-
+@else
+ <span >{{ $ticket->status }}</span>
+@endif
   
 </td>
 
+ @if(auth()->user()->hasRole('support_agent'))
 <td>
+   
+    @if($ticket->Status !='Closed') 
     <a href="{{ route('customer.resolve', $ticket->id) }}"
    class="btn btn-sm btn-warning">
    Resolve
 </a>
+@else
+<span>{{ $ticket->status }}</span>
+@endif
+
 </td>
- <td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
+@endif
+<td> {{ $ticket->team->teamName ?? 'Not Assigned' }} </td>
 <td>
     
        {{ $ticket->agent->name ?? 'No Agent' }}
