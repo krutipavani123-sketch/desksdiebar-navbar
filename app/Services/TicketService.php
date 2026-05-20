@@ -65,23 +65,12 @@ class TicketService
         $query = Ticket::with(['team', 'agent']);  // team and agent relation load
         if ($user->hasRole('team_leader')) {
             $team = Team::where('leader_id', $user->id)
-                ->value('id');
+                ->pluck('id');
 
             $query->where(function ($q) use ($team) {
-                $q->where('assigned_team_id', $team)
+                $q->whereIn('assigned_team_id', $team)
                     ->orWhereNull('assigned_agent_id'); //unassigned agent
             });
-            // $team = DB::table('team_user')
-            //     ->where('user_id', $user->id)
-            //     ->value('team_id');
-
-            // $query->where(function ($q) use ($team) { //team based  filtering
-            //     $q->where('assigned_team_id', $team)
-            //         ->orWhereNull('assigned_agent_id');
-            //     // unassigned ticket show   
-            // });
-
-
         } elseif ($user->hasRole('support_agent')) {
             $query->where('assigned_agent_id', $user->id);
             // show their assigned ticket 
@@ -103,8 +92,12 @@ class TicketService
         // $tickets = $query->get();
         $tickets = $query->with('comments.user')->get();
 
-        $teams = Team::all();
-
+        // leader  can only see their team when assign ticket
+        if ($user->hasRole('team_leader')) {
+            $teams = Team::where('leader_id', $user->id)->get();
+        } else {
+            $teams = Team::all();
+        }
 
         // $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
 
