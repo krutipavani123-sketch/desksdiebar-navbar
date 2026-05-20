@@ -194,10 +194,7 @@ class TicketController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        if ($ticket->assigned_agent_id != auth()->id() && !auth()->user()->hasAnyRole(['support_agent', 'team_leader', 'admin'])) {
-            return redirect()->back()->with('error', 'You Have Not Permission');
-            // abort(403);
-        }
+
 
         $request->validate([
             'status' => 'required',
@@ -206,11 +203,15 @@ class TicketController extends Controller
         $ticket->status = $request->status;
         $ticket->save();
 
-        return redirect()->back()->with('success', 'Status Updated');
+        return redirect()->route('customer.ticketlist')
+            ->with('success', 'Status Updated');
     }
 
-
-
+    public function statuspage($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        return view('customer.updatestatus', compact('ticket'));
+    }
 
 
     public function resolve($id)

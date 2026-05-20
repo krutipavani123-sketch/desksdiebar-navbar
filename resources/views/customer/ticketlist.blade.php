@@ -182,33 +182,48 @@
   @else
         {{ $ticket->status }}
     @endif--}}
+
+
+    @if(auth()->user()->hasRole('support_agent'))
 <td>
-@if(auth()->user()->hasRole('support_agent'))
+    @if($ticket->status != 'Closed')
+        <a href="{{ route('customer.statuspage', $ticket->id) }}" class="btn btn-sm btn-primary">
+            Update Status
+        </a>
+    @else
+        {{ $ticket->status }}
+    @endif
+</td>
+@endif
+{{-- @if(auth()->user()->hasRole('support_agent'))
+<td>
 @if($ticket->status != 'Closed')
     <form action="{{ route('customer.updatestatus', $ticket->id) }}" method="POST">
-        @csrf
+    @csrf
 
-        <select name="status" onchange="this.form.submit()">
-            <option value="Open" {{ $ticket->status == 'Open' ? 'selected' : '' }}>Open</option>
-            <option value="In Progress" {{ $ticket->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
-            <option value="Pending" {{ $ticket->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-            <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
-            <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option>
-        </select>
-    </form>
-@else
-    <span >Closed</span>
-@endif
+    <select name="status" onchange="this.form.submit()">
+        <option value="Open" {{ $ticket->status == 'Open' ? 'selected' : '' }}>Open</option>
+        <option value="In Progress" {{ $ticket->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+        <option value="Pending" {{ $ticket->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+        <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
+        <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option>
+    </select>
+</form>
+
+    @else
+        {{ $ticket->status }}
+    @endif
+
 @else
  <span >{{ $ticket->status }}</span>
 @endif
   
-</td>
+</td> --}}
 
  @if(auth()->user()->hasRole('support_agent'))
 <td>
    
-    @if($ticket->Status !='Closed') 
+    @if($ticket->status !='Closed') 
     <a href="{{ route('customer.resolve', $ticket->id) }}"
    class="btn btn-sm btn-warning">
    Resolve
