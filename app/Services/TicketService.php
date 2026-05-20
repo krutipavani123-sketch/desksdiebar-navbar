@@ -46,7 +46,7 @@ class TicketService
         //    ->where('team_id', $teamId)    //Model::where('column_name', $value)->get();
         ///   ->value('user_id'); // first agent (assign automatic agentid )
 
-         Ticket::create([
+        Ticket::create([
             'subject' => $request->subject,
             'description' => $request->description,
             'priority' => $request->priority,
@@ -57,8 +57,6 @@ class TicketService
             'assigned_agent_id' => $agentId,  // assign automatic agentid 
             'customer_id' => auth()->id(),
         ]);
-
-        
     }
 
     public function ticketlist(Request $request)
@@ -66,18 +64,28 @@ class TicketService
         $user = auth()->user();
         $query = Ticket::with(['team', 'agent']);  // team and agent relation load
         if ($user->hasRole('team_leader')) {
-            $team = DB::table('team_user')
-                ->where('user_id', $user->id)
-                ->value('team_id');
+            $team = Team::where('leader_id', $user->id)
+                ->value('id');
 
-            $query->where(function ($q) use ($team) { //team based filtering
+            $query->where(function ($q) use ($team) {
                 $q->where('assigned_team_id', $team)
-                    ->orWhereNull('assigned_agent_id');
-                // unassigned ticket show   
+                    ->orWhereNull('assigned_agent_id'); //unassigned agent
             });
+            // $team = DB::table('team_user')
+            //     ->where('user_id', $user->id)
+            //     ->value('team_id');
+
+            // $query->where(function ($q) use ($team) { //team based  filtering
+            //     $q->where('assigned_team_id', $team)
+            //         ->orWhereNull('assigned_agent_id');
+            //     // unassigned ticket show   
+            // });
+
+
         } elseif ($user->hasRole('support_agent')) {
             $query->where('assigned_agent_id', $user->id);
             // show their assigned ticket 
+
         } elseif ($user->hasRole('customer')) {
             $query->where('customer_id', $user->id); // view own ticket
         }

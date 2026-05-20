@@ -26,20 +26,28 @@ class TeamController extends Controller
         //     ->where('user_id', auth()->id())
         //     ->value('team_id');
 
-        
+
 
         // if superadmin show all team and if leader login show only their team
         $user = auth()->user();
-// if($user->hasRole('superadmin') && $user->hasRole('admin')) {
-//             $teams = Team::all();
-//         }
-        if ($user && $user->hasRole('superadmin') || $user->hasRole('admin')) {
+
+
+        if ($user && $user->hasAnyRole(['superadmin', 'admin'])) {
 
             $query = Team::query()->with('users', 'leader', 'agent');
+        } elseif ($user->hasRole('team_leader')) {
+            $query = Team::with('users', 'leader', 'agent')->where('leader_id', $user->id);                   //only their team
         } else {
             $query = Team::with('users', 'leader')
-                ->where('leader_id', auth()->id());
+                ->whereHas('users', function ($q) use ($user) { //only they assigned 
+                    $q->where('users.id', $user->id);
+                });
         }
+
+        //else {
+        //     $query = Team::with('users', 'leader')
+        //         ->where('leader_id', auth()->id());           // only show own team
+        // }
 
         if ($request->filled('search')) {
             $query->where('teamName', 'like', '%' . request('search') . '%');
@@ -115,7 +123,7 @@ class TeamController extends Controller
             $teams->leader_id = $request->leader_id;
             $teams->assigned_agent_id = $request->assigned_agent_id;
             // $teams->save();
-            if ($request->has('users')) {
+            if ($request->has('users')) {                                   //only show role has users
                 $teams->users()->sync($request->users);
             } else {
                 $teams->users()->sync([]);

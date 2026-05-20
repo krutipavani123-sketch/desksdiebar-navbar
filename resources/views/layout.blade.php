@@ -107,8 +107,9 @@ $user = auth()->user();
     @endif
 
     @if($user->hasRole('team_leader'))
-        <a href="#">My Team</a>
+        {{-- <a href="#">My Team</a> --}}
            {{-- <a href="#">Team Tickets</a> --}}
+           <a href="{{ route('team.list') }}">Teams</a>
 <a href="{{ route('customer.ticketlist') }}">Team Tickets</a>
     @endif
 
