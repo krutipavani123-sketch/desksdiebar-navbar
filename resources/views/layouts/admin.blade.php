@@ -92,16 +92,23 @@ $user = auth()->user();
         <a href="{{ route('customer.ticketlist') }}">My Tickets</a>
     @endif
 
-</div>
+    @if($user->hasRole('customer'))
+        <a href="{{ route('customer.createticket') }}">Create Ticket</a>
+        <a href="{{ route('customer.ticketlist') }}">My Tickets</a>
+    @endif
 
+</div>
 <!-- CONTENT -->
 <div class="content">
 
     <div class="topbar d-flex justify-content-between">
         <h5>@yield('title')</h5>
         <div>
-            <i class="bi bi-bell"></i>
-            <i class="bi bi-person ms-3"></i>
+           <i class="bi bi-bell"></i>
+              <a href="{{ url('profile') }}"><i class="bi bi-person ms-3"></i></a>
+               <a href="{{ url('logout') }}">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
         </div>
     </div>
 

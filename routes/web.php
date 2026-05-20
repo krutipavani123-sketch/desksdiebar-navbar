@@ -12,18 +12,16 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TeamLeaderDashboardController;
 
 use Dom\Comment;
 
 Route::get('/', function () {
     return view('welcome');
 });
-// Route::middleware(['auth'])->group(function () {
+Route::get('/teamleader/dashboard', [TeamLeaderDashboardController::class, 'index']);
 
-//     Route::get('/dashboard', [DashboardController::class, 'index'])
-//         ->name('dashboard');
 
-// });
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
@@ -110,7 +108,7 @@ Route::post('customer/resolve/update/{id}', [TicketController::class, 'updateRes
 Route::post('customer/updatestatus/{id}', [TicketController::class, 'updatestatus'])
     ->name('customer.updatestatus');
 Route::get('/ticket/{id}/status', [TicketController::class, 'statuspage'])
-->name('customer.statuspage');
+    ->name('customer.statuspage');
 
 Route::post('customer/assignticket', [TicketController::class, 'assignticket'])->name('customer.assignticket');
 

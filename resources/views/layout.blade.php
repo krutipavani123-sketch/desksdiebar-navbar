@@ -118,8 +118,8 @@ $user = auth()->user();
     @endif
 
     @if($user->hasRole('customer'))
-        <a href="{{ route('customer.ticketlist') }}">Tickets</a>
         <a href="{{ route('customer.createticket') }}">Create Ticket</a>
+        <a href="{{ route('customer.ticketlist') }}">My Tickets</a>
     @endif
 
 </div>
