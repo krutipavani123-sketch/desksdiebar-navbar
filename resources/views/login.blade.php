@@ -51,12 +51,12 @@
         </button>
 
        <div class="text-center text-sm text-gray-500 mt-4">
-    <form action="{{ route('loginmail') }}" method="POST" class="inline">
+    <form action="{{ route('password.email') }}" method="POST" class="inline">
         @csrf
         
-        <button type="submit" class="text-indigo-600 font-medium hover:underline">
+        <a href="{{ url('/forgot-password') }}">
             Forgot Password? Reset Password
-        </button>
+    </a>
     </form>
 </div>
 

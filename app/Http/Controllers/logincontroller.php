@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\LoginMail;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Password;
 
 class logincontroller extends Controller
 {
@@ -88,5 +88,44 @@ class logincontroller extends Controller
     {
         $this->LoginService->logout();
         return redirect()->route('login')->with('success', 'Logout');
+    }
+
+    public function resetpassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed',
+        ]);
+
+        //token verify , email match , password change
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            //find user
+            function ($user, $password) {
+                $user->password = bcrypt($password);
+                $user->save();
+            }
+        );
+        //check reset success or not
+        return $status === Password::PASSWORD_RESET
+            ? redirect('/login')->with('success', 'Password reset successful!')
+            : back()->withErrors(['email' => __($status)]);
+    }
+    public function forgotpassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        //check exists email and send reset mail ,genrate password token
+        $status = \Illuminate\Support\Facades\Password::sendResetLink(
+            $request->only('email')
+        );
+
+        // check successfully sent link
+        return $status === \Illuminate\Support\Facades\Password::RESET_LINK_SENT
+            ? back()->with('status', 'Reset link sent to your email')
+            : back()->withErrors(['email' => 'Email not found']);
     }
 }

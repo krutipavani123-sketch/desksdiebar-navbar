@@ -26,9 +26,28 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
 
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', [
+        'token' => $token,
+        'email' => request()->email
+    ]);
+})->name('password.reset');
+
+//form open
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+});
+// validate email
+Route::post('/forgot-password', [logincontroller::class, 'forgotpassword'])
+    ->name('password.email');
+// new password save
+Route::post('/reset-password', [logincontroller::class, 'resetpassword'])
+    ->name('password.store');
+
 Route::post('/loginmail', [logincontroller::class, 'loginmail'])->name('loginmail');
 
-
+//session enable ,csrf protection,login maintain
 Route::middleware('web')->group(function () {
 
     Route::get('login', [logincontroller::class, 'showLogin'])->name('login');
@@ -37,6 +56,8 @@ Route::middleware('web')->group(function () {
     Route::post('register', [logincontroller::class, 'register']);
 
     Route::get('welcome', [WelcomeController::class, 'welcome']);
+
+    //loggedin user access
     Route::middleware('auth')->group(function () {
         Route::get('profile', [ProfileController::class, 'profile']);
         Route::get('logout', [logincontroller::class, 'logout']);
