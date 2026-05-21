@@ -9,6 +9,8 @@ use App\Models\User;
 
 class Ticket extends Model
 {
+
+   public $timestamps = true;
     // use HasRoles;
 
     protected $table = 'tickets';
@@ -22,6 +24,7 @@ class Ticket extends Model
         'assigned_team_id',
         'assigned_agent_id',
         'customer_id',
+        'sla_deadline',
     ];
 
     public function team()

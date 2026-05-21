@@ -8,5 +8,6 @@ use Spatie\Permission\Traits\HasRoles;
 class Permission extends Model
 {
     use HasRoles;
+    public $timestamps = true;
     protected $fillable = ['name', 'guard_name'];
 }

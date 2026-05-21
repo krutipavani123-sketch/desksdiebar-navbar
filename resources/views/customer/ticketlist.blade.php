@@ -27,7 +27,7 @@
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-{{-- @can('add ticket') --}}
+@if(auth()->user()->hasRole('customer'))
    <div class="mb-4 d-flex justify-content-end">
 
     <button type="button" 
@@ -35,7 +35,7 @@
             class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm me-2">
          CreateTicket
     </button>
-
+@endif
       {{-- <button type="button" 
             onclick="window.location.href='{{ route('customer.assignticket') }}'" 
             class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">

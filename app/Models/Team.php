@@ -8,6 +8,8 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Team extends Model
 {
+
+   public $timestamps = true;
     use HasRoles;
     protected $table = "teams";
     protected $fillable = ['teamName', 'leader_id', 'assigned_agent_id'];

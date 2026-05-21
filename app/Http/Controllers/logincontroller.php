@@ -45,6 +45,7 @@ class logincontroller extends Controller
             "email" =>  $request->email,
             "password" => Hash::make($request->password),
         ]);
+        $user->assignRole('customer');
         // $this->LoginService->register($request->only('name', 'email', 'password'));
         //       dd($request->only('name', 'email', 'password'));
         return redirect('login')->with('success', 'Account created');

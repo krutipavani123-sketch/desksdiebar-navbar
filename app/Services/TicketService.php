@@ -13,6 +13,7 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\sendmailqueue;
 use App\Mail\TicketCreateMailNotification;
+use Carbon\Carbon;
 
 class TicketService
 {
@@ -38,7 +39,18 @@ class TicketService
             ->where('id', $teamId)
             ->value('assigned_agent_id');
 
+        $now = Carbon::now();
 
+        if ($request->priority == 'Low') {
+            $sla_deadline = 72;
+        } elseif ($request->priority == 'Medium') {
+            $sla_deadline = 24;
+        } elseif ($request->priority == 'High') {
+            $sla_deadline = 8;
+        } else {
+            $sla_deadline = 2;
+        }
+        $deadline = $now->copy()->addHours($sla_deadline);
 
         $ticket = Ticket::create([
             'subject' => $request->subject,
@@ -50,12 +62,17 @@ class TicketService
             'assigned_team_id' => $teamId,
             'assigned_agent_id' => $agentId,  // assign automatic agentid 
             'customer_id' => auth()->id(),
+            'sla_deadline' => $deadline,
         ]);
 
+        if (now()->greaterThan($ticket->sla_deadline)) {
+            $ticket->status = 'Overdue';
+            $ticket->save();
+        }
         Mail::to(auth()->user()->email)
             ->queue(new TicketCreateMailNotification($ticket));
 
-
+        return redirect()->route('customer.ticketlist')->with('success', 'Ticket created successfully');
         // Mail::to(auth()->user()->email)->send(new sendmailqueue($ticket));
 
         // return response()->json([

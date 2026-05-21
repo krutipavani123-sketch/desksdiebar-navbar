@@ -19,6 +19,8 @@ use Spatie\Permission\Traits\HasPermissions;
 // #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+
+   public $timestamps = true;
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 

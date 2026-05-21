@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class InternalNote extends Model
 {
+
+   public $timestamps = true;
     protected $table = "internal_notes";
 
     protected $fillable = [
