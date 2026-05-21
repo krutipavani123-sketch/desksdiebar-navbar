@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InternalNoteController;
 use App\Http\Controllers\TeamLeaderDashboardController;
-
 use Dom\Comment;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::get('/verify-email/{token}', [logincontroller::class, 'verifyEmail']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
@@ -163,3 +163,16 @@ Route::get('delete/{id}', [CommentController::class, 'delete'])->name('delete');
 
 Route::get('customer/editcomment/{id}', [CommentController::class, 'edit'])->name('edit');
 Route::post('update/{id}', [CommentController::class, 'update'])->name('update');
+
+
+Route::get('internalnote/{id}', [InternalNoteController::class, 'shownote'])->name('shownote');
+
+Route::post('internalnote/{id}', [InternalNoteController::class, 'notes'])->name('notes');
+Route::get('notelist', [InternalNoteController::class, 'notelist'])->name('internalnote.notelist');
+
+
+Route::put('updatenote/{id}', [InternalNoteController::class, 'update'])->name('note.update');
+
+Route::get('internalnote/editnote/{id}', [InternalNoteController::class, 'editnote'])->name('note.edit');
+
+Route::get('deletenote/{id}', [InternalNoteController::class, 'deletenote'])->name('note.delete');

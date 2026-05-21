@@ -38,4 +38,13 @@ class Ticket extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function internalnote()
+    {
+        return $this->hasMany(InternalNote::class, '');
+    }
+    public function Note()
+{
+    return $this->hasOne(InternalNote::class);
+}
 }

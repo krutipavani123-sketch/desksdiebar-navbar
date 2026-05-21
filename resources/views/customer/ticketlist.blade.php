@@ -100,7 +100,13 @@
             <th class="px-6 py-3 text-left">Assigned Team</th>
             <th class="px-6 py-3 text-left">Assigned Agent</th>
                         {{-- <th class="px-6 py-3 text-left">Comment</th> --}}
-
+@if(auth()->user()->hasAnyRole(
+    'superadmin',
+    'admin',
+    'team_leader',
+    'support_agent'))
+             <th class="px-6 py-3 text-left">Internal Note</th>
+             @endif
            <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -183,6 +189,23 @@
     
        {{ $ticket->agent->name ?? 'No Agent' }}
 </td>   
+@if(auth()->user()->hasAnyRole(
+    'superadmin',
+    'admin',
+    'team_leader',
+    'support_agent'))
+<td>
+     @if(optional($ticket->Note)->note)
+        {{ $ticket->Note->note }}
+   @else
+    <a href="{{ route('shownote', $ticket->id) }}"
+   class="btn btn-sm">
+   Add Internal Note
+</a>
+@endif
+</td>
+
+@endif
 
         {{-- <td colspan="10">
 

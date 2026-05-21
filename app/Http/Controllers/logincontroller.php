@@ -70,7 +70,7 @@ class logincontroller extends Controller
             }
             $user = Auth::user();
             $request->session()->regenerate();
-            // $request->session()->save();
+            $request->session()->save();
             Mail::to($user->email)->queue(new LoginMail($user));
 
             return redirect('welcome')->with('success', 'Login');
@@ -79,10 +79,10 @@ class logincontroller extends Controller
         }
     }
 
-    public function  loginmail(Request $request)
-    {
-        return $this->LoginService->loginmail($request);
-    }
+    // public function  loginmail(Request $request)
+    // {
+    //     return $this->LoginService->loginmail($request);
+    // }
 
     public function logout()
     {
