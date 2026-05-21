@@ -38,10 +38,21 @@ class DashboardController extends Controller
             $totalteam = Team::count();
             $totalticket = Ticket::count();
             $agents = User::role('support_agent')->count();
+            $totalopenticket = Ticket::where('status', 'Open')->count();
+            $totalcloseticket = Ticket::where('status', 'Closed')->count();
+            $totalpendingticket = Ticket::where('status', 'Pending')->count();
+            $totalprogressticket = Ticket::where('status', 'In Progress')->count();
+            $totalreopenticket = Ticket::where('status', 'ReOpened')->count();
             return view('dashboards.admin', compact(
                 'totalteam',
                 'totalticket',
-                'agents'
+                'agents',
+                'totalopenticket',
+                'totalcloseticket',
+                'totalpendingticket',
+                'totalprogressticket',
+                'totalreopenticket'
+
             ));
         }
 
@@ -69,9 +80,16 @@ class DashboardController extends Controller
             $resolved = Ticket::where('assigned_agent_id', auth()->id())
                 ->where('status', 'Closed')
                 ->count();
+
+            $totalpendingticket = Ticket::where('assigned_agent_id', auth()->id())
+                ->where('status', 'Pending')
+                ->count();
+
+
             return view('dashboards.agent', compact(
                 'assignticket',
-                'resolved'
+                'resolved',
+                'totalpendingticket',
             ));
         }
 

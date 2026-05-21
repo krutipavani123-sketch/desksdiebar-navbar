@@ -33,6 +33,50 @@
                 </div>
             </div>
 
+
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <h6>Open Tickets</h6>
+                    <h2>{{ $totalopenticket }}</h2>
+                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <h6>Close Tickets</h6>
+                    <h2>{{ $totalcloseticket }}</h2>
+                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
+                </div>
+            </div>
+
+
+             <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <h6>Pending Tickets</h6>
+                    <h2>{{ $totalpendingticket }}</h2>
+                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <h6>In Progress Tickets</h6>
+                    <h2>{{ $totalprogressticket }}</h2>
+                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <h6>ReOpened Tickets</h6>
+                    <h2>{{ $totalreopenticket }}</h2>
+                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
+                </div>
+            </div>
+
+
         </div>
 
     </div>

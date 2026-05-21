@@ -24,6 +24,13 @@
             </div>
         </div>
 
+        <div class="col-md-4">
+                <div class="card p-3 shadow">
+                    <h6>Pending Tickets</h6>
+                    <h2>{{ $totalpendingticket }}</h2>
+                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
+                </div>
+            </div>
     </div>
 
 </div>
