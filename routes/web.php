@@ -128,12 +128,12 @@ Route::post('customer/resolve/update/{id}', [TicketController::class, 'updateRes
 
 Route::post('customer/updatestatus/{id}', [TicketController::class, 'updatestatus'])
     ->name('customer.updatestatus');
-Route::get('/ticket/{id}/status', [TicketController::class, 'statuspage'])
+Route::get('/ticket/status/{id}', [TicketController::class, 'statuspage'])
     ->name('customer.statuspage');
 
 Route::post('customer/assignticket', [TicketController::class, 'assignticket'])->name('customer.assignticket');
 
-
+Route::get('customer/reopen/{id}', [TicketController::class, 'reopen'])->name('customer.reopen');
 
 Route::get('team/teamcreate', [TeamController::class, 'create'])->name('team.create');
 

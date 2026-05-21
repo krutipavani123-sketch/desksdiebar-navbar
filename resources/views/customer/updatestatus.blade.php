@@ -12,6 +12,7 @@
             <option value="Open" {{ $ticket->status == 'Open' ? 'selected' : '' }}>Open</option>
             <option value="In Progress" {{ $ticket->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
             <option value="Pending" {{ $ticket->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                 <option value="ReOpened" {{ $ticket->status == 'ReOpened' ? 'selected' : '' }}>ReOpened</option>
             {{-- <option value="Resolved" {{ $ticket->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
             <option value="Closed" {{ $ticket->status == 'Closed' ? 'selected' : '' }}>Closed</option> --}}
         </select>

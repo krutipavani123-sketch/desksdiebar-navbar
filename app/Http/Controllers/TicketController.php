@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Team;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TicketAssignNotificationMail;
+use App\Mail\TicketCreateMailNotification;
+use App\Mail\TicketCloseNotificationMail;
+use App\Mail\TicketReopenedMail;
 
 class TicketController extends Controller
 {
@@ -44,6 +49,11 @@ class TicketController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $this->ticketservice->addticket($request);
+
+        // Mail::to(auth()->user()->email)
+        //     ->send(new TicketCreateMailNotification($request));
+
+
         return redirect()->route('customer.ticketlist')->with("success", "Ticket created successfully!");
         // $result = $this->ticketservice->addticket($request);
 
@@ -100,7 +110,7 @@ class TicketController extends Controller
             }
 
 
-              if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
+            if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
                 if ($tickets->attachment) {
                     Storage::disk('public')->delete($tickets->attachment);
                 }
@@ -144,15 +154,24 @@ class TicketController extends Controller
         $teamId = $request->team_id;
         $agentId = DB::table('teams')
             ->where('id', $teamId)    //match id    
-            ->value('assigned_agent_id');
+            ->value('assigned_agent_id');  //fetch that id
 
+        //fetch id 
+        $tickets = Ticket::whereIn('id', $request->ticket_ids)->get();
 
         Ticket::whereIn('id', $request->ticket_ids)    //find id inside array
             ->update([
-                'assigned_team_id' => $request->team_id,
+                'assigned_team_id' => $teamId,
                 'assigned_agent_id' =>  $agentId,
             ]);
+        $agent = User::find($agentId);
 
+        if ($agent) {
+            foreach ($tickets as  $ticket) {
+                Mail::to($agent->email)
+                    ->queue(new TicketAssignNotificationMail($ticket));
+            }
+        }
 
         return redirect()->back()->with('success', 'Tickets assigned successfully');
     }
@@ -182,11 +201,10 @@ class TicketController extends Controller
     // }
 
 
+
     public function updatestatus(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);
-
-
 
         $request->validate([
             'status' => 'required',
@@ -222,7 +240,30 @@ class TicketController extends Controller
         //$ticket->resolved_at = now(); 
         $ticket->save();
 
+        //ticket created user receive mail
+        Mail::to($ticket->customer?->email)
+            ->queue(new TicketCloseNotificationMail($ticket));
+
+    
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Resolved');
+    }
+
+    public function reopen($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->status != 'Closed') {
+            return redirect()->back()->with('error', 'Only Close Ticket Reopen');
+        }
+        $ticket->status = 'ReOpened';
+        $ticket->save();
+
+        if ($ticket->agent) {
+            Mail::to($ticket->agent->email)
+                ->queue(new TicketReopenedMail($ticket));
+        }
+
+        return redirect()->route('customer.ticketlist')->with('success', 'Ticket Reopened successfully');
     }
 }
 

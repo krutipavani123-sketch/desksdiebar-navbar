@@ -47,7 +47,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Team::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
@@ -55,4 +56,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(InternalNote::class, '');
     }
+    
 }

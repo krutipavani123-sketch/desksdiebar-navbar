@@ -156,10 +156,18 @@
 </td>
 
 <td>
+  
     <span>
         {{ $ticket->status }}
     </span>
-
+    @if(auth()->user()->hasRole('customer'))
+      @if($ticket->status =='Closed')
+      <a href="{{route('customer.reopen',$ticket->id)}}"
+        class="btn btn-sm btn-primary mt-1">
+                  Reopen Ticket
+        </a></a>
+@endif
+@endif
     @if(auth()->user()->hasRole('support_agent') && $ticket->status != 'Closed')
         <br>
         <a href="{{ route('customer.statuspage', $ticket->id) }}" class="btn btn-sm btn-primary mt-1">
@@ -238,11 +246,14 @@
 <div class="modal fade"
                         id="assignModal"
                         tabindex="-1"
-                        aria-hidden="true"> // popup
+                        aria-hidden="true">  
+                        {{-- popup --}}
 
-                        <div class="modal-dialog"> //center popup
+                        <div class="modal-dialog">
+                             {{-- center popup --}}
 
-                            <div class="modal-content"> //main box  
+                            <div class="modal-content">
+                                 {{-- main box   --}}
 
                               
                                 <div class="modal-header">

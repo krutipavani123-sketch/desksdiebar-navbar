@@ -44,7 +44,12 @@ class Ticket extends Model
         return $this->hasMany(InternalNote::class, '');
     }
     public function Note()
-{
-    return $this->hasOne(InternalNote::class);
-}
+    {
+        return $this->hasOne(InternalNote::class);
+    }
+    // for mail when ticket close 
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 }

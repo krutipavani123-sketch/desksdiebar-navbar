@@ -35,9 +35,11 @@ class TeamController extends Controller
         if ($user && $user->hasAnyRole(['superadmin', 'admin'])) {
 
             $query = Team::query()->with('users', 'leader', 'agent');
-        } elseif ($user->hasRole('team_leader')) {
+        } 
+        elseif ($user->hasRole('team_leader')) {
             $query = Team::with('users', 'leader', 'agent')->where('leader_id', $user->id);                   //only their team
-        } else {
+        } 
+        else {
             $query = Team::with('users', 'leader')
                 ->whereHas('users', function ($q) use ($user) { //only they assigned 
                     $q->where('users.id', $user->id);

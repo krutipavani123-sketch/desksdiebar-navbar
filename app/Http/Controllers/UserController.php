@@ -70,7 +70,7 @@ class UserController extends Controller
             // $permission->update(['name'=> $request->name]);
             $users->name = $request->name;
             $users->email = $request->email;
-            $users->team_id = $request->team_id;
+            //$users->team_id = $request->team_id;
             $users->save();
             if (!empty($request->permission)) {
                 $users->syncPermissions($request->permission);
@@ -101,7 +101,7 @@ class UserController extends Controller
             'password' => 'required',
             'roles' => 'nullable|array',
             'permission' => 'nullable|array',
-            'team_id' => 'nullable|exists:teams,id',
+            //'team_id' => 'nullable|exists:teams,id',
         ]);
 
         if ($validator->passes()) {
@@ -110,7 +110,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'team_id' => $request->team_id,
+              //  'team_id' => $request->team_id,
             ]);
 
 
