@@ -152,6 +152,8 @@ class TicketController extends Controller
         ]);
 
         $teamId = $request->team_id;
+
+        
         $agentId = DB::table('teams')
             ->where('id', $teamId)    //match id    
             ->value('assigned_agent_id');  //fetch that id
