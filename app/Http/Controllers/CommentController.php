@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Storage;
 
 class CommentController extends Controller
 {
@@ -13,10 +14,22 @@ class CommentController extends Controller
 
     public function addcomment(Request $request)
     {
+        $path = null;
+
+        if ($request->hasFile('attachment')) {
+
+            $file = $request->file('attachment');
+
+            if ($file->isValid()) {
+                $path = $file->store('images', 'public');
+            }
+        }
+
 
         $request->validate([
             'ticket_id' => 'required|exists:tickets,id',
-            'comment'   => 'required|string'
+            'comment'   => 'required|string',
+            "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',   //10mb
         ]);
 
         $ticket = Ticket::findOrFail($request->ticket_id);
@@ -33,9 +46,11 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'comment' => $request->comment,
             'is_internal' => $request->has('is_internal') ? 1 : 0,
+            'attachment' => $path
         ]);
 
-        return redirect()->route('customer.ticketlist')->with('success', 'Comment Added');
+        return redirect()->route('customer.commentlist', $request->ticket_id)
+            ->with('success', 'Comment Added');
     }
     //return view('comment', 'comment');
     //  return redirect()->route('customer.comment')->with('success','Comment Add');
@@ -85,7 +100,9 @@ class CommentController extends Controller
         $validator = Validator::make($request->all(), [
             //'ticket_id' => 'required|exists:tickets,id',
             'comment' => 'required',
-            'is_internal' => 'nullable'
+            'is_internal' => 'nullable',
+            "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',   //10mb
+
         ]);
 
         $ticket = Ticket::findOrFail($comment->ticket_id);
@@ -103,11 +120,32 @@ class CommentController extends Controller
             return back()->with('error', $validator->errors()->first());
         } else {
             $comment->comment = $request->comment;
-            $comment->is_internal = $request->has('is_internal') ? 1 : 0;
+            //  $comment->is_internal = $request->has('is_internal') ? 1 : 0;
+            $comment->is_internal = $request->is_internal;
+
+            if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
+                if ($comment->attachment) {
+                    Storage::disk('public')->delete($comment->attachment);
+                }
+                $comment->attachment = null;
+            }
+
+            if ($request->hasFile('attachment')) {
+
+                if ($comment->attachment) {
+                    Storage::disk('public')->delete($comment->attachment);
+                    //replace old img with new img
+                }
+
+                $path = $request->file('attachment')->store('images', 'public');
+
+                $comment->attachment = $path;
+            }
+
             $comment->save();
         }
 
-        return back()->with('success', 'Updated');
+        return redirect()->route('customer.commentlist', $comment->ticket_id)->with('success', 'Updated');
     }
 
     public function show($id)
@@ -116,6 +154,6 @@ class CommentController extends Controller
 
         $comments = $ticket->comments;
 
-        return view('customer.show', compact('ticket','comments'));
+        return view('customer.show', compact('ticket', 'comments'));
     }
 }

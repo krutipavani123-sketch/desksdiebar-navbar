@@ -189,6 +189,12 @@
                      alt="Attachment" 
                      style="max-width: 150px; height: auto; border: 1px solid #ddd; padding: 5px;">
             </a>
+             <div class="mt-2">
+            <label>
+                <input type="checkbox" name="remove_attachment" value="1">
+                Remove Image
+            </label>
+        </div>
         </div>
     @endif
 </div>

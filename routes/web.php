@@ -161,7 +161,7 @@ Route::get('commentlist/{id}', [CommentController::class, 'commentlist'])
 
 Route::get('delete/{id}', [CommentController::class, 'delete'])->name('delete');
 
-Route::get('customer/editcomment/{id}', [CommentController::class, 'edit'])->name('edit');
+Route::get('customer/editcomment/{id}', [CommentController::class, 'edit'])->name('editcomment');
 Route::post('update/{id}', [CommentController::class, 'update'])->name('update');
 
 

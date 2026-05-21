@@ -98,10 +98,20 @@ class TicketController extends Controller
                     ]);
                 }
             }
+
+
+              if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
+                if ($tickets->attachment) {
+                    Storage::disk('public')->delete($tickets->attachment);
+                }
+                $tickets->attachment = null;
+            }
+
             if ($request->hasFile('attachment')) {
 
                 if ($tickets->attachment) {
                     Storage::disk('public')->delete($tickets->attachment);
+                    //replace old img with new img
                 }
 
                 $path = $request->file('attachment')->store('images', 'public');
@@ -144,31 +154,6 @@ class TicketController extends Controller
             ]);
 
 
-
-        // if ($user && $user->hasRole('team_leader')) {
-
-        //     Ticket::whereIn('id', $request->ticket_ids)
-        //         ->update([
-        //             'assigned_team_id' => $request->team_id,
-        //             'assigned_agent_id' => $request->agent_id,
-        //         ]);
-        // } else {
-        //     Ticket::whereIn('id', $request->ticket_ids)
-        //         ->update([
-        //             'assigned_team_id' => $request->team_id,
-        //             'assigned_agent_id' => $request->agent_id,
-        //         ]);
-        // }
-        //dd($request->request->all());
-
-
-
-
-        // Ticket::whereIn('id', $request->ticket_ids)
-        //     ->update([
-        //         'assigned_team_id' => $request->team_id
-        //     ]);
-
         return redirect()->back()->with('success', 'Tickets assigned successfully');
     }
 
@@ -190,6 +175,13 @@ class TicketController extends Controller
         $comments = Comment::all();
         return view('customer.commentlist', compact('comments'));
     }
+
+    // public function editcomment(Request $request, $id)
+    // {
+    //     return $this->ticketservice->editcomment($request, $id);
+    // }
+
+
     public function updatestatus(Request $request, $id)
     {
         $ticket = Ticket::findOrFail($id);

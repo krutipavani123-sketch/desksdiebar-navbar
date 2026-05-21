@@ -112,17 +112,46 @@
          
             <div class="form-group">
                 <label class="form-label">Comment</label>
-                <textarea name="comment">{{ old('comment') }}</textarea>
+                <textarea name="comment">{{ old('comment',$comment->comment) }}</textarea>
                 @error('comment') <p class="error-text">{{ $message }}</p> @enderror
             </div>
 
             <div class="form-group">
                 <label class="form-label">is_internal</label>
-                <input type="checkbox" name="is_internal">{{ old('is_internal') }} is_internal</input>
+                {{-- <input type="checkbox" name="is_internal">{{ old('is_internal',$comment->is_internal) }} is_internal</input> --}}
+                            <input type="hidden" name="is_internal" value="0">
+
+<input type="checkbox" name="is_internal" value="1"
+    {{ old('is_internal', $comment->is_internal) ? 'checked' : '' }}>
+
                 @error('is_internal') <p class="error-text">{{ $message }}</p> @enderror
             </div>
+
+
+
           
-        
+                   <div class="form-group">
+    <label class="form-label">Attachment</label>
+    <input type="file" name="attachment" class="form-control">
+    
+    @if($comment->attachment)
+        <div class="mt-2">
+            <p class="small text-muted">Current Image:</p>
+            <a href="{{ asset('storage/' . $comment->attachment) }}" target="_blank">
+                <img src="{{ asset('storage/' . $comment->attachment) }}" 
+                     alt="Attachment" 
+                     style="max-width: 150px; height: auto; border: 1px solid #ddd; padding: 5px;">
+            </a>
+             <div class="mt-2">
+            <label>
+                <input type="checkbox" name="remove_attachment" value="1">
+                Remove Image
+            </label>
+        </div>
+        </div>
+    @endif
+</div>
+
             @error('comment')
                 <p class="error-text">{{ $message }}</p>
             @enderror

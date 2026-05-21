@@ -62,6 +62,7 @@
             <th class="px-6 py-3 text-left">Comment</th> 
             <th class="px-6 py-3 text-left">User Name</th>
             <th class="px-6 py-3 text-left">is_internal</th>  
+            <th class="px-6 py-3 text-left">Attachment</th>  
             <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -87,14 +88,24 @@
         @endif
 
    </td>
+ <td>
+     @if(!empty($comment->attachment))
+    <img src="{{ $ticket->attachment ? asset('storage/' . $ticket->attachment) : 'https://via.placeholder.com/80' }}" width="70" height="50">
+      @else
 
+        <span class="text-danger">
+            No Attachment
+        </span>
+
+        @endif
+</td>
         <td class="px-6 py-3 text-left">
 
-                <a href="{{ route('edit', $comment->id) }}">
+                <a href="{{ route('editcomment', $comment->id) }}">
     <i class="bi bi-pencil-square"></i>
 </a>
 
-                <a href="{{ route('delete',$comment->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ route('delete',$comment->id) }}" ><i class="bi bi-trash2-fill  text-danger"></i></a>
               
             </td>
 
