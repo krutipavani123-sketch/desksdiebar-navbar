@@ -14,7 +14,9 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InternalNoteController;
 use App\Http\Controllers\TeamLeaderDashboardController;
+use App\Models\Notification;
 use Dom\Comment;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -176,3 +178,6 @@ Route::put('updatenote/{id}', [InternalNoteController::class, 'update'])->name('
 Route::get('internalnote/editnote/{id}', [InternalNoteController::class, 'editnote'])->name('note.edit');
 
 Route::get('deletenote/{id}', [InternalNoteController::class, 'deletenote'])->name('note.delete');
+
+
+Route::get('read/{id}', [NotificationController::class, 'read']);

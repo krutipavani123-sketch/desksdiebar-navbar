@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Notification;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {   //all pages
+            $notifications = Notification::where('user_id', auth()->id())->latest()
+                ->take(10)
+                ->get();
+
+            $unreadnotification = Notification::where('user_id', auth()->id())
+                ->where('is_read', false)
+                ->count();
+            // data available in all files
+            $view->with('notifications', $notifications);
+            $view->with('unreadnotification', $unreadnotification);
+        });
     }
 }

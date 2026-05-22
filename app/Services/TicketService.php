@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\sendmailqueue;
 use App\Mail\TicketCreateMailNotification;
 use Carbon\Carbon;
+use App\Models\Notification;
 
 class TicketService
 {
@@ -64,6 +65,20 @@ class TicketService
             'customer_id' => auth()->id(),
             'sla_deadline' => $deadline,
         ]);
+
+
+
+        // $agentId = $agentId ?? null;
+
+        // if (!empty($agentId)) {
+        //     $this->createnotification(
+        //         $agentId,
+        //         'New Ticket Created',
+        //         "Ticket #{$ticket->id} created and assigned to you",
+        //         'created'
+        //     );
+        // }
+
 
         if (now()->greaterThan($ticket->sla_deadline)) {
             $ticket->status = 'Overdue';
@@ -141,4 +156,15 @@ class TicketService
         ]);
         return back()->with('success', 'comment added');
     }
+
+    // private function createnotification($userid, $title, $message, $type)
+    // {
+    //     Notification::create([
+    //         'user_id' => $userid,
+    //         'title' => $title,
+    //         'message' => $message,
+    //         'type' => $type,
+    //         'is_read' => false
+    //     ]);
+    // }
 }

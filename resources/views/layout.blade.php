@@ -135,7 +135,36 @@ $user = auth()->user();
         <h5>@yield('title')</h5>
 
         <div>
-            <i class="bi bi-bell"></i>
+<a class="nav-link" href="" data-bs-toggle="dropdown">
+
+     🔔
+
+     @if($unreadnotification > 0)
+     <span class="badge bg-danger">
+        {{ $unreadnotification }}
+     </span>
+     @endif
+</a>
+
+<ul class="dropdown-menu dropdown-menu-end">
+    @forelse ($notifications as $notification)
+    <li>
+        <a class="dropdown-item" href="{{ url('read',$notification->id) }}">
+{{-- 
+            {{ dd($notifications) }} --}}
+            <strong>{{ $notification->title }}</strong>
+            <small>{{ $notification->message }}</small>
+
+        </a>
+    </li>
+        @empty 
+        <li class="dropdown-item">No Notifications</li>
+    @endforelse
+</ul>
+
+
+
+            {{-- <i class="bi bi-bell"></i> --}}
               <a href="{{ url('profile') }}"><i class="bi bi-person ms-3"></i></a>
                <a href="{{ url('logout') }}">
                     <i class="bi bi-box-arrow-right"></i>

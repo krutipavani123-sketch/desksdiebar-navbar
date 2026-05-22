@@ -17,6 +17,7 @@ use App\Mail\TicketAssignNotificationMail;
 use App\Mail\TicketCreateMailNotification;
 use App\Mail\TicketCloseNotificationMail;
 use App\Mail\TicketReopenedMail;
+use App\Models\Notification;
 
 class TicketController extends Controller
 {
@@ -152,8 +153,8 @@ class TicketController extends Controller
         ]);
 
         $teamId = $request->team_id;
+        $user = auth()->id();
 
-        
         $agentId = DB::table('teams')
             ->where('id', $teamId)    //match id    
             ->value('assigned_agent_id');  //fetch that id
@@ -170,15 +171,22 @@ class TicketController extends Controller
 
         if ($agent) {
             foreach ($tickets as  $ticket) {
+
+                Notification::create([
+                    'user_id' => $agentId,
+                    'title' => 'New Ticket Assigned',
+                    'message' => "Ticket {$ticket->id} has been assigned to you",
+                    'type' => 'assigned'
+                ]);
+
                 Mail::to($agent->email)
                     ->queue(new TicketAssignNotificationMail($ticket));
             }
+
+
+            return redirect()->back()->with('success', 'Tickets assigned successfully');
         }
-
-        return redirect()->back()->with('success', 'Tickets assigned successfully');
     }
-
-
     public function comment(Request $request, $id)
     {
         return $this->ticketservice->comment($request, $id);
@@ -242,11 +250,13 @@ class TicketController extends Controller
         //$ticket->resolved_at = now(); 
         $ticket->save();
 
+
+
         //ticket created user receive mail
         Mail::to($ticket->customer?->email)
             ->queue(new TicketCloseNotificationMail($ticket));
 
-    
+
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Resolved');
     }
 
