@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+
         View::composer('*', function ($view) {   //all pages
             $notifications = Notification::where('user_id', auth()->id())->latest()
                 ->take(10)
@@ -33,5 +35,27 @@ class AppServiceProvider extends ServiceProvider
             $view->with('notifications', $notifications);
             $view->with('unreadnotification', $unreadnotification);
         });
+
+
+        // View::composer('*', function ($view) {
+
+        //     if (auth()->check()) {
+
+        //         $notifications = Notification::where('user_id', auth()->id())
+        //             ->latest()
+        //             ->take(10)
+        //             ->get();
+
+        //         $unreadnotification = Notification::where('user_id', auth()->id())
+        //             ->where('is_read', 0)
+        //             ->count();
+        //     } else {
+        //         $notifications = collect();
+        //         $unreadnotification = 0;
+        //     }
+
+        //     $view->with('notifications', $notifications);
+        //     $view->with('unreadnotification', $unreadnotification);
+        // });
     }
 }

@@ -28,6 +28,7 @@ class LoginService
         // } else {
         //     $user->assignRole("customer");
         // }
+        $user->sendEmailVerificationNotification();
 
 
 

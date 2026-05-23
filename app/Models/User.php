@@ -14,13 +14,13 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\HasPermissions;
 
-
 // #[Fillable(['name', 'email', 'password'])]
 // #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
-{
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-   public $timestamps = true;
+class User extends Authenticatable implements MustVerifyEmail
+{
+    public $timestamps = true;
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -58,5 +58,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(InternalNote::class, '');
     }
-    
 }

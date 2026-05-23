@@ -46,6 +46,7 @@ class TicketController extends Controller
             // 'ticket_id' => 'required|exists:tickets,id',
         ]);
 
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -187,9 +188,35 @@ class TicketController extends Controller
             return redirect()->back()->with('success', 'Tickets assigned successfully');
         }
     }
+    // public function comment(Request $request, $id)
+    // {
+    //     return $this->ticketservice->comment($request, $id);
+    // }
+
     public function comment(Request $request, $id)
     {
-        return $this->ticketservice->comment($request, $id);
+        $request->validate([
+            'comment' => 'required',
+        ]);
+
+        $ticket = Ticket::findOrFail($id);
+
+        //   $comment = Comment::findOrFail($id);
+        // $user = User::findOrFail($id);
+        Comment::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'comment' => $request->comment,
+        ]);
+        Notification::create([
+            'user_id' => auth()->id(),
+            'title' => 'Comment Added',
+            'message' => "Comment Added on Ticket {$ticket->id}",
+            'type' => 'comment',
+            'is_read' => 0,
+        ]);
+
+        return back()->with('success', 'Comment added');
     }
 
 
@@ -251,7 +278,12 @@ class TicketController extends Controller
         $ticket->save();
 
 
-
+        Notification::create([
+            'user_id' => $ticket->customer_id,
+            'title' => 'Ticket Closed',
+            'message' => "Ticket {$ticket->id} has been closed",
+            'type' => 'Closed',
+        ]);
         //ticket created user receive mail
         Mail::to($ticket->customer?->email)
             ->queue(new TicketCloseNotificationMail($ticket));
@@ -269,6 +301,13 @@ class TicketController extends Controller
         }
         $ticket->status = 'ReOpened';
         $ticket->save();
+
+        Notification::create([
+            'user_id' => $ticket->assigned_agent_id,
+            'title' => 'Ticket Reopen',
+            'message' => "Ticket {$ticket->id} has been ReOpened",
+            "type" => "ReOpened",
+        ]);
 
         if ($ticket->agent) {
             Mail::to($ticket->agent->email)

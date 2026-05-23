@@ -48,10 +48,12 @@ class TicketService
             $sla_deadline = 24;
         } elseif ($request->priority == 'High') {
             $sla_deadline = 8;
+        } elseif ($request->priority == 'Checking') {
+            $sla_deadline = 4;
         } else {
             $sla_deadline = 2;
         }
-        $deadline = $now->copy()->addHours($sla_deadline);
+        $deadline = $now->copy()->addMinutes($sla_deadline);
 
         $ticket = Ticket::create([
             'subject' => $request->subject,
@@ -79,11 +81,36 @@ class TicketService
         //     );
         // }
 
+        // $tickets = Ticket::all();
 
-        if (now()->greaterThan($ticket->sla_deadline)) {
-            $ticket->status = 'Overdue';
-            $ticket->save();
+        // foreach ($tickets as $ticket) {
+        //     if ($ticket->status != 'Closed' && now()->greaterThan($ticket->sla_deadline)) {
+        //         $ticket->status = 'Overdue';
+        //         $ticket->save();
+        //     }
+        // }
+
+        // if (now()->greaterThan($ticket->sla_deadline)) {
+        //     $ticket->status = 'Overdue';
+        //     $ticket->save();
+        // }
+
+        Notification::create([
+            'user_id' => auth()->id(),
+            'title' => 'Ticket Created',
+            'message' => "Ticket Created for {$ticket->id}",
+            'type' => 'created'
+        ]);
+        if ($agentId) {
+            Notification::create([
+                'user_id' => $agentId,
+                'title' => 'New Ticket Assigned',
+                'message' => "Ticket #{$ticket->id} assigned to you",
+                'type' => 'assigned',
+                'is_read' => 0,
+            ]);
         }
+
         Mail::to(auth()->user()->email)
             ->queue(new TicketCreateMailNotification($ticket));
 
@@ -149,13 +176,60 @@ class TicketService
             'comment' => 'required',
         ]);
 
+        $ticket = Ticket::findOrFail($id);
+
+        //   $comment = Comment::findOrFail($id);
+        // $user = User::findOrFail($id);
         Comment::create([
-            'ticket_id' => $id,
+            'ticket_id' => $ticket->id,
             'user_id' => auth()->id(),
             'comment' => $request->comment,
         ]);
-        return back()->with('success', 'comment added');
+        Notification::create([
+            'user_id' => auth()->id(),
+            'title' => 'Comment Added',
+            'message' => "Comment Added on Ticket {$ticket->id}",
+            'type' => 'comment',
+            'is_read' => 0,
+        ]);
+
+        // if ($ticket->customer_id) {
+        //     Notification::create([
+        //         'user_id' => $ticket->customer_id,
+        //         'title' => 'New Comment Added',
+        //         'message' => "New comment on Ticket #{$ticket->id}",
+        //         'type' => 'comment',
+        //         'is_read' => 0,
+        //     ]);
+        // }
+
+
+        // if ($ticket->assigned_agent_id) {
+        //     Notification::create([
+        //         'user_id' => $ticket->assigned_agent_id,
+        //         'title' => 'New Comment Added',
+        //         'message' => "New comment on Ticket #{$ticket->id}",
+        //         'type' => 'comment',
+        //         'is_read' => 0,
+        //     ]);
+        // }
+
+        return back()->with('success', 'Comment added');
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // private function createnotification($userid, $title, $message, $type)
     // {
