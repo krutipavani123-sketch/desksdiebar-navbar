@@ -7,11 +7,22 @@ use App\Models\Permission;
 use  App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class PermissionController extends Controller
 {
 
     protected $permissionservice;   //object
+
+
+    function clearDashboardCache()
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('admindashboard_stats');
+        Cache::forget('leaderdashboard_stats');
+        Cache::forget('agentdashboard_stats');
+        Cache::forget('customerdashboard_tasks');
+    }
 
     public function __construct(PermissionService $permissionservice)
     {
@@ -27,7 +38,7 @@ class PermissionController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+   $this->clearDashboardCache();
         $this->permissionservice->permissionadd(request()->all());
 
         return redirect()->route('permissions.permissionlist')->with('success', 'Permission Added');
@@ -61,6 +72,7 @@ class PermissionController extends Controller
     {
 
         // $permissions = Permission::all();
+           $this->clearDashboardCache();
         return $this->permissionservice->permissionlist();
         //  return view('permissions.permissionlist', compact('permissions'));
     }
@@ -79,7 +91,7 @@ class PermissionController extends Controller
             'name' => 'required|min:3|unique:permissions,name,' . $id
 
         ]);
-
+   $this->clearDashboardCache();
         if ($validator->passes()) {
             $permission->name = $request->name;
             $permission->save();
@@ -96,6 +108,7 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
         $permission->delete();
+          $this->clearDashboardCache();
         return redirect()->route('permissions.permissionlist')->with('success', 'Deleted');
     }
 }

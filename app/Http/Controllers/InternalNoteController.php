@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 class InternalNoteController extends Controller
 {
 
+    public function create()
+    {
+        //  $ticket = Ticket::findOrFail($id);
+        return view('internalnote.internalnote');
+    }
 
     public function shownote($id)
     {

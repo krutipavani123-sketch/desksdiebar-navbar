@@ -18,6 +18,7 @@ use App\Mail\TicketCreateMailNotification;
 use App\Mail\TicketCloseNotificationMail;
 use App\Mail\TicketReopenedMail;
 use App\Models\Notification;
+use Illuminate\Support\Facades\Cache;
 
 class TicketController extends Controller
 {
@@ -26,6 +27,15 @@ class TicketController extends Controller
     public function __construct(TicketService $ticketservice)
     {
         $this->ticketservice = $ticketservice;
+    }
+
+    function clearDashboardCache()
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('admindashboard_stats');
+        Cache::forget('leaderdashboard_stats');
+        Cache::forget('agentdashboard_stats');
+        Cache::forget('customerdashboard_tasks');
     }
     public function create()
     {
@@ -51,6 +61,7 @@ class TicketController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+        $this->clearDashboardCache();
         $this->ticketservice->addticket($request);
 
         // Mail::to(auth()->user()->email)
@@ -66,6 +77,7 @@ class TicketController extends Controller
     {
         //return view("customer.ticketlist");
         //  $agents = Team::with('agents')->get();
+        $this->clearDashboardCache();
         return $this->ticketservice->ticketlist($request);
     }
 
@@ -135,7 +147,7 @@ class TicketController extends Controller
                     ]);
                 }
             }
-
+            $this->clearDashboardCache();
             $tickets->save();
 
             return redirect()->route("customer.ticketlist")->with("success", "Ticket Updated");
@@ -146,6 +158,7 @@ class TicketController extends Controller
     {
         $tickets = Ticket::findOrFail($id);
         $tickets->delete();
+        $this->clearDashboardCache();
         return redirect()->route("customer.ticketlist")->with("success", "Ticket Deleted");
     }
 
@@ -155,7 +168,7 @@ class TicketController extends Controller
             "ticket_ids" => "required|array",
             "team_id" => "required|exists:teams,id",
         ]);
-
+        $this->clearDashboardCache();
         $teamid = $request->team_id;
 
         $team = Team::with('teamagents')->findOrFail($teamid);
@@ -284,6 +297,7 @@ class TicketController extends Controller
 
     {
         $comments = Comment::all();
+        $this->clearDashboardCache();
         return view('customer.commentlist', compact('comments'));
     }
 
@@ -304,7 +318,7 @@ class TicketController extends Controller
 
         $ticket->status = $request->status;
         $ticket->save();
-
+        $this->clearDashboardCache();
         return redirect()->route('customer.ticketlist')
             ->with('success', 'Status Updated');
     }
@@ -328,7 +342,7 @@ class TicketController extends Controller
         $ticket->status = 'Closed';  //permienently close
         //  $ticket->status = $request->status;
         $ticket->resolution = $request->resolution;
-
+        $this->clearDashboardCache();
         //$ticket->resolved_at = now(); 
         $ticket->save();
 
@@ -368,7 +382,7 @@ class TicketController extends Controller
             Mail::to($ticket->agent->email)
                 ->queue(new TicketReopenedMail($ticket));
         }
-
+        $this->clearDashboardCache();
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Reopened successfully');
     }
 }

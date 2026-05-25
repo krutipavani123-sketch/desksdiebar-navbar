@@ -216,6 +216,8 @@ Route::get('customer/editcomment/{id}', [CommentController::class, 'edit'])->nam
 Route::post('update/{id}', [CommentController::class, 'update'])->name('update');
 
 
+//Route::post('note', [InternalNoteController::class, 'shownote'])->name('note');
+Route::get('note', [InternalNoteController::class, 'create'])->name('note.create');
 Route::get('internalnote/{id}', [InternalNoteController::class, 'shownote'])->name('shownote');
 
 Route::post('internalnote/{id}', [InternalNoteController::class, 'notes'])->name('notes');

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Cache;
 
 class RoleController extends Controller
 {
@@ -20,6 +21,17 @@ class RoleController extends Controller
     {
         $this->roleservice = $roleservice;
     }
+
+    function clearDashboardCache()
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('admindashboard_stats');
+        Cache::forget('leaderdashboard_stats');
+        Cache::forget('agentdashboard_stats');
+        Cache::forget('customerdashboard_tasks');
+    }
+
+
     public function addrole(Request $request)
     {
         $validator = Validator::make(request()->all(), [
@@ -41,6 +53,7 @@ class RoleController extends Controller
         // if ($role) {
         //     $role->syncPermissions($permissions);
         // }
+           $this->clearDashboardCache();
         $this->roleservice->addrole($request->all());
         return redirect()->route('roles.list')->with('success', 'Role Added');
     }
@@ -62,6 +75,7 @@ class RoleController extends Controller
 
     public function list(Request $request)
     {
+           $this->clearDashboardCache();
         return $this->roleservice->list();
     }
     // public function list(Request $request)
@@ -72,6 +86,7 @@ class RoleController extends Controller
 
     public function create(Request $request)
     {
+           $this->clearDashboardCache();
         return $this->roleservice->create();
         // $permissions = Permission::all();
         // return view('roles.createrole', compact('permissions'));
@@ -91,7 +106,7 @@ class RoleController extends Controller
 
             //unique:table,column,ignore_id,id_column
         ]);
-
+   $this->clearDashboardCache();
         if ($validator->passes()) {
             $roles->name = $request->name;
             $roles->save();
@@ -111,6 +126,7 @@ class RoleController extends Controller
     {
         $roles = Role::findOrFail($id);
         $roles->delete();
+           $this->clearDashboardCache();
         if ($roles) {
             return redirect()->route('roles.list')->with('success', 'Deleted');
         } else {

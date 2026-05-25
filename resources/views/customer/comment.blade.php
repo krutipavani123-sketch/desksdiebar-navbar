@@ -3,20 +3,21 @@
 @section('title', 'Comment')
 
 @section('header')
-     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Comment') }}
-        </h2>
-    </x-slot>
+<x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Add Comment') }}
+    </h2>
+</x-slot>
 @endsection
 
 @section('main')
+
 <style>
     body {
         background: #f4f6fb;
     }
 
-    .ticket-wrapper {
+    .wrapper {
         min-height: 85vh;
         display: flex;
         justify-content: center;
@@ -24,21 +25,16 @@
         padding: 20px;
     }
 
-    .ticket-card {
+    .card-box {
         width: 100%;
-        max-width: 550px;
-        background: #ffffff;
-        border-radius: 18px;
+        max-width: 600px;
+        background: #fff;
+        border-radius: 16px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         padding: 25px;
-        transition: 0.3s;
     }
 
-    .ticket-card:hover {
-        transform: translateY(-3px);
-    }
-
-    .tikcket-title {
+    .title {
         font-size: 22px;
         font-weight: 700;
         text-align: center;
@@ -50,29 +46,37 @@
         font-weight: 600;
         margin-bottom: 6px;
         display: block;
-        margin-top: 10px;
-        color: #444;
+        margin-top: 12px;
     }
 
-    input[type="textarea"] {
+    textarea {
         width: 100%;
+        min-height: 120px;
         padding: 10px 14px;
         border: 1px solid #ddd;
         border-radius: 10px;
         outline: none;
         transition: 0.2s;
+        resize: vertical;
     }
 
-    input:focus {
+    textarea:focus {
         border-color: #0d6efd;
         box-shadow: 0 0 5px rgba(13,110,253,0.3);
+    }
+
+    .checkbox-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
     }
 
     .btn-save {
         width: 100%;
         background: linear-gradient(135deg, #0d6efd, #4a90e2);
         border: none;
-        padding: 10px;
+        padding: 12px;
         color: white;
         font-weight: 600;
         border-radius: 10px;
@@ -89,41 +93,33 @@
         font-size: 14px;
         margin-top: 5px;
     }
-
 </style>
 
+<div class="wrapper">
 
-<div class="ticket-wrapper">
+    <div class="card-box">
 
-    <div class="ticket-card">
-
-        <div class="ticket-title">
-            Comment
-        </div>
+        <div class="title">Add Comment</div>
 
         @include('message')
 
-        <form action="{{ url('addcomment') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('addcomment') }}" method="POST">
             @csrf
 
-     
-        
-<input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-         
-            <div class="form-group">
-                <label class="form-label">Comment</label>
-                <textarea name="comment">{{ old('comment') }}</textarea>
-                @error('comment') <p class="error-text">{{ $message }}</p> @enderror
+            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+
+            <label class="form-label">Comment</label>
+            <textarea name="comment" placeholder="Write your comment...">{{ old('comment') }}</textarea>
+            @error('comment') 
+                <p class="error-text">{{ $message }}</p> 
+            @enderror
+
+            <div class="checkbox-wrap">
+                <input type="checkbox" name="is_internal" value="1" {{ old('is_internal') ? 'checked' : '' }}>
+                <label>Internal Comment</label>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">is_internal</label>
-                <input type="checkbox" name="is_internal">{{ old('is_internal') }} is_internal</input>
-                @error('is_internal') <p class="error-text">{{ $message }}</p> @enderror
-            </div>
-          
-        
-            @error('comment')
+            @error('is_internal')
                 <p class="error-text">{{ $message }}</p>
             @enderror
 

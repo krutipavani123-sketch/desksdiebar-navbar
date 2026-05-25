@@ -1,84 +1,163 @@
-    @extends('layouts.admin')
+@extends('layouts.app')
 
-    @section('main')
+@section('main')
 
-    <div class="container">
+<style>
+    body {
+        background: #f4f7fc;
+    }
 
-        <h3>🛠️ Admin Dashboard</h3>
+    .dashboard-title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 30px;
+    }
 
-        <div class="row g-3">
+    .dashboard-card {
+        border: none;
+        border-radius: 18px;
+        padding: 22px;
+        color: #fff;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
 
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>Teams</h6>
-                    <h2>{{ $totalteam }}</h2>
-                    {{-- <h2>{{ \App\Models\Team::count() }}</h2> --}}
-                </div>
+    .dashboard-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    .dashboard-card .icon {
+        position: absolute;
+        right: 20px;
+        top: 18px;
+        font-size: 40px;
+        opacity: 0.25;
+    }
+
+    .dashboard-card h6 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        opacity: 0.9;
+    }
+
+    .dashboard-card h2 {
+        font-size: 34px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    /* Gradient Colors */
+    .bg-teams {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+    }
+
+    .bg-agents {
+        background: linear-gradient(135deg, #06b6d4, #0891b2);
+    }
+
+    .bg-tickets {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .bg-open {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .bg-close {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .bg-pending {
+        background: linear-gradient(135deg, #f97316, #ea580c);
+    }
+
+    .bg-progress {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .bg-reopen {
+        background: linear-gradient(135deg, #a855f7, #9333ea);
+    }
+</style>
+
+<div class="container py-4">
+
+    <div class="dashboard-title">
+        🛠️ Admin Dashboard
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="dashboard-card bg-teams">
+                <div class="icon">👥</div>
+                <h6>Total Teams</h6>
+                <h2>{{ $totalteam }}</h2>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>Agents</h6>
-                    <h2>{{ $agents}}</h2>
-                    
-                    {{-- <h2>{{ \App\Models\User::role('support_agent')->count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-agents">
+                <div class="icon">🧑‍💻</div>
+                <h6>Support Agents</h6>
+                <h2>{{ $agents }}</h2>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>Tickets</h6>
-                    <h2>{{ $totalticket }}</h2>
-                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-tickets">
+                <div class="icon">🎫</div>
+                <h6>Total Tickets</h6>
+                <h2>{{ $totalticket }}</h2>
             </div>
+        </div>
 
-
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>Open Tickets</h6>
-                    <h2>{{ $totalopenticket }}</h2>
-                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-open">
+                <div class="icon">📂</div>
+                <h6>Open Tickets</h6>
+                <h2>{{ $totalopenticket }}</h2>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>Close Tickets</h6>
-                    <h2>{{ $totalcloseticket }}</h2>
-                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-close">
+                <div class="icon">✅</div>
+                <h6>Closed Tickets</h6>
+                <h2>{{ $totalcloseticket }}</h2>
             </div>
+        </div>
 
-
-             <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>Pending Tickets</h6>
-                    <h2>{{ $totalpendingticket }}</h2>
-                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-pending">
+                <div class="icon">⏳</div>
+                <h6>Pending Tickets</h6>
+                <h2>{{ $totalpendingticket }}</h2>
             </div>
+        </div>
 
-
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>In Progress Tickets</h6>
-                    <h2>{{ $totalprogressticket }}</h2>
-                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-progress">
+                <div class="icon">🚀</div>
+                <h6>In Progress</h6>
+                <h2>{{ $totalprogressticket }}</h2>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card p-3 shadow">
-                    <h6>ReOpened Tickets</h6>
-                    <h2>{{ $totalreopenticket }}</h2>
-                    {{-- <h2>{{ \App\Models\Ticket::count() }}</h2> --}}
-                </div>
+        <div class="col-md-3">
+            <div class="dashboard-card bg-reopen">
+                <div class="icon">🔄</div>
+                <h6>ReOpened Tickets</h6>
+                <h2>{{ $totalreopenticket }}</h2>
             </div>
-
-
         </div>
 
     </div>
 
-    @endsection
+</div>
+
+@endsection

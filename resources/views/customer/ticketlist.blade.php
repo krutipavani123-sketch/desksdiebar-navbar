@@ -15,7 +15,119 @@
 
     @endsection
     @section('main')
-      
+<style>
+body {
+    background: #f4f6fb;
+}
+.action-btn{
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:#f8f9fa;
+    transition:0.2s;
+    font-size:16px;
+    text-decoration:none;
+}
+
+.action-btn:hover{
+    transform: translateY(-2px);
+    background:#e9ecef;
+}
+.page-wrapper {
+    padding: 25px;
+}
+
+/* CARD */
+.card-box {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+
+/* HEADER */
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.header-bar h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* BUTTONS */
+.btn-modern {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 8px 14px;
+    transition: 0.2s;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+}
+
+/* TABLE */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.table thead {
+    background: #111827;
+    color: #fff;
+}
+
+.table th {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px;
+    white-space: nowrap;
+}
+
+.table td {
+    font-size: 13px;
+    padding: 12px;
+    vertical-align: middle;
+}
+
+/* STATUS BADGES */
+.badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.open { background:#fff3cd; color:#856404; }
+.badge.closed { background:#d1e7dd; color:#0f5132; }
+.badge.reopen { background:#cfe2ff; color:#084298; }
+
+/* ACTION ICONS */
+.action-icons a {
+    margin-right: 10px;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.action-icons a:hover {
+    transform: scale(1.2);
+}
+
+/* CHECKBOX */
+input[type="checkbox"] {
+    transform: scale(1.2);
+}
+</style>
+         
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -27,7 +139,7 @@
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-@if(auth()->user()->hasRole('customer'))
+{{-- @if(auth()->user()->hasRole('customer'))
    <div class="mb-4 d-flex justify-content-end">
 
     <button type="button" 
@@ -41,16 +153,16 @@
             class="btn btn-primary btn-sm px-4 py-2 fw-semibold shadow-sm">
          Assign Ticket
     </button> --}}
-@if(!auth()->user()->hasAnyRole(['support_agent', 'customer']))
+{{-- @if(!auth()->user()->hasAnyRole(['support_agent', 'customer']))
      <button type="button"
                         class="btn btn-success btn-sm px-4 py-2 fw-semibold shadow-sm"
-                        data-bs-toggle="modal"          {{-- model open --}}
+                        data-bs-toggle="modal"          {{-- model open 
                         data-bs-target="#assignModal">
                         Assign Ticket
                     </button> 
 @endif
                     
-</div>
+</div> --}} 
    {{-- @endcan       --}}
    
 
@@ -61,7 +173,7 @@
     Assign Ticket
 </button>
    --}}
-
+<div class="card-box">
  <form action="{{ route('customer.assignticket') }}" method="POST" enctype="multipart/form-data">
 
                     @csrf
@@ -75,12 +187,35 @@
     data-height="auto"
      data-search="true"
     data-page-list="[5,10,25,50,100,200,All]">
-<h2>Ticket List</h2>
+<div class="card-box mb-3">
+    <div class="header-bar">
+        <h2>🎫 Ticket List</h2>
+
+        <div class="d-flex gap-2">
+
+            @if(auth()->user()->hasRole('customer'))
+            <a href="{{ route('customer.createticket') }}"
+               class="btn btn-primary btn-modern">
+                + Create Ticket
+            </a>
+            @endif
+
+            @if(!auth()->user()->hasAnyRole(['support_agent', 'customer']))
+            <button class="btn btn-success btn-modern"
+                    data-bs-toggle="modal"
+                    data-bs-target="#assignModal">
+                Assign Ticket
+            </button>
+            @endif
+
+        </div>
+    </div>
+</div>
 
 
 
 
-    <thead class="bg-gray-50">
+  <thead class="table-dark">
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">Select</th>
             <th class="px-6 py-3 text-left" width="60">No</th>
@@ -123,20 +258,28 @@
             <td class="px-6 py-3 text-left">{{ $ticket->subject }}</td>
 
     @if(auth()->user()->hasAnyRole(['support_agent','customer']))       
-<td>
+<td class="d-flex gap-2 align-items-center">
 
+    <!-- Add Comment -->
     <a href="{{ route('customer.comment', $ticket->id) }}"
-      <i class="bi bi-file-earmark-plus text-primary" style="font-size: 1rem;"></i>
+       class="action-btn text-primary"
+       title="Add Comment">
+        <i class="bi bi-plus-circle-fill"></i>
     </a>
 
+    <!-- View Comments -->
     <a href="{{ route('customer.commentlist', $ticket->id) }}"
-      <i class="bi bi-eye-fill text-success" style="font-size: 1rem;"></i>
-  
+       class="action-btn text-success"
+       title="View Comments">
+        <i class="bi bi-eye-fill"></i>
     </a>
 
-    <a href="{{ route('customer.show', $ticket->id) }}">
-   <i class="bi bi-reply-fill"></i>
-</a>
+    <!-- Reply -->
+    <a href="{{ route('customer.show', $ticket->id) }}"
+       class="action-btn text-warning"
+       title="Reply">
+        <i class="bi bi-reply-fill"></i>
+    </a>
 
 </td>
 @endif
@@ -174,7 +317,7 @@
             Update Status
         </a>
     @endif
-</td>
+</td>   
   
 
  @if(auth()->user()->hasRole('support_agent'))
@@ -229,16 +372,26 @@
 
         </td> --}}
 {{-- @can('edit ticket') --}}
-            <td class="px-6 py-3 text-left">
+       <td class="d-flex gap-2 align-items-center">
 
-                <a href="{{ route('customer.edit', $ticket->id) }}">
-    <i class="bi bi-pencil-square"></i>
-</a>
-{{-- @endcan
-@can('delete ticket') --}}
-                <a href="{{ route('customer.delete',$ticket->id) }}" ><i class="bi bi-trash2-fill text-danger"></i></a>
-                {{-- @endcan --}}
-            </td>
+    <!-- Edit -->
+    <a href="{{ route('customer.edit', $ticket->id) }}"
+       class="action-btn text-primary"
+       title="Edit Ticket">
+
+        <i class="bi bi-pencil-square"></i>
+    </a>
+
+    <!-- Delete -->
+    <a href="{{ route('customer.delete', $ticket->id) }}"
+       class="action-btn text-danger"
+       title="Delete Ticket"
+       onclick="return confirm('Are you sure you want to delete this ticket?')">
+
+        <i class="bi bi-trash-fill"></i>    
+    </a>
+
+</td>
         </tr>
         @endforeach
     </tbody>    

@@ -12,9 +12,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
+
+function clearDashboardCache()
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('admindashboard_stats');
+        Cache::forget('leaderdashboard_stats');
+        Cache::forget('agentdashboard_stats');
+        Cache::forget('customerdashboard_tasks');
+    }
     public function list()
     {
         //    $users = User::with('roles.permissions')->get();
@@ -28,6 +38,8 @@ class UserController extends Controller
        // $users = User::with(['permissions', 'roles.permissions', 'teams'])->get();
 
         $teams = Team::all();
+
+           $this->clearDashboardCache();
         return view('users.list', compact('users', 'teams'));
     }
 
@@ -71,6 +83,8 @@ class UserController extends Controller
             $users->name = $request->name;
             $users->email = $request->email;
             //$users->team_id = $request->team_id;
+
+               $this->clearDashboardCache();
             $users->save();
             if (!empty($request->permission)) {
                 $users->syncPermissions($request->permission);
@@ -103,7 +117,7 @@ class UserController extends Controller
             'permission' => 'nullable|array',
             //'team_id' => 'nullable|exists:teams,id',
         ]);
-
+   $this->clearDashboardCache();
         if ($validator->passes()) {
 
             $users = User::create([
@@ -137,6 +151,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+           $this->clearDashboardCache();
         return redirect()->route('users.list')->with('success', 'Deleted');
     }
 }

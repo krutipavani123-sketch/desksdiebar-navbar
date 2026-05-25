@@ -9,11 +9,21 @@ use  App\Models\User;
 use  App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Cache;
 
 class TeamController extends Controller
 {
 
     use HasRoles;
+
+    function clearDashboardCache()
+    {
+        Cache::forget('dashboard_stats');
+        Cache::forget('admindashboard_stats');
+        Cache::forget('leaderdashboard_stats');
+        Cache::forget('agentdashboard_stats');
+        Cache::forget('customerdashboard_tasks');
+    }
     public function create()
     {
         $users = User::role('support_agent')->get();
@@ -58,6 +68,8 @@ class TeamController extends Controller
         //  $teams = Team::with('users', 'leader')->get();
         $users = User::role('support_agent')->get();
         // $agents = $query->get();
+
+        $this->clearDashboardCache();
         return view("team.listteam", compact('teams', 'users'));
     }
 
@@ -105,6 +117,9 @@ class TeamController extends Controller
             //     $teams->users()->attach($request->users);
             // }
             // $teams->save();
+
+
+            $this->clearDashboardCache();
             return redirect()->route('team.list')->with("success", "Team Created");
         }
     }
@@ -149,6 +164,7 @@ class TeamController extends Controller
             } else {
                 $teams->teamagents()->sync([]);
             }
+            $this->clearDashboardCache();
             $teams->save();
             return redirect()->route("team.list")->with("success", "Team Updated");
         }
@@ -158,6 +174,7 @@ class TeamController extends Controller
     {
         $teams = Team::findOrFail($id);
         $teams->delete();
+        $this->clearDashboardCache();
         return redirect()->route("team.list")->with("success", "Deleted");
     }
 }
