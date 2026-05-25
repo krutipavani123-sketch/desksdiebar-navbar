@@ -162,11 +162,12 @@ class TicketController extends Controller
         return redirect()->route("customer.ticketlist")->with("success", "Ticket Deleted");
     }
 
-    public function assignticket(Request $request, $id)
+    public function assignticket(Request $request)
     {
         $request->validate([
             "ticket_ids" => "required|array",
             "team_id" => "required|exists:teams,id",
+            "agent_id" => "nullable|exists:users,id",
         ]);
         $this->clearDashboardCache();
         $teamid = $request->team_id;
@@ -178,15 +179,17 @@ class TicketController extends Controller
         if ($agentsid->isEmpty()) {
             return back()->with('error', 'No Agents Available');
         }
-
-        $busyagent = User::whereIn('id', $agentsid)
-            ->withCount([
-                'assignedticket as openticketcount' => function ($query) {
-                    $query->whereNotIn('status', ['Closed']);
-                }
-            ])
-            ->orderBy('openticketcount', 'asc')->first();
-
+        if ($request->filled('assigned_agent_id')) {
+            $busyagent = User::where('id', $request->assigned_agent_id)->first();
+        } else {
+            $busyagent = User::whereIn('id', $agentsid)
+                ->withCount([
+                    'assignedticket as openticketcount' => function ($query) {
+                        $query->whereNotIn('status', ['Closed']);
+                    }
+                ])
+                ->orderBy('openticketcount', 'asc')->first();
+        }
         if (!$busyagent) {
             return back()->with('error', 'No agent Available');
         }
@@ -211,6 +214,8 @@ class TicketController extends Controller
                 new TicketAssignNotificationMail($ticket)
             );
         }
+
+        return redirect()->route('customer.ticketlist')->with('success', 'Assigned');
     }
 
     // public function assignticket(Request $request)
@@ -385,6 +390,20 @@ class TicketController extends Controller
         $this->clearDashboardCache();
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Reopened successfully');
     }
+
+    // public function autoassignticket(Request $request,$id){
+
+    // $request->validate([
+    //     'assigned_agent_id'=> '$required|exists:users,id',
+    // ]);
+    //     $ticket = Ticket::findOrFail(request('id'));
+
+
+    //     $ticket->assigned_agent_id=$request->assigned_agent_id;
+    //     $ticket->save();
+
+    //     return redirect()->route('customer.ticketlist')->with('success','Ticket Assigned Successfully');
+    // }
 }
 
 

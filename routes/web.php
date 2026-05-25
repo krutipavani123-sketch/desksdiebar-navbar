@@ -184,6 +184,8 @@ Route::get('/ticket/status/{id}', [TicketController::class, 'statuspage'])
 
 Route::post('customer/assignticket', [TicketController::class, 'assignticket'])->name('customer.assignticket');
 
+Route::post('autoassignticket/{id}', [TicketController::class, 'autoassignticket']);
+
 Route::get('customer/reopen/{id}', [TicketController::class, 'reopen'])->name('customer.reopen');
 
 Route::get('team/teamcreate', [TeamController::class, 'create'])->name('team.create');
