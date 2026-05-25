@@ -163,7 +163,20 @@
                 </select>
             </div>
 
-          
+            <div class="form-group">
+                <label class="form-label">Team</label>
+                <select name="team_id" class="form-control">
+                    <option  value="">Select Team</option>
+                
+                @foreach($teams as $team)
+                <option value="{{ $team->id }}">
+                    {{ $team->teamName }}
+                </option>
+                    
+                @endforeach
+                
+                </select>
+</div>
             <div class="form-group">
                 <label class="form-label">Attachment</label>
                 <input type="file" name="attachment">

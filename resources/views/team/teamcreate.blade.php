@@ -206,18 +206,24 @@
            {{-- <input type="radio" name="leader_id" value="" id="leader_none" checked style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
                             <label for="leader_none" style="font-size: 14px; color: #999; cursor: pointer; width: 100%;">No Team Leader</label>
                         </div> --}}
-                       <div class="form-group">
-    <label>Select Agent</label>
+                       {{-- <div class="form-group">
+    <label>Select Agent</label> --}}
 
-    <select name="assigned_agent_id" class="form-control">
-        <option value="">Select Agent</option>
+    {{-- <select name="assigned_agent_id" class="form-control"> --}}
+<div class="form-group">
+     <label>Select Agent</label>
+        {{-- <input type="checkbox" name="agents[]" value="{{ $user->id }}"> --}}
+        {{-- <option value="">Select Agent</option> --}}
 
-        @foreach($users as $user)
-            <option value="{{ $user->id }}">
-                {{ $user->name }}
-            </option>
-        @endforeach
-    </select>
+        @foreach($teamagents as $user)
+    <div style="display:flex; align-items:center; margin-botatom:8px;">
+        <input type="checkbox" name="teamagents[]" value="{{ $user->id }}">
+        <label style="margin-left:8px;">
+            {{ $user->name }}
+        </label>
+    </div>
+@endforeach
+    {{-- </select> --}}
 </div>
 
                         

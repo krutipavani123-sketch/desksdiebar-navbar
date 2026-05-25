@@ -184,19 +184,27 @@
     </details>
 </div>
 
-
+{{-- 
             <div class="form-group">
-    <label class="form-label">Select Agent</label>
+    <label class="form-label">Select Agent</label> --}}
 
-    <select name="assigned_agent_id" class="form-control">
-        <option value="">Select Agent</option>
+<div class="form-group">
+     <label>Select Agent</label>
+        {{-- <input type="checkbox" name="agents[]" value="{{ $user->id }}"> --}}
+        {{-- <option value="">Select Agent</option> --}}
 
-        @foreach($users as $user)
-            <option value="{{ $user->id }}"
-                {{ old('assigned_agent_id', $teams->assigned_agent_id) == $user->id ? 'selected' : '' }}>
-                {{ $user->name }}
-            </option>
-        @endforeach
+     @foreach($users as $user)
+    <div style="display:flex; align-items:center; margin-bottom:8px;">
+        <input type="checkbox"
+               name="teamagents[]"
+               value="{{ $user->id }}"
+               {{ in_array($user->id, $selectedAgents) ? 'checked' : '' }}>
+
+        <label style="margin-left:8px;">
+            {{ $user->name }}
+        </label>
+    </div>
+@endforeach
     </select>
 </div>
        

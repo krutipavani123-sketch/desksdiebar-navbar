@@ -87,11 +87,10 @@
         </td>
 
        <td class="px-6 py-3 text-left">
-    @if($team->agent)
-        {{ $team->agent->name }}
-    @else
-        <span class="text-gray-400 italic">No Agent assigned</span>
-    @endif
+          {{ $team->teamagents->pluck('name')->unique()->implode(', ') }}
+   {{-- @foreach($team->agents as $agent)
+   {{ $team->agents->pluck('name')->unique()->implode(' ') }}s --}}
+{{-- @endforeach --}}
 </td>
         {{-- @can('edit team') --}}
         <td class="px-6 py-3 text-left">

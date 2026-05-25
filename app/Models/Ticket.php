@@ -55,4 +55,8 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
+
+
+
 }
+

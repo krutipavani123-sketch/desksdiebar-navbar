@@ -58,4 +58,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(InternalNote::class, '');
     }
+
+
+
+    public function agentTeams()
+    {
+        return $this->belongsToMany(Team::class, 'team_agent');
+    }
+
+    //one to many
+    public function assignedticket()
+    {
+        return $this->hasMany(Ticket::class, 'assigned_agent_id');
+    }
 }

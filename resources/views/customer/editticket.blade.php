@@ -136,6 +136,8 @@
                 @error('description') <p class="error-text">{{ $message }}</p> @enderror
             </div>
 
+            
+    @if(auth()->user()->hasAnyRole(['support_agent','customer'])) 
             <div class="form-group">
                 <label class="form-label">comment</label>
             
@@ -145,7 +147,7 @@
             
                  @error('comment') <p class="error-text">{{ $message }}</p> @enderror
             </div>
-
+@endif
 
 
            <div class="form-group">
@@ -153,7 +155,7 @@
     <select name="priority" class="form-control">
         <option value="">Select Priority</option>
         <option value="Default" {{ old('priority', $tickets->priority) == 'Default' ? 'selected' : '' }}>Default</option>
-        <option value="LOW" {{ old('priority', $tickets->priority) == 'LOW' ? 'selected' : '' }}>Low</option>
+        <option value="Low" {{ old('priority', $tickets->priority) == 'Low' ? 'selected' : '' }}>Low</option>
         <option value="Medium" {{ old('priority', $tickets->priority) == 'Medium' ? 'selected' : '' }}>Medium</option>
         <option value="High" {{ old('priority', $tickets->priority) == 'High' ? 'selected' : '' }}>High</option>
         <option value="Critical" {{ old('priority', $tickets->priority) == 'Critical' ? 'selected' : '' }}>Critical</option>
@@ -184,7 +186,7 @@
     @if($tickets->attachment)
         <div class="mt-2">
             <p class="small text-muted">Current Image:</p>
-            <a href="{{ asset('storage/' . $tickets->attachment) }}" target="_blank">
+           <a href="{{ asset('storage/' . $tickets->attachment) }}" target="_blank">  {{--  open in new tab --}}
                 <img src="{{ asset('storage/' . $tickets->attachment) }}" 
                      alt="Attachment" 
                      style="max-width: 150px; height: auto; border: 1px solid #ddd; padding: 5px;">

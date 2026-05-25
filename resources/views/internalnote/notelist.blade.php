@@ -56,6 +56,7 @@
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Note</th>
+            {{-- <th class="px-6 py-3 text-left">Name</th> --}}
             <th class="px-6 py-3 text-left">Created</th>
             <th class="px-6 py-3 text-left">Action</th>
         </tr>
@@ -65,7 +66,16 @@
         @foreach($notes as $note)
         <tr>
             <td class="px-6 py-3 text-left">{{ $note->id }}</td>
-            <td class="px-6 py-3 text-left">{{ $note->note }}</td>
+            <td class="px-6 py-3 text-left">Note:{{ $note->note }}
+              <p><br>
+                <small>
+                    <strong>Added By:</strong>{{ $note->user->name ?? 'Unknown' }}<br>   
+                    <strong>Role:</strong>{{ $note->user->getRoleNames()->first() ?? '-' }}
+                </small>
+              </p>
+
+            </td>
+            
             <td class="px-6 py-3 text-left">{{ $note->created_at->format('d M, Y') }}</td>
 
             <td class="px-6 py-3 text-left">

@@ -17,12 +17,13 @@ class TeamController extends Controller
     public function create()
     {
         $users = User::role('support_agent')->get();
+        $teamagents = User::role('support_agent')->get();
         $teams = Team::all();
-        return view("team.teamcreate", compact("users", "teams"));
+        return view("team.teamcreate", compact("users", "teams", "teamagents"));
     }
     public function list(Request $request)
     {
-        // $teamId = DB::table('team_user')
+        // $teamId = DB::table('team_user') 
         //     ->where('user_id', auth()->id())
         //     ->value('team_id');
 
@@ -35,11 +36,9 @@ class TeamController extends Controller
         if ($user && $user->hasAnyRole(['superadmin', 'admin'])) {
 
             $query = Team::query()->with('users', 'leader', 'agent');
-        } 
-        elseif ($user->hasRole('team_leader')) {
+        } elseif ($user->hasRole('team_leader')) {
             $query = Team::with('users', 'leader', 'agent')->where('leader_id', $user->id);                   //only their team
-        } 
-        else {
+        } else {
             $query = Team::with('users', 'leader')
                 ->whereHas('users', function ($q) use ($user) { //only they assigned 
                     $q->where('users.id', $user->id);
@@ -66,10 +65,12 @@ class TeamController extends Controller
     public function addteam(Request $request)
     {
         $validator = Validator::make(request()->all(), [
-            "teamName" => "required",
+            "teamName" => "required|unique:teams,teamName",
             "leader_id" => 'nullable|exists:users,id',    //must exists
             "users" => 'nullable|array',
-            "assigned_agent_id" => 'nullable|exists:users,id',
+            "teamagents" => 'nullable|array',
+            // "assigned_agent_id" => 'nullable|exists:users,id',
+
         ]);
 
 
@@ -83,14 +84,23 @@ class TeamController extends Controller
             $teams = Team::create([
                 "teamName" => $request->teamName,
                 "leader_id" => $request->leader_id,
-                "assigned_agent_id" => $request->assigned_agent_id,
+
+                //"assigned_agent_id" => $request->assigned_agent_id,
                 // $teams->leader_id = $request->leader_id; 
 
             ]);
 
             if ($request->filled('users')) {
-                $teams->users()->attach($request->users);   //pivot table(many to many)  attach new relation
+                $teams->users()->attach($request->users); //pivot table(many to many)  attach new relation
             }
+            if ($request->filled('teamagents')) {
+                $teams->teamagents()->sync($request->teamagents);
+            } else {
+                $teams->teamagents()->sync([]);
+            }
+            // if ($request->filled('users')) {
+            //     $teams->users()->attach($request->users);   //pivot table(many to many)  attach new relation
+            // }
             // if ($request->has('users')) {
             //     $teams->users()->attach($request->users);
             // }
@@ -105,7 +115,10 @@ class TeamController extends Controller
     {
         $teams = Team::findOrFail($id);
         $users = User::role('support_agent')->get();
-        return view("team.teamedit", compact("teams", 'users'));
+        $teamagents = User::role('support_agent')->get();
+        $selectedAgents = $teams->teamagents->pluck('id')->toArray();
+
+        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents'));
     }
 
     public function update(Request $request, $id)
@@ -115,6 +128,7 @@ class TeamController extends Controller
             "teamName" => "required",
             "users" => 'nullable|array',
             "leader_id" => 'nullable|exists:users,id',
+            "agents" => 'nullable|array',
             // "assigned_agent_id" => 'nullable|array',
         ]);
         if ($validator->fails()) {
@@ -123,14 +137,18 @@ class TeamController extends Controller
 
             $teams->teamName = $request->teamName;
             $teams->leader_id = $request->leader_id;
-            $teams->assigned_agent_id = $request->assigned_agent_id;
+            // $teams->assigned_agent_id = $request->assigned_agent_id;
             // $teams->save();
             if ($request->has('users')) {                                   //only show role has users
                 $teams->users()->sync($request->users);
             } else {
                 $teams->users()->sync([]);
             }
-
+            if ($request->filled('teamagents')) {
+                $teams->teamagents()->sync($request->teamagents);
+            } else {
+                $teams->teamagents()->sync([]);
+            }
             $teams->save();
             return redirect()->route("team.list")->with("success", "Team Updated");
         }

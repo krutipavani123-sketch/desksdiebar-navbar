@@ -60,7 +60,7 @@ class InternalNoteController extends Controller
                 $search = request()->search;
                 $query->where('note', 'like', "%{$search}%");
             }
-            $notes = $query->get();
+            $notes = $query->with('user')->get();
 
             return view('internalnote.notelist', compact('notes', 'user'));
         }

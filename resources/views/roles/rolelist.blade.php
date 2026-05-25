@@ -69,7 +69,7 @@
     <i class="bi bi-pencil-square"></i>
 </a>
 
-                <a href="{{ route('roles.delete',$role->id) }}" ><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ route('roles.delete',$role->id) }}" ><i class="bi bi-trash2-fill text-danger"></i></a>
             </td>
         </tr>
         @endforeach

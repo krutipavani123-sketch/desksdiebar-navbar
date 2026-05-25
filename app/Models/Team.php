@@ -19,12 +19,35 @@ class Team extends Model
         return $this->belongsToMany(User::class, 'team_user');
     }
 
+    // public function agents()
+    // {
+    //     return $this->belongsToMany(User::class, 'team_user')
+    //         ->role('support_agent');
+    // }
+
     public function agents()
     {
-        return $this->belongsToMany(User::class, 'team_user')
-            ->role('support_agent');
+        return $this->belongsToMany(User::class, 'team_user');
     }
+    //for ticket assign
+    public function teamagents()
+    {
+        return $this->belongsToMany(User::class, 'team_agent', 'team_id', 'user_id');
+        // table connected , table name , another table primary key(foreign key)
+    }
+    // public function agents()
+    // {
+    //     return $this->belongsToMany(User::class, 'team_user')
+    //         ->whereHas('roles', function ($q) {
+    //             $q->where('name', 'support_agent');
+    //         });
+    // }
 
+
+    // public function agentss()
+    // {
+    //     return $this->belongsToMany(User::class, 'team_agent');
+    // }
     public function agent()
     {
         return $this->belongsTo(User::class, 'assigned_agent_id');

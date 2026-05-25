@@ -37,9 +37,9 @@ class checkslastatus extends Command
 
         // difference between deadline & current time  and negative answer
         foreach ($tickets as $ticket) {
-            $minutes = now()->diffInMinutes($ticket->sla_deadline, false);
+            $minutes = now()->diffInMinutes($ticket->sla_deadline, false); //negative value
 
-            if ($minutes <= 30 && $minutes > 0) {
+            if ($minutes <= 1 && $minutes > 0) {
                 Notification::create([
                     'user_id' => $ticket->assigned_agent_id,
                     'title' => 'SLA Warning',
