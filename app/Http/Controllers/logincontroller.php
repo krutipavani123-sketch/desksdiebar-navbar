@@ -95,7 +95,7 @@ class logincontroller extends Controller
             $request->session()->save();
             Mail::to($user->email)->queue(new LoginMail($user));
 
-            return redirect('welcome')->with('success', 'Login');
+            return redirect('dashboard')->with('success', 'Login');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

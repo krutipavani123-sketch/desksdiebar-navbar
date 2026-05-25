@@ -20,13 +20,13 @@ use App\Models\Notification;
 use Dom\Comment;
 use App\Http\Controllers\NotificationController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/verify-email/{token}', [logincontroller::class, 'verifyEmail']);
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
+Route::get('/dashboard', [WelcomeController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
 
