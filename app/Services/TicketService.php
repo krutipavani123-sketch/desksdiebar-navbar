@@ -17,18 +17,19 @@ use App\Mail\TicketCreateMailNotification;
 use Carbon\Carbon;
 use App\Models\Notification;
 use Carbon\CarbonPeriod;
+use App\Models\ActivityLog;
 
 use App\Models\Category;
 
 class TicketService
 {
 
-  public function getCategories()
-{
-    return Cache::remember('categories', 300, function () {
-        return Category::all();
-    });
-}
+    public function getCategories()
+    {
+        return Cache::remember('categories', 300, function () {
+            return Category::all();
+        });
+    }
     public function addticket(Request $request)
     {
         $path = null;
@@ -90,6 +91,15 @@ class TicketService
             'customer_id' => auth()->id(),
             'sla_deadline' => $deadline
         ]);
+
+        ActivityLog::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'action' => 'Ticket Created',
+            'old_value' => null,
+            'new_value' => 'Ticket Created'
+
+        ]);
         Notification::create([
             'user_id' => auth()->id(),
             'title' => 'Ticket Created',
@@ -111,6 +121,118 @@ class TicketService
         }
         return true;
     }
+
+
+    public function ticketlist(Request $request)
+    {
+        $user = auth()->user();
+        $query = Ticket::with(['team', 'agent']);  // team and agent relation load
+        if ($user->hasRole('team_leader')) {
+            $team = Team::where('leader_id', $user->id)
+                ->pluck('id');
+
+            $query->where(function ($q) use ($team) {
+                $q->whereIn('assigned_team_id', $team)
+                    ->orWhereNull('assigned_agent_id'); //unassigned agent
+            });
+        } elseif ($user->hasRole('support_agent')) {
+            $query->where('assigned_agent_id', $user->id);
+            // show their assigned ticket 
+
+        } elseif ($user->hasRole('customer')) {
+            $query->where('customer_id', $user->id); // view own ticket
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('subject', 'like', "%{$search}%")
+                    ->orwhere('description', 'like', "%{$search}%");
+            });
+        }
+        //   $agents = User::role('support_agent')->get();
+
+        // $tickets = $query->get();
+        $tickets = $query->with('comments.user')->get();
+
+        // leader  can only see their team when assign ticket
+        if ($user->hasRole('team_leader')) {
+            $teams = Team::where('leader_id', $user->id)->get();
+        } else {
+            $teams = Team::all();
+        }
+
+        // $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
+
+
+        return view('customer.ticketlist', compact('tickets', 'teams'));
+        // return view('customer.ticketlist', compact('tickets', 'teams', 'agents'));
+    }
+
+
+    public function comment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required',
+        ]);
+
+        $ticket = Ticket::findOrFail($id);
+
+        //   $comment = Comment::findOrFail($id);
+        // $user = User::findOrFail($id);
+        $comment =  Comment::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'comment' => $request->comment,
+        ]);
+        Notification::create([
+            'user_id' => auth()->id(),
+            'title' => 'Comment Added',
+            'message' => "Comment Added on Ticket {$ticket->id}",
+            'type' => 'comment',
+            'is_read' => 0,
+        ]);
+
+        ActivityLog::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'action' => 'Comment Added',
+            'old_value' => null,
+            'new_value' => $comment->comment,
+        ]);
+        // if ($ticket->customer_id) {
+        //     Notification::create([
+        //         'user_id' => $ticket->customer_id,
+        //         'title' => 'New Comment Added',
+        //         'message' => "New comment on Ticket #{$ticket->id}",
+        //         'type' => 'comment',
+        //         'is_read' => 0,
+        //     ]);
+        // }
+
+
+        // if ($ticket->assigned_agent_id) {
+        //     Notification::create([
+        //         'user_id' => $ticket->assigned_agent_id,
+        //         'title' => 'New Comment Added',
+        //         'message' => "New comment on Ticket #{$ticket->id}",
+        //         'type' => 'comment',
+        //         'is_read' => 0,
+        //     ]);
+        // }
+
+        return back()->with('success', 'Comment added');
+    }
+
+
+
+
+
+
+
+
+
 
 
     // public function addticket(Request $request)
@@ -213,113 +335,6 @@ class TicketService
     //     //     'message' => 'Ticket created and email sent'
     //     // ]);
     // }
-
-    public function ticketlist(Request $request)
-    {
-        $user = auth()->user();
-        $query = Ticket::with(['team', 'agent']);  // team and agent relation load
-        if ($user->hasRole('team_leader')) {
-            $team = Team::where('leader_id', $user->id)
-                ->pluck('id');
-
-            $query->where(function ($q) use ($team) {
-                $q->whereIn('assigned_team_id', $team)
-                    ->orWhereNull('assigned_agent_id'); //unassigned agent
-            });
-        } elseif ($user->hasRole('support_agent')) {
-            $query->where('assigned_agent_id', $user->id);
-            // show their assigned ticket 
-
-        } elseif ($user->hasRole('customer')) {
-            $query->where('customer_id', $user->id); // view own ticket
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-
-            $query->where(function ($q) use ($search) {
-                $q->where('subject', 'like', "%{$search}%")
-                    ->orwhere('description', 'like', "%{$search}%");
-            });
-        }
-        //   $agents = User::role('support_agent')->get();
-
-        // $tickets = $query->get();
-        $tickets = $query->with('comments.user')->get();
-
-        // leader  can only see their team when assign ticket
-        if ($user->hasRole('team_leader')) {
-            $teams = Team::where('leader_id', $user->id)->get();
-        } else {
-            $teams = Team::all();
-        }
-
-        // $tickets = Ticket::with(['team', 'agent', 'comments.user'])->get();
-
-
-        return view('customer.ticketlist', compact('tickets', 'teams'));
-        // return view('customer.ticketlist', compact('tickets', 'teams', 'agents'));
-    }
-
-
-    public function comment(Request $request, $id)
-    {
-        $request->validate([
-            'comment' => 'required',
-        ]);
-
-        $ticket = Ticket::findOrFail($id);
-
-        //   $comment = Comment::findOrFail($id);
-        // $user = User::findOrFail($id);
-        Comment::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => auth()->id(),
-            'comment' => $request->comment,
-        ]);
-        Notification::create([
-            'user_id' => auth()->id(),
-            'title' => 'Comment Added',
-            'message' => "Comment Added on Ticket {$ticket->id}",
-            'type' => 'comment',
-            'is_read' => 0,
-        ]);
-
-        // if ($ticket->customer_id) {
-        //     Notification::create([
-        //         'user_id' => $ticket->customer_id,
-        //         'title' => 'New Comment Added',
-        //         'message' => "New comment on Ticket #{$ticket->id}",
-        //         'type' => 'comment',
-        //         'is_read' => 0,
-        //     ]);
-        // }
-
-
-        // if ($ticket->assigned_agent_id) {
-        //     Notification::create([
-        //         'user_id' => $ticket->assigned_agent_id,
-        //         'title' => 'New Comment Added',
-        //         'message' => "New comment on Ticket #{$ticket->id}",
-        //         'type' => 'comment',
-        //         'is_read' => 0,
-        //     ]);
-        // }
-
-        return back()->with('success', 'Comment added');
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

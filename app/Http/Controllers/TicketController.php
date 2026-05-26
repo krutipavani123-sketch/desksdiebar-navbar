@@ -19,6 +19,8 @@ use App\Mail\TicketCloseNotificationMail;
 use App\Mail\TicketReopenedMail;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Cache;
+use App\Models\ActivityLog;
+
 
 class TicketController extends Controller
 {
@@ -112,6 +114,9 @@ class TicketController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
+
+            $oldpriority =   $tickets->priority;
+
             $tickets->subject = $request->subject;
             $tickets->description = $request->description;
             $tickets->priority = $request->priority;
@@ -139,15 +144,32 @@ class TicketController extends Controller
 
                 $tickets->attachment = $path;
             }
+            $tickets->save();
 
-
+            if ($oldpriority != $request->priority) {
+                ActivityLog::create([
+                    'ticket_id' => $tickets->id,
+                    'user_id' => auth()->id(),
+                    'action' => 'Priority Changed',
+                    'old_value' => $oldpriority,
+                    'new_value' => $request->priority
+                ]);
+            }
             if ($request->filled('comment')) {
                 // $latestComment = $tickets->comments();
                 $latestComment = $tickets->comments()->latest()->first();
 
                 if ($latestComment) {
+                    $oldcomment = $latestComment->comment;
                     $latestComment->update([
                         'comment' => $request->comment
+                    ]);
+                    ActivityLog::create([
+                        'ticket_id' => $tickets->id,
+                        'user_id' => auth()->id(),
+                        'action' => 'Comment Updated',
+                        'old_value' => $oldcomment,
+                        'new_value' => $request->comment
                     ]);
                 }
             }
@@ -198,14 +220,26 @@ class TicketController extends Controller
             return back()->with('error', 'No agent Available');
         }
 
-        Ticket::whereIn('id', $request->ticket_ids)->update([
-            'assigned_agent_id' => $busyagent->id,
-            'assigned_team_id' => $teamid,
-        ]);
+        // Ticket::whereIn('id', $request->ticket_ids)->update([
+        //     'assigned_agent_id' => $busyagent->id,
+        //     'assigned_team_id' => $teamid,
+        // ]);
+
+
 
         $tickets = Ticket::whereIn('id', $request->ticket_ids)->get();
 
+
         foreach ($tickets as $ticket) {
+            $oldagent = $ticket->agent?->name ?? 'Unassigned';
+
+            ActivityLog::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => auth()->id(),
+                'action' => 'Ticket Assign',
+                'old_value' => $oldagent,
+                'new_value' => "Ticket Assign to {{$busyagent->name}}",
+            ]);
 
             Notification::create([
                 'user_id' => $busyagent->id,
@@ -219,59 +253,18 @@ class TicketController extends Controller
             );
         }
 
+        Ticket::whereIn('id', $request->ticket_ids)->update([
+            'assigned_agent_id' => $busyagent->id,
+            'assigned_team_id' => $teamid,
+        ]);
+
         return redirect()->route('customer.ticketlist')->with('success', 'Assigned');
     }
 
-    // public function assignticket(Request $request)
-    // {
-    //     $request->validate([
-    //         'ticket_ids' => 'required|array',
-    //         'team_id' => 'required|exists:teams,id',
-    //         'agent_id' => 'nullable|exists:users,id',
-    //     ]);
-
-    //     $teamId = $request->team_id;
-    //     $user = auth()->id();
-
-    //     $agentId = DB::table('teams')
-    //         ->where('id', $teamId)    //match id    
-    //         ->value('assigned_agent_id');  //fetch that id
-
-    //     //fetch id 
-    //     $tickets = Ticket::whereIn('id', $request->ticket_ids)->get();
-
-    //     Ticket::whereIn('id', $request->ticket_ids)    //find id inside array
-    //         ->update([
-    //             'assigned_team_id' => $teamId,
-    //             'assigned_agent_id' =>  $agentId,
-    //         ]);
-    //     $agent = User::find($agentId);
-
-    //     if ($agent) {
-    //         foreach ($tickets as  $ticket) {
-
-    //             Notification::create([
-    //                 'user_id' => $agentId,
-    //                 'title' => 'New Ticket Assigned',
-    //                 'message' => "Ticket {$ticket->id} has been assigned to you",
-    //                 'type' => 'assigned'
-    //             ]);
-
-    //             Mail::to($agent->email)
-    //                 ->queue(new TicketAssignNotificationMail($ticket));
-    //         }
-
-
-    //         return redirect()->back()->with('success', 'Tickets assigned successfully');
-    //     }
-    // }
-    // public function comment(Request $request, $id)
-    // {
-    //     return $this->ticketservice->comment($request, $id);
-    // }
 
     public function comment(Request $request, $id)
     {
+
         $request->validate([
             'comment' => 'required',
         ]);
@@ -280,7 +273,7 @@ class TicketController extends Controller
 
         //   $comment = Comment::findOrFail($id);
         // $user = User::findOrFail($id);
-        Comment::create([
+        $comment = Comment::create([
             'ticket_id' => $ticket->id,
             'user_id' => auth()->id(),
             'comment' => $request->comment,
@@ -296,6 +289,14 @@ class TicketController extends Controller
         // if (!$ticket->first_response_at) {
         //     $ticket->first_response_at = now();
         // }
+
+        // ActivityLog::create([
+        //     'ticket_id' => $ticket->id,
+        //     'user_id' => auth()->id(),
+        //     'action' => 'Comment Added',
+        //     'old_value' => null,
+        //     'new_value' => $comment->comment,
+        // ]);
 
         return back()->with('success', 'Comment added');
     }
@@ -325,12 +326,23 @@ class TicketController extends Controller
     {
         $ticket = Ticket::findOrFail($id);
 
-        $request->validate([
-            'status' => 'required',
-        ]);
+        $oldstatus = $ticket->status;
+        // $request->validate([
+        //     'status' => 'required',
+        // ]);
 
         $ticket->status = $request->status;
         $ticket->save();
+
+        ActivityLog::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'action' => 'status changed',
+            'old_value' => $oldstatus,
+            'new_value' => $request->status,
+        ]);
+
+
         $this->clearDashboardCache();
         return redirect()->route('customer.ticketlist')
             ->with('success', 'Status Updated');
@@ -451,3 +463,53 @@ class TicketController extends Controller
 //         return $this->ticketservice->reassignteam($request, $ticketId);
 //     }
 // }
+
+
+
+   // public function assignticket(Request $request)
+    // {
+    //     $request->validate([
+    //         'ticket_ids' => 'required|array',
+    //         'team_id' => 'required|exists:teams,id',
+    //         'agent_id' => 'nullable|exists:users,id',
+    //     ]);
+
+    //     $teamId = $request->team_id;
+    //     $user = auth()->id();
+
+    //     $agentId = DB::table('teams')
+    //         ->where('id', $teamId)    //match id    
+    //         ->value('assigned_agent_id');  //fetch that id
+
+    //     //fetch id 
+    //     $tickets = Ticket::whereIn('id', $request->ticket_ids)->get();
+
+    //     Ticket::whereIn('id', $request->ticket_ids)    //find id inside array
+    //         ->update([
+    //             'assigned_team_id' => $teamId,
+    //             'assigned_agent_id' =>  $agentId,
+    //         ]);
+    //     $agent = User::find($agentId);
+
+    //     if ($agent) {
+    //         foreach ($tickets as  $ticket) {
+
+    //             Notification::create([
+    //                 'user_id' => $agentId,
+    //                 'title' => 'New Ticket Assigned',
+    //                 'message' => "Ticket {$ticket->id} has been assigned to you",
+    //                 'type' => 'assigned'
+    //             ]);
+
+    //             Mail::to($agent->email)
+    //                 ->queue(new TicketAssignNotificationMail($ticket));
+    //         }
+
+
+    //         return redirect()->back()->with('success', 'Tickets assigned successfully');
+    //     }
+    // }
+    // public function comment(Request $request, $id)
+    // {
+    //     return $this->ticketservice->comment($request, $id);
+    // }
