@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\HasPermissions;
-
+use Laravel\Sanctum\HasApiTokens;
 // #[Fillable(['name', 'email', 'password'])]
 // #[Hidden(['password', 'remember_token'])]
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public $timestamps = true;
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-
+use HasApiTokens;
     use HasRoles;
 
     use HasPermissions;

@@ -185,7 +185,7 @@ input[type="checkbox"] {
 
  <thead class="table-dark">
         <tr class="border-b">
-            <th class="px-6 py-3 text-left" width="60">No</th>
+            <th class="px-6 py-3 text-left" width="60"  data-sortable="true">No</th>
             <th class="px-6 py-3 text-left">Comment</th> 
             <th class="px-6 py-3 text-left">User Name</th>
             <th class="px-6 py-3 text-left">is_internal</th>  
@@ -200,7 +200,7 @@ input[type="checkbox"] {
         
         <tr>
     
-            <td class="px-6 py-3 text-left">{{ $comment->id }}</td>
+            <td class="px-6 py-3 text-left" >{{ $comment->id }}</td>
             <td class="px-6 py-3 text-left">{{ $comment->comment }}</td>
    <td class="px-6 py-3 text-left">{{ $comment->user->name }}</td>
 

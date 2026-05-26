@@ -298,7 +298,10 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Internal Notes</span>
             </a>
-
+ <a href="{{ route('categories.list') }}">
+                  <i class="bi bi-list-ul"></i>
+                <span>Category</span>
+            </a>
         @endif
 
         @if($user->hasRole('team_leader'))
@@ -318,6 +321,10 @@
                 <span>Internal Notes</span>
             </a>
 
+ <a href="{{ route('categories.list') }}">
+                  <i class="bi bi-list-ul"></i>
+                <span>Category</span>
+            </a>
         @endif
 
         @if($user->hasRole('support_agent'))
@@ -331,7 +338,10 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Internal Notes</span>
             </a>
-
+ <a href="{{ route('categories.list') }}">
+                  <i class="bi bi-list-ul"></i>
+                <span>Category</span>
+            </a>
         @endif
 
         @if($user->hasRole('customer'))
@@ -345,7 +355,10 @@
                 <i class="bi bi-ticket-fill"></i>
                 <span>My Tickets</span>
             </a>
-
+ <a href="{{ route('categories.list') }}">
+                  <i class="bi bi-list-ul"></i>
+                <span>Category</span>
+            </a>
         @endif
 
     </div>

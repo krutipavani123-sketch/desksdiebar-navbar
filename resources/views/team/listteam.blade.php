@@ -185,7 +185,7 @@ input[type="checkbox"] {
 
     <thead class="table-dark">
         <tr class="border-b">
-            <th class="px-6 py-3 text-left" width="60">No</th>
+            <th class="px-6 py-3 text-left" width="60"  data-sortable="true">No</th>
             <th class="px-6 py-3 text-left">Team Name</th>
             <th class="px-6 py-3 text-left">Team Leader</th>
             <th class="px-6 py-3 text-left">Team Member Name</th> 

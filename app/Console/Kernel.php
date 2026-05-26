@@ -7,6 +7,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
+
+
     /**
      * The Artisan commands provided by your application.
      */
@@ -14,6 +17,19 @@ class Kernel extends ConsoleKernel
         // Register your custom commands here
         \App\Console\Commands\checkslastatus::class,
     ];
+    protected $middlewareGroups = [
+        'web' => [
+            // web middleware
+        ],
+
+        'api' => [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+    ];
+
+
 
     /**
      * Define the application's command schedule.

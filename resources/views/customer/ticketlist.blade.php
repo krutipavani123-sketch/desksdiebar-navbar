@@ -186,6 +186,7 @@ input[type="checkbox"] {
     data-side-pagination="client"
     data-height="auto"
      data-search="true"
+      data-sortable="true"
     data-page-list="[5,10,25,50,100,200,All]">
 <div class="card-box mb-3">
     <div class="header-bar">
@@ -218,7 +219,7 @@ input[type="checkbox"] {
   <thead class="table-dark">
         <tr class="border-b">
             <th class="px-6 py-3 text-left" width="60">Select</th>
-            <th class="px-6 py-3 text-left" width="60">No</th>
+            <th class="px-6 py-3 text-left" width="60"  data-sortable="true">No</th>
             <th class="px-6 py-3 text-left">Subject</th>
              @if(auth()->user()->hasAnyRole(['support_agent','customer']))    
 <th class="px-6 py-3 text-left">Comment</th> 
@@ -226,7 +227,7 @@ input[type="checkbox"] {
             <th class="px-6 py-3 text-left">Description</th>
 
             <th class="px-6 py-3 text-left">Priority</th>
-            <th class="px-6 py-3 text-left">Category</th>
+            <th class="px-6 py-3 text-left" >Category</th>
             <th class="px-6 py-3 text-left">Attachment</th>
             <th class="px-6 py-3 text-left">Status</th>
             @if(auth()->user()->hasRole('support_agent'))

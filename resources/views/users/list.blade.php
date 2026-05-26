@@ -158,7 +158,7 @@ input[type="checkbox"] {
 
         <thead class="table-dark">
             <tr> <!-- Fixed missing open row tag -->
-                <th data-field="id" class="px-6 py-3 text-left" width="60">No</th>
+                <th data-field="id" class="px-6 py-3 text-left" width="60"  data-sortable="true">No</th>
                 <th data-field="name" class="px-6 py-3 text-left">Name</th>
                 <th data-field="role" class="px-6 py-3 text-left">Role</th>
                 <th data-field="permissions" class="px-6 py-3 text-left">Permissions</th>
