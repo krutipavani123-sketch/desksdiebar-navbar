@@ -10,7 +10,7 @@ use App\Models\User;
 class Ticket extends Model
 {
 
-   public $timestamps = true;
+    public $timestamps = true;
     // use HasRoles;
 
     protected $table = 'tickets';
@@ -18,7 +18,7 @@ class Ticket extends Model
         'subject',
         'description',
         'priority',
-        'category',
+        'category_id',
         'attachment',
         'status',
         'assigned_team_id',
@@ -57,6 +57,8 @@ class Ticket extends Model
     }
 
 
-
+    public function category()
+{
+    return $this->belongsTo(Category::class, 'category_id');
 }
-
+}

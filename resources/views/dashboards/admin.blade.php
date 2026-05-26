@@ -82,6 +82,9 @@
     .bg-reopen {
         background: linear-gradient(135deg, #a855f7, #9333ea);
     }
+     .bg-overdue {
+        background: linear-gradient(135deg, #e74a3b, #be2617);
+    }
 </style>
 
 <div class="container py-4">
@@ -153,6 +156,17 @@
                 <div class="icon">🔄</div>
                 <h6>ReOpened Tickets</h6>
                 <h2>{{ $totalreopenticket }}</h2>
+            </div>
+        </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="dashboard-card bg-overdue">
+                <div class="dashboard-icon">
+                    ⏰
+                </div>
+
+                <h6>Overdue</h6>
+                <h2>{{ $overdue ?? 0 }}</h2>
             </div>
         </div>
 

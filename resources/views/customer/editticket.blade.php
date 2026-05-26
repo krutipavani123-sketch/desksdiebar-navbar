@@ -3,7 +3,7 @@
 
 @section('header')
      <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Edit Ticket') }}
         </h2>
     </x-slot>
@@ -168,13 +168,16 @@
          
             <div class="form-group">
                 <label class="form-label">Category</label>
-                <select name="category" class="form-control" >
+                <select name="category_id" class="form-control" >
                     <option value="">Select Category</option>
-                    <option value="Hardware" {{ old('category',$tickets->category) == 'Hardware' ? 'selected' : ''}}>Hardware</option>
-                    <option value="Software / Applications" {{ old('category',$tickets->category) == 'Software / Applications' ? 'selected' :''}}>Software / Applications</option>
-                    <option value="Network" {{ old('category', $tickets->category) == 'Network' ? 'selected' : '' }}>Network</option>
-                    <option value="Account / Access" {{ old('category',$tickets->category) == 'Account / Access' ? 'selected' : ''}}>Account / Access</option>
-                    <option value="Facilities / Other" {{ old('category',$tickets->category) == 'Facilities / Other' ? 'selected' : ''}}>Facilities / Other</option>
+
+                   @foreach($categories as $category)
+
+                   <option value="{{ $category->id }}"
+                    {{ old('category_id', $tickets->category_id) == $category->id ? "selected" : '' }}>
+                    {{ $category->name }}
+                     </option>
+                   @endforeach
                 </select>
             </div>
 

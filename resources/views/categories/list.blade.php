@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Users List')
+@section('title', 'Category List')
 
 @section('main')
 <style>
@@ -129,27 +129,23 @@ input[type="checkbox"] {
            class="table table-bordered table-sm"
            data-toggle="table"
            data-pagination="true"
-           data-page-size="3"
+           data-page-size="5"
            data-side-pagination="client"
            data-height="auto"
             data-search="true"
-           data-page-list="[3,5,10,25,50,100,200,All]">
+           data-page-list="[5,10,25,50,100,200,All]">
 
 <div class="card-box mb-3">
     <div class="header-bar">
-        <h2> <i class="bi bi-people-fill">User List</i></h2>
+     <h2><i class="bi bi-list-ul me-1"></i> Category List</h2>
 
         <div class="d-flex gap-2">
 
           
-            <a href="{{ route('users.create') }}"
+            <a href="{{ route('categories.create') }}"
                class="btn btn-primary btn-modern">
-                +  Create User
+                +  Create Category
             </a>
-          
-
-          
-
         </div>
     </div>
 </div>
@@ -160,86 +156,39 @@ input[type="checkbox"] {
             <tr> <!-- Fixed missing open row tag -->
                 <th data-field="id" class="px-6 py-3 text-left" width="60">No</th>
                 <th data-field="name" class="px-6 py-3 text-left">Name</th>
-                <th data-field="role" class="px-6 py-3 text-left">Role</th>
-                <th data-field="permissions" class="px-6 py-3 text-left">Permissions</th>
+                
                 <th data-field="created" class="px-6 py-3 text-left">Created</th>
                 <th data-field="action" class="px-6 py-3 text-left">Action</th>
             </tr>
         </thead>
 
         <tbody class="bg-white">
-            @foreach($users as $user)
+            @foreach($categories as $category)
             <tr>
-                <td class="px-6 py-3 text-left">{{ $user->id }}</td>
-                <td class="px-6 py-3 text-left">{{ $user->name }}</td>
-                <td class="px-6 py-3 text-left">
-    {{ $user->roles->pluck('name')->implode(', ') }}
-
-                     {{-- @forelse($user->roles as $role)
-        <span class="text-muted">{{ $role->name }}</span>
-    @empty
-        <span class="text-muted">No Role</span>
-    @endforelse --}}
-                    {{-- @if($user->roles->isNotEmpty())
-                        {{ $user->roles->pluck('name')->implode(', ') }}
-                    @else
-                        <span class="text-muted">No Role</span>
-                    @endif --}}
-                </td>
-
-
-
-                <td class="px-6 py-3 text-left">
-
-                  
-    {{ $user->getAllPermissions()->pluck('name')->implode(', ') }}
-
-                     {{-- @foreach($user->permissions as $permission)
- <span class="text-muted">{{ $permission->name }}</span>
-                     @endforeach
-
-                     @foreach($user->roles as $role)
-                     @foreach($role->permissions as $permission)
-                     <span class="text-muted">{{ $permission->name}}@unless($loop->last), @endunless</span>
-                     @endforeach
-                     @endforeach --}}
-                    {{-- @if($user->roles->isNotEmpty())
-                        {{ $user->roles->flatMap->permissions->pluck('name')->unique()->implode(', ') }}
-                    @else
-                        <span class="text-muted">No Permissions</span>
-                    @endif --}}
-                </td>
-
-
-                <td class="px-6 py-3 text-left">{{ $user->created_at->format('d M, Y') }}</td>
+                <td class="px-6 py-3 text-left">{{ $category->id }}</td>
+                <td class="px-6 py-3 text-left">{{ $category->name }}</td>
+                <td class="px-6 py-3 text-left">{{ $category->created_at->format('d M, Y') }}</td>
 
                    <td class="d-flex gap-2 align-items-center">
 
     <!-- Edit -->
-    <a href="{{route('users.edit', $user->id)}}"
+    <a href="{{route('categories.edit', $category->id)}}"
        class="action-btn text-primary"
-       title="Edit Ticket">
+       title="Edit Category">
 
         <i class="bi bi-pencil-square"></i>
     </a>
 
-    <!-- Delete -->
-    <a href="{{ route('users.delete', $user->id) }}"
+
+    <a href="{{ route('categories.delete', $category->id) }}"
        class="action-btn text-danger"
-       title="Delete Ticket"
-       onclick="return confirm('Are you sure you want to delete this user?')">
+       title="Delete Category"
+       onclick="return confirm('Are you sure you want to delete this category?')">
 
         <i class="bi bi-trash-fill"></i>
-    </a>
+    </a> 
 
-
-                {{-- <td class="px-6 py-3 text-left">
-                    <a href="{{ route('users.edit', $user->id) }}" class="me-2">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a href="{{ route('users.delete', $user->id) }}" class="text-danger">
-                        <i class="bi bi-trash2-fill"></i>
-                    </a> --}}
+             
                 </td>
             </tr>
             @endforeach

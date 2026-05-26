@@ -19,24 +19,15 @@ use App\Http\Controllers\TeamLeaderDashboardController;
 use App\Models\Notification;
 use Dom\Comment;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\CategoryController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
-Route::get('/verify-email/{token}', [logincontroller::class, 'verifyEmail']);
-
 Route::get('/dashboard', [WelcomeController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
-
-
-// Route::get('/reset-password/{token}', function ($token) {
-//     return view('auth.reset-password', [
-//         'token' => $token,
-//         'email' => request()->email
-//     ]);
-// })->name('password.reset');
 
 
 
@@ -59,43 +50,22 @@ Route::post('/reset-password', [logincontroller::class, 'resetpassword'])
 
 
 
-
-
-
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('status', 'verification-link-sent');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-
 // Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
+//     return view('verify-email');
 // })->middleware('auth')->name('verification.notice');
-
 // Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
 //     $request->fulfill();
-//     return redirect('/welcome');
+//     return redirect()->route('customer.createticket');
 // })->middleware(['auth', 'signed'])->name('verification.verify');
-
 // Route::post('/email/verification-notification', function (Request $request) {
 //     $request->user()->sendEmailVerificationNotification();
-
 //     return back()->with('message', 'Verification link sent!');
 // })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
+
+
+
 
 Route::post('/loginmail', [logincontroller::class, 'loginmail'])->name('loginmail');
 
@@ -107,11 +77,11 @@ Route::middleware('web')->group(function () {
     Route::get('register', [logincontroller::class, 'showRegister']);
     Route::post('register', [logincontroller::class, 'register']);
 
-    Route::get('welcome', [WelcomeController::class, 'welcome']);
+    //Route::get('welcome', [WelcomeController::class, 'welcome']);
 
     //loggedin user access
     Route::middleware('auth')->group(function () {
-        Route::get('profile', [ProfileController::class, 'profile']);
+        Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
     });
 });
 Route::post('logout', [logincontroller::class, 'logout'])->name('logout');
@@ -187,6 +157,28 @@ Route::post('customer/assignticket', [TicketController::class, 'assignticket'])-
 Route::post('autoassignticket/{id}', [TicketController::class, 'autoassignticket']);
 
 Route::get('customer/reopen/{id}', [TicketController::class, 'reopen'])->name('customer.reopen');
+
+
+
+Route::get('/categories/create', [CategoryController::class, 'create'])
+    ->name('categories.create');
+
+Route::post('/categories/store', [CategoryController::class, 'store'])
+    ->name('categories.store');
+
+Route::get('/categories/list', [CategoryController::class, 'list'])
+    ->name('categories.list');
+
+Route::put('/categories/update/{id}', [CategoryController::class, 'update'])
+    ->name('categories.update');
+
+Route::get('/categories/edit/{id}', [CategoryController::class, 'edit'])
+    ->name('categories.edit');
+
+Route::get('/categories/delete/{id}', [CategoryController::class, 'delete'])
+    ->name('categories.delete');
+
+
 
 Route::get('team/teamcreate', [TeamController::class, 'create'])->name('team.create');
 

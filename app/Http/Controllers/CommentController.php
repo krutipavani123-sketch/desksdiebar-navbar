@@ -63,12 +63,16 @@ class CommentController extends Controller
         return view('customer.comment', compact('ticket'));
     }
 
-    public function commentlist($id)
+    public function commentlist(Request $request, $id)
     {
         $ticket = Ticket::with('comments.user')->findOrFail($id);
 
         $comments = $ticket->comments;
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $comments->where('name', 'like', "%{$search}%");
+        }
         return view('customer.commentlist', compact('comments', 'ticket'));
     }
 

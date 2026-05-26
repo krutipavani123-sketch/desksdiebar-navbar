@@ -18,9 +18,17 @@ use Carbon\Carbon;
 use App\Models\Notification;
 use Carbon\CarbonPeriod;
 
+use App\Models\Category;
+
 class TicketService
 {
 
+  public function getCategories()
+{
+    return Cache::remember('categories', 300, function () {
+        return Category::all();
+    });
+}
     public function addticket(Request $request)
     {
         $path = null;
@@ -67,13 +75,14 @@ class TicketService
             $sla_deadline = 2;
         }
 
-        $deadline = $now->copy()->addMinutes($sla_deadline);
+        $deadline = $now->copy()->addHours($sla_deadline);
 
         $ticket = Ticket::create([
             'subject' => $request->subject,
             'description' => $request->description,
             'priority' => $request->priority,
-            'category' => $request->category,
+            //'category' => $request->category,
+            'category_id' => $request->category_id,
             'attachment' => $path,
             'status' => 'Open',
             'assigned_team_id' => $teamId,

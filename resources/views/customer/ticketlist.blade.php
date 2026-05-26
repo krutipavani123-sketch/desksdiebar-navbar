@@ -8,7 +8,7 @@
 
 @section('header')
      <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Ticket') }}
         </h2>
     </x-slot>
@@ -135,9 +135,9 @@ input[type="checkbox"] {
    @include('message')
 
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-gray-900">
 
 {{-- @if(auth()->user()->hasRole('customer'))
    <div class="mb-4 d-flex justify-content-end">
@@ -189,7 +189,7 @@ input[type="checkbox"] {
     data-page-list="[5,10,25,50,100,200,All]">
 <div class="card-box mb-3">
     <div class="header-bar">
-        <h2>🎫 Ticket List</h2>
+        <h2> <i class="bi bi-ticket-detailed-fill"> Ticket List</i></h2>
 
         <div class="d-flex gap-2">
 
@@ -285,7 +285,7 @@ input[type="checkbox"] {
 @endif
             <td class="px-6 py-3 text-left">{{  $ticket->description }}</td>
             <td class="px-6 py-3 text-left">{{  $ticket->priority}}</td>
-          <td class="px-6 py-3 text-left">{{  $ticket->category }}</td>
+          <td class="px-6 py-3 text-left">{{ $ticket->category->name ?? 'No Category' }}</td>
 <td>
      @if(!empty($ticket->attachment))
     <img src="{{ $ticket->attachment ? asset('storage/' . $ticket->attachment) : 'https://via.placeholder.com/80' }}" width="70" height="50">

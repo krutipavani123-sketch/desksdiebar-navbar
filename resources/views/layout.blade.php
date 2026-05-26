@@ -270,6 +270,11 @@
                 <span>Internal Notes</span>
             </a>
 
+             <a href="{{ route('categories.list') }}">
+                  <i class="bi bi-list-ul"></i>
+                <span>Category</span>
+            </a>
+
         @endif
 
         @if($user->hasRole('admin'))

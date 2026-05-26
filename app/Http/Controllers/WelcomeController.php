@@ -71,6 +71,11 @@ class WelcomeController extends Controller
                     'totalpendingticket' => Ticket::where('status', 'Pending')->count(),
                     'totalprogressticket' => Ticket::where('status', 'In Progress')->count(),
                     'totalreopenticket' => Ticket::where('status', 'ReOpened')->count(),
+
+                    'overdue' => Ticket::where('status', '!=', 'Closed')
+                        ->whereNotNull('sla_deadline')
+                        ->where('sla_deadline', '<', now())
+                        ->count(),
                 ];
             });
             return view('dashboards.admin', $admindata);
@@ -80,7 +85,10 @@ class WelcomeController extends Controller
             // $totalopenticket = Ticket::where('status', 'Open')->count();
             // $totalcloseticket = Ticket::where('status', 'Closed')->count();
             // $totalpendingticket = Ticket::where('status', 'Pending')->count();
-            // $totalprogressticket = Ticket::where('status', 'In Progress')->count();
+            // $totalprogressticket = Ticket::where('status', 'In Progress')->count();            'overdue' => Ticket::where('status', '!=', 'Closed')
+                        // ->whereNotNull('sla_deadline')
+                        // ->where('sla_deadline', '<', now())
+                        // ->count(),
             // $totalreopenticket = Ticket::where('status', 'ReOpened')->count();
             // return view('dashboards.admin', compact(
             //     'totalteam',
@@ -126,9 +134,11 @@ class WelcomeController extends Controller
         if ($user->hasRole('support_agent')) {
 
             $agentdata = Cache::remember('agentdashboard_stats', 300, function () {
+                // $tickets = Ticket::where('assigned_agent_id', auth()->id())->get();
                 return [
 
                     'assignticket' => Ticket::where('assigned_agent_id', auth()->id())->count(),
+
                     'resolved' => Ticket::where('assigned_agent_id', auth()->id())
                         ->where('status', 'Closed')
                         ->count(),

@@ -14,7 +14,7 @@ use App\Mail\LoginMail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
-
+use Illuminate\Auth\Events\Registered;
 class logincontroller extends Controller
 {
     protected $LoginService;  // object 
@@ -91,6 +91,10 @@ class logincontroller extends Controller
             // }
 
             $user = Auth::user();
+
+         //   event(new Registered($user));
+
+
             $request->session()->regenerate();
             $request->session()->save();
             Mail::to($user->email)->queue(new LoginMail($user));

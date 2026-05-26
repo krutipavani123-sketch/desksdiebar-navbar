@@ -1,10 +1,10 @@
 @extends('layout')
-@section('title', 'Ticket List')
+@section('title', 'Create Category ')
 
 @section('header')
      <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Ticket List') }}
+            {{ __('Create Category') }}
         </h2>
     </x-slot>
 @endsection
@@ -118,67 +118,23 @@
 
         @include('message')
 
-        <form action="{{ route('customer.addticket') }}" method="post" enctype="multipart/form-data">
+         <form method="POST" action="{{ route('categories.store') }}">
             @csrf
 
-     
-            <div class="form-group">
-                <label class="form-label">Subject</label>
-                <input value="{{ old('subject') }}" name="subject" type="text">
-                 @error('subject') <p class="error-text">{{ $message }}</p> @enderror
+
+<div class="modal-content">
+            <div class="modal-header">
+                <h5>Add Category</h5>
             </div>
 
-         
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea name="description">{{ old('description') }}</textarea>
-                @error('description') <p class="error-text">{{ $message }}</p> @enderror
+            <div class="modal-body">
+                <input type="text" name="name" class="form-control" placeholder="Category Name" required>
             </div>
 
-          
-            <div class="form-group">
-                <label class="form-label">Priority</label>
-                <select name="priority">
-                    <option>Default</option>
-                    <option>Low</option>
-                    <option>Medium</option>
-                    <option>High</option>
-                    <option>Critical</option>
-                </select>
-            </div>
+            
+        </div>
 
-         
-            <div class="form-group">
-                <label class="form-label">Category</label>
-                <select name="category">
-                    <option>Default</option>
-                    <option>Hardware</option>
-                    <option>Software / Applications</option>
-                    <option>Network</option>
-                    <option>Account / Access</option>
-                    <option>Facilities / Other</option>
-                </select>
-            </div>
 
-          
-            <div class="form-group">
-                <label class="form-label">Attachment</label>
-                <input type="file" name="attachment">
-            </div>
-
-          
-            <div class="form-group">
-                <label class="form-label">Status</label>
-                <select name="status">
-                    <option>Open</option>
-                    <option>In Progress</option>
-                    <option>Pending</option>
-                    <option>Resolved</option>
-                    <option>Closed</option>
-                </select>
-            </div>
-
-          
             @error('name')
                 <p class="error-text">{{ $message }}</p>
             @enderror
@@ -194,4 +150,3 @@
 </div>
 
 @endsection
-

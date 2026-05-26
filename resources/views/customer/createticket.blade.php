@@ -3,7 +3,7 @@
 
 @section('header')
      <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Ticket List') }}
         </h2>
     </x-slot>
@@ -149,8 +149,20 @@
                 </select>
             </div>
 
-         
-            <div class="form-group">
+              <div class="form-group">
+
+                <label class="form-label">Category</label>
+                <select name="category_id" class="form-control">
+                <option value="">Select Category</option>
+
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">
+                    {{ $category->name }}
+                </option>
+            @endforeach
+            </select>
+            </div>
+            {{-- <div class="form-group">
                 <label class="form-label">Category</label>
                 <select name="category">
                     <option value="">Select Category</option>
@@ -161,7 +173,7 @@
                     <option>Facilities / Other</option>
                     <option>About Service</option>
                 </select>
-            </div>
+            </div> --}}
 
             <div class="form-group">
                 <label class="form-label">Team</label>

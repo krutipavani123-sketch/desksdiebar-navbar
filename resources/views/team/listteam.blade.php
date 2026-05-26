@@ -8,7 +8,7 @@
 
 @section('header')
      <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Team') }}
         </h2>
     </x-slot>
@@ -135,10 +135,10 @@ input[type="checkbox"] {
 
 
    @include('message')
-            {{-- <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            {{-- <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
        
-             <div class="p-2 text-gray-900 dark:text-gray-100">
+             <div class="p-2 text-gray-900">
 
                 <h2>Team List</h2>
 
@@ -165,7 +165,7 @@ input[type="checkbox"] {
 
 <div class="card-box mb-3">
     <div class="header-bar">
-        <h2>🎫 Team List</h2>
+        <h2><i class="bi bi-diagram-3-fill">Team List</i></h2>
 
         <div class="d-flex gap-2">
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use  App\Services\TicketService;
@@ -40,7 +40,10 @@ class TicketController extends Controller
     public function create()
     {
         $teams = Team::all();
-        return view("customer.createticket", compact('teams'));
+        Cache::forget('categories');
+        $categories = $this->ticketservice->getCategories();
+
+        return view("customer.createticket", compact('teams', 'categories'));
     }
 
 
@@ -49,8 +52,8 @@ class TicketController extends Controller
         $validator = Validator::make($request->all(), [
             "subject" => "required",
             "description" => "required",
-            "priority" => "required|not_in:Default",  //must  change 
-            "category" => "required|not_in:Default",
+            "priority" => "required",  //must  change 
+            "category_id" => "required|exists:categories,id",
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',   //10mb
             //"status" => "required",
             'team_id' => 'required|exists:teams,id',
@@ -85,10 +88,11 @@ class TicketController extends Controller
     {
         //        $tickets = Ticket::findOrFail($id);
 
+        //$tickets = Ticket::with('comments')->findOrFail($id);
         $tickets = Ticket::with('comments')->findOrFail($id);
-
+        $categories = Category::all();
         //return redirect()->route('customer.edit', compact('tickets'));
-        return view('customer.editticket', compact('tickets'));
+        return view('customer.editticket', compact('tickets', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -100,8 +104,8 @@ class TicketController extends Controller
         $validator = Validator::make($request->all(), [
             "subject" => "required",
             "description" => "required",
-            "priority" => "required|not_in:Default",
-            "category" => "required|not_in:Default",
+            "priority" => "required",
+            "category_id" => "required|exists:categories,id",
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',
             //  "status" => "required", 
         ]);
@@ -111,7 +115,7 @@ class TicketController extends Controller
             $tickets->subject = $request->subject;
             $tickets->description = $request->description;
             $tickets->priority = $request->priority;
-            $tickets->category = $request->category;
+            $tickets->category_id = $request->category_id;
             // $tickets->attachment = $request->attachment;
             $tickets->status = $request->status;
 
@@ -288,6 +292,10 @@ class TicketController extends Controller
             'type' => 'comment',
             'is_read' => 0,
         ]);
+
+        // if (!$ticket->first_response_at) {
+        //     $ticket->first_response_at = now();
+        // }
 
         return back()->with('success', 'Comment added');
     }
