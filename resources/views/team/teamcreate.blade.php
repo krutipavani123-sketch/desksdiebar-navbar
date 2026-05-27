@@ -129,7 +129,35 @@
                  @error('teamName') <p class="error-text">{{ $message }}</p> @enderror
             </div>
 
+  <div class="form-group">
+    <label class="form-label">Select Team Category</label>
 
+    <details style="position: relative; width: 100%; margin-top: 6px;">
+
+        <summary style="display:flex; justify-content:space-between; padding:10px; border:1px solid #ddd; border-radius:10px; background:#fff; cursor:pointer;">
+            <span>Select Category</span>
+            <span>⌄</span>
+        </summary>
+
+        <div style="position:absolute; top:100%; left:0; right:0; z-index:1000; max-height:200px; overflow-y:auto; border:1px solid #ddd; border-radius:10px; background:#fff; padding:10px;">
+
+            <div style="margin-bottom:8px;">
+                <input type="radio" name="category_id" value="" id="cat_none" checked>
+                <label for="cat_none">No Category</label>
+            </div>
+
+            @foreach($categories as $category)
+                <div style="margin-bottom:8px;">
+                    <input type="radio" name="category_id" value="{{ $category->id }}" id="cat_{{ $category->id }}">
+                    <label for="cat_{{ $category->id }}">
+                        {{ $category->name }}
+                    </label>
+                </div>
+            @endforeach
+
+        </div>
+    </details>
+</div>
             <div class="form-group">
     <label class="form-label">Select Team Leader</label>
     

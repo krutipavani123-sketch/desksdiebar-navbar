@@ -12,7 +12,7 @@ class Team extends Model
     public $timestamps = true;
     use HasRoles;
     protected $table = "teams";
-    protected $fillable = ['teamName', 'leader_id', 'assigned_agent_id'];
+    protected $fillable = ['teamName', 'leader_id', 'assigned_agent_id', 'category_id'];
 
     public function users()
     {
@@ -60,6 +60,10 @@ class Team extends Model
     {
         return $this->hasMany(Ticket::class, 'assigned_team_id');
     }
+    public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 }
 // $team = Team::withCount('tickets')
     // ->orderBy('tickets_count')

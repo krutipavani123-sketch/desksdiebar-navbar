@@ -152,7 +152,7 @@
               <div class="form-group">
 
                 <label class="form-label">Category</label>
-                <select name="category_id"  class="form-control">
+                <select name="category_id" class="form-control">
                 <option value="">Select Category</option>
 
             @foreach($categories as $category)

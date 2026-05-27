@@ -20,7 +20,7 @@ use App\Mail\TicketReopenedMail;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Cache;
 use App\Models\ActivityLog;
-
+use App\Models\CategoryTeamAgent;
 
 class TicketController extends Controller
 {
@@ -124,7 +124,11 @@ class TicketController extends Controller
             // $tickets->attachment = $request->attachment;
             $tickets->status = $request->status;
 
-
+            // change category that time change assign team
+            $category = Category::find($request->category_id);
+            if ($category) {
+                $tickets->assigned_team_id = $category->team_id;
+            }
 
             if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
                 if ($tickets->attachment) {
@@ -193,13 +197,14 @@ class TicketController extends Controller
         $request->validate([
             "ticket_ids" => "required|array",
             "team_id" => "required|exists:teams,id",
-            "agent_id" => "nullable|exists:users,id",
+            "assigned_agent_id" => "nullable|exists:users,id",
         ]);
         $this->clearDashboardCache();
+
         $teamid = $request->team_id;
 
         $team = Team::with('teamagents')->findOrFail($teamid);
-
+        $categoryid = $team->category_id;   //assign that time change category
         $agentsid = $team->teamagents->pluck('id');
 
         if ($agentsid->isEmpty()) {
@@ -224,7 +229,6 @@ class TicketController extends Controller
         //     'assigned_agent_id' => $busyagent->id,
         //     'assigned_team_id' => $teamid,
         // ]);
-
 
 
         $tickets = Ticket::whereIn('id', $request->ticket_ids)->get();
@@ -253,9 +257,12 @@ class TicketController extends Controller
             );
         }
 
+
+        //$team_category_id = $team->category_id;  //assign that time change category
         Ticket::whereIn('id', $request->ticket_ids)->update([
             'assigned_agent_id' => $busyagent->id,
             'assigned_team_id' => $teamid,
+            'category_id' => $categoryid,
         ]);
 
         return redirect()->route('customer.ticketlist')->with('success', 'Assigned');

@@ -42,6 +42,8 @@ class TicketService
         }
 
         $teamId = $request->team_id;
+        // $category=Category::find($request->category->id);
+        // $teamId=$category->team_id;
         $team = Team::with('teamagents')->findOrFail($teamId);
 
         $agentId = null;
@@ -83,7 +85,8 @@ class TicketService
             'description' => $request->description,
             'priority' => $request->priority,
             //'category' => $request->category,
-            'category_id' => $request->category_id,
+                'category_id' => $request->category_id,
+           // 'category_id' => $team->category_id,
             'attachment' => $path,
             'status' => 'Open',
             'assigned_team_id' => $teamId,
@@ -179,13 +182,13 @@ class TicketService
 
         $ticket = Ticket::findOrFail($id);
 
-      
+
         $comment =  Comment::create([
             'ticket_id' => $ticket->id,
             'user_id' => auth()->id(),
             'comment' => $request->comment,
         ]);
-        
+
 
         return back()->with('success', 'Comment added');
     }

@@ -10,6 +10,7 @@ use  App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Cache;
+use  App\Models\Category;
 
 class TeamController extends Controller
 {
@@ -30,7 +31,8 @@ class TeamController extends Controller
         $users = User::role('support_agent')->get();
         $teamagents = User::role('support_agent')->get();
         $teams = Team::all();
-        return view("team.teamcreate", compact("users", "teams", "teamagents", "leaders"));
+        $categories = Category::all();
+        return view("team.teamcreate", compact("users", "teams", "teamagents", "leaders", "categories"));
     }
     public function list(Request $request)
     {
@@ -82,6 +84,7 @@ class TeamController extends Controller
             "leader_id" => 'nullable|exists:users,id',    //must exists
             "users" => 'nullable|array',
             "teamagents" => 'nullable|array',
+            "category_id" => 'nullable|exists:categories,id',
             // "assigned_agent_id" => 'nullable|exists:users,id',
 
         ]);
@@ -97,7 +100,7 @@ class TeamController extends Controller
             $teams = Team::create([
                 "teamName" => $request->teamName,
                 "leader_id" => $request->leader_id,
-
+                "category_id" => $request->category_id,
                 //"assigned_agent_id" => $request->assigned_agent_id,
                 // $teams->leader_id = $request->leader_id; 
 
@@ -131,11 +134,11 @@ class TeamController extends Controller
     {
         $teams = Team::findOrFail($id);
         $users = User::role('support_agent')->get();
-          $leaders = User::role('team_leader')->get();
+        $leaders = User::role('team_leader')->get();
         $teamagents = User::role('support_agent')->get();
         $selectedAgents = $teams->teamagents->pluck('id')->toArray();
 
-        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents','leaders'));
+        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents', 'leaders'));
     }
 
     public function update(Request $request, $id)
@@ -146,6 +149,7 @@ class TeamController extends Controller
             "users" => 'nullable|array',
             "leader_id" => 'nullable|exists:users,id',
             "agents" => 'nullable|array',
+            //    "category_id" => 'nullable|exists:categories,id',
             // "assigned_agent_id" => 'nullable|array',
         ]);
         if ($validator->fails()) {

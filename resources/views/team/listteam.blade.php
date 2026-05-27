@@ -189,8 +189,9 @@ input[type="checkbox"] {
             <th class="px-6 py-3 text-left">Team Name</th>
             <th class="px-6 py-3 text-left">Team Leader</th>
             <th class="px-6 py-3 text-left">Team Member Name</th> 
-                        <th class="px-6 py-3 text-left">Agent</th>
 
+                        <th class="px-6 py-3 text-left">Agent</th>
+<th class="px-6 py-3 text-left">Team Category</th>
             <th class="px-6 py-3 text-left">Action</th>
         </tr>
     </thead>
@@ -222,7 +223,13 @@ input[type="checkbox"] {
 {{-- @endforeach --}}
 </td>
 
-
+<td class="px-6 py-3 text-left">
+            @if($team->category)
+                {{ $team->category->name }}
+            @else
+                <span class="text-gray-400 italic">No Category assigned</span>
+            @endif
+        </td>
 
         <td class="d-flex gap-2 align-items-center">
 
