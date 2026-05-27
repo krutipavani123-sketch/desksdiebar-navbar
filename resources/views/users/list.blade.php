@@ -129,11 +129,11 @@ input[type="checkbox"] {
            class="table table-bordered table-sm"
            data-toggle="table"
            data-pagination="true"
-           data-page-size="3"
+           data-page-size="10"
            data-side-pagination="client"
            data-height="auto"
             data-search="true"
-           data-page-list="[3,5,10,25,50,100,200,All]">
+           data-page-list="[5,10,25,50,100,200,All]">
 
 <div class="card-box mb-3">
     <div class="header-bar">

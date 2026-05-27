@@ -26,10 +26,11 @@ class TeamController extends Controller
     }
     public function create()
     {
+        $leaders = User::role('team_leader')->get();
         $users = User::role('support_agent')->get();
         $teamagents = User::role('support_agent')->get();
         $teams = Team::all();
-        return view("team.teamcreate", compact("users", "teams", "teamagents"));
+        return view("team.teamcreate", compact("users", "teams", "teamagents", "leaders"));
     }
     public function list(Request $request)
     {
@@ -130,10 +131,11 @@ class TeamController extends Controller
     {
         $teams = Team::findOrFail($id);
         $users = User::role('support_agent')->get();
+          $leaders = User::role('team_leader')->get();
         $teamagents = User::role('support_agent')->get();
         $selectedAgents = $teams->teamagents->pluck('id')->toArray();
 
-        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents'));
+        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents','leaders'));
     }
 
     public function update(Request $request, $id)

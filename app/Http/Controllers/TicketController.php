@@ -271,32 +271,13 @@ class TicketController extends Controller
 
         $ticket = Ticket::findOrFail($id);
 
-        //   $comment = Comment::findOrFail($id);
-        // $user = User::findOrFail($id);
+
         $comment = Comment::create([
             'ticket_id' => $ticket->id,
             'user_id' => auth()->id(),
             'comment' => $request->comment,
         ]);
-        // Notification::create([
-        //     'user_id' => auth()->id(),
-        //     'title' => 'Comment Added',
-        //     'message' => "Comment Added on Ticket {$ticket->id}",
-        //     'type' => 'comment',
-        //     'is_read' => 0,
-        // ]);
 
-        // if (!$ticket->first_response_at) {
-        //     $ticket->first_response_at = now();
-        // }
-
-        // ActivityLog::create([
-        //     'ticket_id' => $ticket->id,
-        //     'user_id' => auth()->id(),
-        //     'action' => 'Comment Added',
-        //     'old_value' => null,
-        //     'new_value' => $comment->comment,
-        // ]);
 
         return back()->with('success', 'Comment added');
     }

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Models\InternalNote;
-
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class InternalNoteController extends Controller
@@ -38,6 +39,25 @@ class InternalNoteController extends Controller
             "user_id" => auth()->id(),
             "note" => $request->note,
         ]);
+
+        $users = User::Role([
+            'superadmin',
+            'admin',
+            'team_leader',
+            'support_agent'
+        ])->get();
+
+        foreach ($users as $user) {
+            Notification::create([
+                'user_id' => $user->id(),
+                'title' => 'Internal Note Added',
+                'message' => "Internal Note Added For {$ticket->id} Ticket",
+                'type' => 'InternalNote'
+            ]);
+        }
+
+
+
         return redirect()->route('internalnote.notelist')->with("success", "Note Added");
     }
 

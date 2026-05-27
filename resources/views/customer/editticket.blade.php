@@ -167,18 +167,17 @@
 
          
             <div class="form-group">
+
                 <label class="form-label">Category</label>
-                <select name="category_id" class="form-control" >
-                    <option value="">Select Category</option>
+                <select name="category_id" class="form-control">
+                <option value="">Select Category</option>
 
-                   @foreach($categories as $category)
-
-                   <option value="{{ $category->id }}"
-                    {{ old('category_id', $tickets->category_id) == $category->id ? "selected" : '' }}>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">
                     {{ $category->name }}
-                     </option>
-                   @endforeach
-                </select>
+                </option>
+            @endforeach
+            </select>
             </div>
 
           

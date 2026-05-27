@@ -147,11 +147,11 @@
            <input type="radio" name="leader_id" value="" id="leader_none" checked style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
                             <label for="leader_none" style="font-size: 14px; color: #999; cursor: pointer; width: 100%;">No Team Leader</label>
                         </div>
-                        @foreach($users as $user)
+                        @foreach($leaders as $leader)
                             <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                                <input type="radio" name="leader_id" value="{{ $user->id }}" id="leader_{{ $user->id }}" {{ old('leader_id') == $user->id ? 'checked' : '' }} style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
-                                <label for="leader_{{ $user->id }}" style="font-size: 14px; color: #444; cursor: pointer; width: 100%;">
-                                    {{ $user->name }}   
+                                <input type="radio" name="leader_id" value="{{ $leader->id }}" id="leader_{{ $leader->id }}" {{ old('leader_id') == $leader->id ? 'checked' : '' }} style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
+                                <label for="leader_{{ $leader->id }}" style="font-size: 14px; color: #444; cursor: pointer; width: 100%;">
+                                    {{ $leader->name }}   
                                 </label>
                             </div>
                         @endforeach
