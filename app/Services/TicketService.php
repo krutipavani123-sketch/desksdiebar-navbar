@@ -186,21 +186,21 @@ class TicketService
             'user_id' => auth()->id(),
             'comment' => $request->comment,
         ]);
-        Notification::create([
-            'user_id' => auth()->id(),
-            'title' => 'Comment Added',
-            'message' => "Comment Added on Ticket {$ticket->id}",
-            'type' => 'comment',
-            'is_read' => 0,
-        ]);
+        // Notification::create([
+        //     'user_id' => auth()->id(),
+        //     'title' => 'Comment Added',
+        //     'message' => "Comment Added on Ticket {$ticket->id}",
+        //     'type' => 'comment',
+        //     'is_read' => 0,
+        // ]);
 
-        ActivityLog::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => auth()->id(),
-            'action' => 'Comment Added',
-            'old_value' => null,
-            'new_value' => $comment->comment,
-        ]);
+        // ActivityLog::create([
+        //     'ticket_id' => $ticket->id,
+        //     'user_id' => auth()->id(),
+        //     'action' => 'Comment Added',
+        //     'old_value' => null,
+        //     'new_value' => $comment->comment,
+        // ]);
         // if ($ticket->customer_id) {
         //     Notification::create([
         //         'user_id' => $ticket->customer_id,

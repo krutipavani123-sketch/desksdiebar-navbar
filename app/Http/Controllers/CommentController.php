@@ -7,6 +7,9 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Notification;
+
+use App\Models\ActivityLog;
 
 class CommentController extends Controller
 {
@@ -41,14 +44,40 @@ class CommentController extends Controller
                 abort(403);
             }
         }
-        Comment::Create([
+        $comment = Comment::Create([
             'ticket_id' => $request->ticket_id,
             'user_id' => auth()->id(),
             'comment' => $request->comment,
             'is_internal' => $request->has('is_internal') ? 1 : 0,
             'attachment' => $path
         ]);
+        if ($ticket->customer_id) {
+            Notification::create([
+                'user_id' => $ticket->customer_id,
+                'title' => 'New Comment Added',
+                'message' => "New comment on Ticket {$ticket->id}",
+                'type' => 'comment',
+                'is_read' => 0,
+            ]);
+        }
 
+
+        if ($ticket->assigned_agent_id) {
+            Notification::create([
+                'user_id' => $ticket->assigned_agent_id,
+                'title' => 'New Comment Added',
+                'message' => "New comment on Ticket {$ticket->id}",
+                'type' => 'comment',
+                'is_read' => 0,
+            ]);
+        }
+        ActivityLog::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'action' => 'Comment Added',
+            'old_value' => null,
+            'new_value' => $comment->comment,
+        ]);
         return redirect()->route('customer.commentlist', $request->ticket_id)
             ->with('success', 'Comment Added');
     }

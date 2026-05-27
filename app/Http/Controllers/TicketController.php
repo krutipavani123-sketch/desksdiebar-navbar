@@ -278,13 +278,13 @@ class TicketController extends Controller
             'user_id' => auth()->id(),
             'comment' => $request->comment,
         ]);
-        Notification::create([
-            'user_id' => auth()->id(),
-            'title' => 'Comment Added',
-            'message' => "Comment Added on Ticket {$ticket->id}",
-            'type' => 'comment',
-            'is_read' => 0,
-        ]);
+        // Notification::create([
+        //     'user_id' => auth()->id(),
+        //     'title' => 'Comment Added',
+        //     'message' => "Comment Added on Ticket {$ticket->id}",
+        //     'type' => 'comment',
+        //     'is_read' => 0,
+        // ]);
 
         // if (!$ticket->first_response_at) {
         //     $ticket->first_response_at = now();
