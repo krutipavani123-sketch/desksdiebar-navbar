@@ -148,7 +148,7 @@
 
             @foreach($categories as $category)
                 <div style="margin-bottom:8px;">
-                    <input type="radio" name="category_id" value="{{ $category->id }}" id="cat_{{ $category->id }}">
+                    <input type="radio" name="category_id" value="{{ $category->id }}" id="cat_{{ $category->id }}"  {{ old('category_id', $teams->category_id) == $category->id ? 'checked' : '' }}>  {{-- label click radio select --}}
                     <label for="cat_{{ $category->id }}">
                         {{ $category->name }}
                     </label>

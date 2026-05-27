@@ -137,8 +137,8 @@ class TeamController extends Controller
         $leaders = User::role('team_leader')->get();
         $teamagents = User::role('support_agent')->get();
         $selectedAgents = $teams->teamagents->pluck('id')->toArray();
-
-        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents', 'leaders'));
+        $categories = Category::all();
+        return view("team.teamedit", compact("teams", 'users', 'teamagents', 'selectedAgents', 'leaders', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -158,6 +158,7 @@ class TeamController extends Controller
 
             $teams->teamName = $request->teamName;
             $teams->leader_id = $request->leader_id;
+            $teams->category_id = $request->category_id;
             // $teams->assigned_agent_id = $request->assigned_agent_id;
             // $teams->save();
             if ($request->has('users')) {                                   //only show role has users

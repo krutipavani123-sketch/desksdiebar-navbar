@@ -129,6 +129,45 @@
                  @error('subject') <p class="error-text">{{ $message }}</p> @enderror
             </div>
 
+
+
+
+
+
+  <div class="form-group">
+    <label class="form-label">Select Team Category</label>
+
+    <details style="position: relative; width: 100%; margin-top: 6px;">
+
+        <summary style="display:flex; justify-content:space-between; padding:10px; border:1px solid #ddd; border-radius:10px; background:#fff; cursor:pointer;">
+            <span>Select Category</span>
+            <span>⌄</span>
+        </summary>
+
+        <div style="position:absolute; top:100%; left:0; right:0; z-index:1000; max-height:200px; overflow-y:auto; border:1px solid #ddd; border-radius:10px; background:#fff; padding:10px;">
+
+            <div style="margin-bottom:8px;">
+                <input type="radio" name="category_id" value="" id="cat_none" checked>
+                <label for="cat_none">No Category</label>
+            </div>
+
+            @foreach($categories as $category)
+                <div style="margin-bottom:8px;">
+                    <input type="radio" name="category_id" value="{{ $category->id }}"  id="cat_{{ $category->id }}"{{(old('category_id',$teams->category_id))==$category->id ?'checked': '' }}>
+                    <label for="cat_{{ $category->id }}">
+                        {{ $category->name }}
+                    </label>
+                </div>
+            @endforeach
+
+        </div>
+    </details>
+</div>
+
+
+
+
+
             <div class="form-group">
     <label class="form-label">Select Team Leader</label>
     
@@ -152,7 +191,7 @@
            
              @foreach($leaders as $leader)
                             <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                                <input type="radio" name="leader_id" value="{{ $leader->id }}" id="leader_{{ $leader->id }}" {{ old('leader_id') == $leader->id ? 'checked' : '' }} style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
+                                <input type="radio" name="leader_id" value="{{ $leader->id }}" id="leader_{{ $leader->id }}" {{ old('leader_id',$teams->leader_id) == $leader->id ? 'checked' : '' }} style="width: auto; margin-top: 0; cursor: pointer; margin-right: 8px;">
                                 <label for="leader_{{ $leader->id }}" style="font-size: 14px; color: #444; cursor: pointer; width: 100%;">
                                     {{ $leader->name }}   
                                 </label>
