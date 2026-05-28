@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public $timestamps = true;
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-use HasApiTokens;
+    use HasApiTokens;
     use HasRoles;
 
     use HasPermissions;
@@ -56,7 +56,8 @@ use HasApiTokens;
 
     public function internalnote()
     {
-        return $this->hasMany(InternalNote::class, '');
+        return $this->hasMany(InternalNote::class);
+        // return $this->hasMany(InternalNote::class, 'user_id');
     }
 
 
@@ -70,5 +71,10 @@ use HasApiTokens;
     public function assignedticket()
     {
         return $this->hasMany(Ticket::class, 'assigned_agent_id');
+    }
+
+    public function customertickets()
+    {
+        return $this->hasMany(Ticket::class, 'customer_id');
     }
 }

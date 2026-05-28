@@ -7,54 +7,16 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-
-
-
-    /**
-     * The Artisan commands provided by your application.
-     */
-    protected $commands = [
-        // Register your custom commands here
-        \App\Console\Commands\checkslastatus::class,
-    ];
-    protected $middlewareGroups = [
-        'web' => [
-            // web middleware
-        ],
-
-        'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
-    ];
-
-
-
-    /**
-     * Define the application's command schedule.
-     */
-    // protected function schedule(Schedule $schedule)
-    // {
-    //     // Schedule the SLA check command to run every minute
-    //     $schedule->command('app:checkslastatus')->everyMinute();
-    // }
-
-    /**
-     * Register the commands for the application.
-     */
-    protected function commands()
+    protected function schedule(Schedule $schedule): void
     {
-        $this->load(__DIR__ . '/Commands');
+        $schedule->command('app:checkslastatus')->everyMinute();
 
-        require base_path('routes/console.php');
+        $schedule->command('app:generate-daily-report')->dailyAt('13:00');
     }
 
-
-
-    //auto run 
-    // protected function schedule(Schedule $schedule): void
-    // {
-    //     $schedule->command('app:checkslastatus')->everyMinute();
-    // }
+    protected function commands(): void
+    {
+        $this->load(__DIR__ . '/Commands');
+        require base_path('routes/console.php');
+    }
 }

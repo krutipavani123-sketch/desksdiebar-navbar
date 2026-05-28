@@ -161,11 +161,7 @@
         <option value="Critical" {{ old('priority', $tickets->priority) == 'Critical' ? 'selected' : '' }}>Critical</option>
     </select>
 </div>
-
-
-         
-
-         
+{{--          
             <div class="form-group">
 
                 <label class="form-label">Category</label>
@@ -178,7 +174,7 @@
                 </option>
             @endforeach
             </select>
-            </div>
+            </div> --}}
 
           
            <div class="form-group">

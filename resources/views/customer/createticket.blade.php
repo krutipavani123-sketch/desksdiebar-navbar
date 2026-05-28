@@ -140,12 +140,12 @@
                 <label class="form-label">Priority</label>
                 <select name="priority">
                     <option value="">Select Priority</option>
-                    <option>Default</option>
+                    {{-- <option>Default</option> --}}
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
                     <option value="Critical">Critical</option>
-                     <option value="Checking">Checking</option>
+                     {{-- <option value="Checking">Checking</option> --}}
                 </select>
             </div>
 

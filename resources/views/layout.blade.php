@@ -238,8 +238,8 @@
             <span>Dashboard</span>
         </a>
 
-        @if($user->hasRole('superadmin'))
-
+        {{-- @if($user->hasRole('superadmin')) --}}
+@if(auth()->check() && auth()->user()->hasRole('superadmin'))
             <a href="{{ route('roles.list') }}">
                 <i class="bi bi-shield-lock-fill"></i>
                 <span>Roles</span>
@@ -275,10 +275,16 @@
                 <span>Category</span>
             </a>
 
+             <a href="{{ route('reports') }}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Reports</span>
+            </a>
+
         @endif
 
-        @if($user->hasRole('admin'))
+        {{-- @if($user->hasRole('admin')) --}}
 
+@if(auth()->check() && auth()->user()->hasRole('admin'))
             <a href="{{ route('team.list') }}">
                 <i class="bi bi-diagram-3-fill"></i>
                 <span>Teams</span>
@@ -302,9 +308,14 @@
                   <i class="bi bi-list-ul"></i>
                 <span>Category</span>
             </a>
+
+             <a href="{{ route('reports') }}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Reports</span>
+            </a>
         @endif
 
-        @if($user->hasRole('team_leader'))
+        @if(auth()->check() && auth()->user()->hasRole('team_leader'))
 
             <a href="{{ route('team.list') }}">
                 <i class="bi bi-diagram-3-fill"></i>
@@ -327,7 +338,7 @@
             </a>
         @endif
 
-        @if($user->hasRole('support_agent'))
+        @if(auth()->check() && auth()->user()->hasRole('support_agent'))
 
             <a href="{{ route('customer.ticketlist') }}">
                 <i class="bi bi-headset"></i>
@@ -344,7 +355,7 @@
             </a>
         @endif
 
-        @if($user->hasRole('customer'))
+        @if(auth()->check() && auth()->user()->hasRole('customer'))
 
             <a href="{{ route('customer.createticket') }}">
                 <i class="bi bi-plus-circle-fill"></i>

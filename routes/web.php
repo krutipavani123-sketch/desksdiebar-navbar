@@ -20,6 +20,7 @@ use App\Models\Notification;
 use Dom\Comment;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -226,3 +227,12 @@ Route::get('deletenote/{id}', [InternalNoteController::class, 'deletenote'])->na
 
 
 Route::get('read/{id}', [NotificationController::class, 'read']);
+
+
+
+Route::get('/reports', [ReportController::class, 'reports'])->name('reports');
+//Route::get('/reports/dashboard', [ReportController::class, 'report'])->name('reports.dashboard');
+
+Route::get('reportview', [ReportController::class, 'showreport'])->name('reportview');
+Route::get('/reports/view/{id}', [ReportController::class, 'view']);
+Route::get('reports/download/{id}', [ReportController::class, 'download']);

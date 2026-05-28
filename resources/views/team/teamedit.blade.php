@@ -131,9 +131,6 @@
 
 
 
-
-
-
   <div class="form-group">
     <label class="form-label">Select Team Category</label>
 

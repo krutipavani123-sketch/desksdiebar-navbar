@@ -77,6 +77,7 @@ $user = auth()->user();
         <a href="{{ route('customer.ticketlist') }}">Ticket</a>
         <a href="{{ route('team.list') }}">Team</a>
            <a href="{{ route('internalnote.notelist') }}">Internal Note</a>
+            {{-- <a href="{{ route('reports') }}">Report</a> --}}
     @endif
 
     @if($user->hasRole('admin'))
@@ -85,6 +86,7 @@ $user = auth()->user();
         <a href="{{ route('users.list') }}">Users</a>
         <a href="{{ route('customer.ticketlist') }}">Tickets</a>
            <a href="{{ route('internalnote.notelist') }}">Internal Note</a>
+            {{-- <a href="{{ route('reports') }}">Report</a> --}}
     @endif
 
          @if($user->hasRole('team_leader'))
