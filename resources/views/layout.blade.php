@@ -332,9 +332,14 @@
                 <span>Internal Notes</span>
             </a>
 
- <a href="{{ route('categories.list') }}">
+         <a href="{{ route('categories.list') }}">
                   <i class="bi bi-list-ul"></i>
                 <span>Category</span>
+            </a>
+
+            <a href="{{ route('monitor') }}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Team Reports</span>
             </a>
         @endif
 

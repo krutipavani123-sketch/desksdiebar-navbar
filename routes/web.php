@@ -21,7 +21,7 @@ use Dom\Comment;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
-
+use App\Http\Controllers\LeaderMonitorPerformanceController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -236,3 +236,7 @@ Route::get('/reports', [ReportController::class, 'reports'])->name('reports');
 Route::get('reportview', [ReportController::class, 'showreport'])->name('reportview');
 Route::get('/reports/view/{id}', [ReportController::class, 'view']);
 Route::get('reports/download/{id}', [ReportController::class, 'download']);
+
+
+Route::get('monitor', [LeaderMonitorPerformanceController::class, 'index'])->name('monitor');
+Route::get('teamreport', [LeaderMonitorPerformanceController::class, 'teamreport'])->name('teamreport');

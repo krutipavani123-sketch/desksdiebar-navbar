@@ -61,9 +61,14 @@ class Team extends Model
         return $this->hasMany(Ticket::class, 'assigned_team_id');
     }
     public function category()
-{
-    return $this->belongsTo(Category::class);
-}
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'team_user');
+    // }
 }
 // $team = Team::withCount('tickets')
     // ->orderBy('tickets_count')
