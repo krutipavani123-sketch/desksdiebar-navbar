@@ -78,10 +78,20 @@ class GenerateDailyReport extends Command
 
 
 
-        Report::create([
-            'file_path' => $filename,
-            'report_date' => now()->toDateString(),
-        ]);
+        // Report::create([
+        //     'file_path' => $filename,
+        //     'report_date' => now()->toDateString(),
+        // ]);
+
+        Report::updateOrCreate(
+            [
+                //search condition
+                'report_date' => now()->toDateString(),
+            ],
+            [
+                'file_path' => $filename,
+            ]
+        );
         $this->info("Report generated successfully!");
     }
 }

@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('app:checkslastatus')->everyMinute();
-Schedule::command('app:generate-daily-report')->dailyAt('14:29');
-Schedule::command('app:leader-daily-performance-report')->dailyAt('14:29');
+Schedule::command('app:generate-daily-report')->everyMinute();
+Schedule::command('app:leader-daily-performance-report')->everyMinute();
 
 
 Artisan::command('inspire', function () {

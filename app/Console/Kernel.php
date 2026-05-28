@@ -11,9 +11,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:checkslastatus')->everyMinute();
 
-        $schedule->command('app:generate-daily-report')->dailyAt('14:29');
+        $schedule->command('app:generate-daily-report')->everyMinute();
 
-        $schedule->command('app:leader-daily-performance-report')->dailyAt('14:29');
+        $schedule->command('app:leader-daily-performance-report')->everyMinute();
     }
 
     protected function commands(): void

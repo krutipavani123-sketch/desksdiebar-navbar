@@ -99,86 +99,125 @@
 
         </style>
 
-        <h1>📊 Team Performance Report</h1>
+     <h1>📊 Team Performance Report</h1>
 
-        {{-- TEAM OVERVIEW --}}
-        <div class="card">
-            <div class="section-title">🏢 Team Overview</div>
-
-            <div class="summary-grid">
-
-                <div class="summary-box bg-total">
-                    <h3>Team Name</h3>
-                    <p>{{ $teamOverview['team_name'] }}</p>
-                </div>
-
-                <div class="summary-box bg-open">
-                    <h3>Leader</h3>
-                    <p>{{ $teamOverview['leader_name'] }}</p>
-                </div>
-
-                <div class="summary-box bg-closed">
-                    <h3>Total Agents</h3>
-                    <p>{{ $teamOverview['total_agents'] }}</p>
-                </div>
-
-            </div>
+     <div class="card">
+        <div class="section-title">
+                🏢 Team Overview
         </div>
 
-        {{-- TICKET STATUS --}}
-        <div class="card">
-            <div class="section-title">🎫 Ticket Status</div>
+        <div class="summary-grid">
 
-            <div class="summary-grid">
-
-                <div class="summary-box bg-total">
-                    <h3>Total</h3>
-                    <p>{{ $ticketStatus['total'] }}</p>
-                </div>
-
-                <div class="summary-box bg-open">
-                    <h3>Open</h3>
-                    <p>{{ $ticketStatus['open'] }}</p>
-                </div>
-
-                <div class="summary-box bg-closed">
-                    <h3>Closed</h3>
-                    <p>{{ $ticketStatus['closed'] }}</p>
-                </div>
-
-                <div class="summary-box bg-pending">
-                    <h3>Pending</h3>
-                    <p>{{ $ticketStatus['pending'] }}</p>
-                </div>
-
-                <div class="summary-box bg-overdue">
-                    <h3>Overdue</h3>
-                    <p>{{ $ticketStatus['overdue'] }}</p>
-                </div>
-
-            </div>
+       
+        <div class="summary-box bg-total">
+            <h3>Team Name</h3>
+            <p>{{ $teamoverview['team_name'] }}</p>
         </div>
 
-        {{-- SLA --}}
-        <div class="card">
-            <div class="section-title">⏱ SLA / Delay Report</div>
+        <div class="summary-box bg-open">
+            <h3>Leader</h3>
+            <p>{{ $teamoverview['leader_name'] }}</p>
+        </div>
+        
+        <div class="summary-box bg-closed">
+            <h3>Total Agents</h3>
+            <p>{{ $teamoverview['totalagents'] }}</p>
+        </div>
+
+     </div>
+      </div>
+
+      <div class="card">
+
+        <div class="section-title">🎫 Ticket Status</div>
+        <div class="summary-grid">
+        <div class="summary-box bg-total">
+            <h3>Total</h3>
+            <p>{{ $ticketstatus['total'] }}</p>
+        </div>
+        <div class="summary-box bg-open">
+            <h3>Open</h3>
+            <p>{{ $ticketstatus['open'] }}</p>
+        </div>
+
+        <div class="summary-box bg-closed">
+            <h3>Close</h3>
+            <p>{{ $ticketstatus['close'] }}</p>
+        </div>
+
+        <div class="summary-box bg-pending">
+            <h3>Pending</h3>
+            <p>{{ $ticketstatus['pending'] }}</p>
+        </div>
+
+        <div class="summary-box bg-overdue">
+            <h3>Overdue</h3>
+            <p>{{ $ticketstatus['overdue'] }}</p>
+        </div>
+      </div>
+      </div>
+
+      <div class="card">
+<div class="section-title">⏱ SLA / Delay Report</div>
 
             <div class="summary-grid">
-
                 <div class="summary-box bg-pending">
                     <h3>SLA Breached</h3>
-                    <p>{{ $slaData['sla_breached'] }}</p>
+                    <p>{{ $sladata['slabreached'] }}</p>
                 </div>
 
-                <div class="summary-box bg-overdue">
+                <divc class="summary-box bg-overdue">
                     <h3>SLA Completed</h3>
-                    <p>{{ $slaData['sla_completed'] }}</p>
+                    <p>{{ $sladata['slacompleted'] }}</p>
                 </div>
-
             </div>
-        </div>
 
-         {{-- <div class="card">
+      </div>
+
+      <div class="card">
+
+         <div class="section-title">👨‍💻 Agent Performance</div>
+
+         <table>
+            <thead>
+                <tr>
+                    <th>Agent</th>
+                    <th>Total</th>
+                    <th>Open</th>
+                    <th>Close</th>
+                    <th>Pending</th>
+                    <th>Overdue</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($agentdata as $agent)
+
+                <tr>
+                    <td><b>{{ $agent['name'] }}</b></td>
+                    <td>{{ $agent['totalticket'] }}</td>
+                    <td>{{ $agent['open'] }}</td>
+                    <td>{{ $agent['close'] }}</td>
+                    <td>{{ $agent['pending'] }}</td>
+                    <td>{{$agent['overdue'] }}</td>
+                </tr>
+                    
+                @endforeach
+            </tbody>
+         </table>
+      </div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+      {{-- <div class="card">
 
             <h2>📈 Performance Summary</h2>
 
@@ -197,46 +236,3 @@
             </div>
 
         </div> --}}
-        
-        {{-- AGENT PERFORMANCE --}}
-        <div class="card">
-            <div class="section-title">👨‍💻 Agent Performance</div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Agent</th>
-                        <th>Total</th>
-                        <th>Open</th>
-                        <th>Closed</th>
-                        <th>Pending</th>
-                        <th>Overdue</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach ($agentdata as $agent)
-                        <tr>
-                            <td><b>{{ $agent['name'] }}</b></td>
-                            <td>{{ $agent['total_ticket'] }}</td>
-                            <td>{{ $agent['open'] }}</td>
-                            <td>{{ $agent['closed'] }}</td>
-                            <td>{{ $agent['pending'] }}</td>
-                            <td>{{ $agent['overdue'] }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-        </div>
-
-    </div>
-</div>
-
-
-       
-
-
-
-   
-  
