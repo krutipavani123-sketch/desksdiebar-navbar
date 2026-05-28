@@ -39,6 +39,7 @@ class GenerateDailyReport extends Command
             'open' => Ticket::where('status', 'Open')->count(),
             'close' => Ticket::where('status', 'Closed')->count(),
             'pending' => Ticket::where('status', 'Pending')->count(),
+            'inprogress' => Ticket::where('status', 'In Progress')->count(),
 
         ];
 

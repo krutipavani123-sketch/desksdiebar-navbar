@@ -68,6 +68,7 @@
             .bg-open{ background:linear-gradient(135deg,#f39c12,#d68910); }
             .bg-closed{ background:linear-gradient(135deg,#27ae60,#1e8449); }
             .bg-pending{ background:linear-gradient(135deg,#e74c3c,#c0392b); }
+            .bg-inprogress{background: linear-gradient(135deg, #3498db, #2c80b4);}
             .bg-overdue{ background:linear-gradient(135deg,#8e44ad,#6c3483); }
 
             table{
@@ -149,6 +150,12 @@
             <h3>Pending</h3>
             <p>{{ $ticketstatus['pending'] }}</p>
         </div>
+
+         <div class="summary-box bg-inprogress">
+            <h3>Pending</h3>
+            <p>{{ $ticketstatus['inprogress'] }}</p>
+        </div>
+
 
         <div class="summary-box bg-overdue">
             <h3>Overdue</h3>

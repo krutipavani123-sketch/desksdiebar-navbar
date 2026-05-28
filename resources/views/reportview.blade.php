@@ -70,6 +70,9 @@
             .bg-pending{
                 background:linear-gradient(135deg,#e74c3c,#c0392b);
             }
+            .bg-inprogress{
+  background: linear-gradient(135deg, #3498db, #2c80b4);
+}
 
             .bg-sla{
                 background:linear-gradient(135deg,#8e44ad,#6c3483);
@@ -141,6 +144,10 @@
                     <p>{{ $ticketsummary['pending'] }}</p>
                 </div>
 
+                <div class="summary-box bg-inprogress">
+                    <h3>Progress Tickets</h3>
+                    <p>{{ $ticketsummary['inprogress'] }}</p>
+                </div>
             </div>
 
         </div>

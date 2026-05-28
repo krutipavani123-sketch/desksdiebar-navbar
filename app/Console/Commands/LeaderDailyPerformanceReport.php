@@ -98,6 +98,12 @@ class LeaderDailyPerformanceReport extends Command
                             ->where('status', 'Pending')
                             ->count(),
 
+                        'inprogress' => Ticket::where('assigned_team_id', $team->id)
+                            ->where('assigned_agent_id', $agent->id)
+                            ->where('status', 'In Progress')
+                            ->count(),
+
+
                         'overdue' => Ticket::where('assigned_team_id', $team->id)
                             ->where('assigned_agent_id', $agent->id)
                             ->where('status', 'Overdue')

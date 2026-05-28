@@ -9,11 +9,11 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:checkslastatus')->everyMinute();
+        $schedule->command('app:checkslastatus')->everyFifteenSeconds();
 
-        $schedule->command('app:generate-daily-report')->everyMinute();
+        $schedule->command('app:generate-daily-report')->everyFifteenSeconds();
 
-        $schedule->command('app:leader-daily-performance-report')->everyMinute();
+        $schedule->command('app:leader-daily-performance-report')->everyFifteenSeconds();
     }
 
     protected function commands(): void
@@ -22,3 +22,4 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 }
+
