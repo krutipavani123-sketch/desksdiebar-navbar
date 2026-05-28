@@ -9,11 +9,11 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:checkslastatus')->everyFifteenSeconds();
+        $schedule->command('app:checkslastatus')->everyFiveSeconds();
 
-        $schedule->command('app:generate-daily-report')->everyFifteenSeconds();
+        $schedule->command('app:generate-daily-report')->everyFiveSeconds();
 
-        $schedule->command('app:leader-daily-performance-report')->everyFifteenSeconds();
+        $schedule->command('app:leader-daily-performance-report')->everyFiveSeconds();
     }
 
     protected function commands(): void

@@ -152,7 +152,7 @@
         </div>
 
          <div class="summary-box bg-inprogress">
-            <h3>Pending</h3>
+            <h3>Progress</h3>
             <p>{{ $ticketstatus['inprogress'] }}</p>
         </div>
 
@@ -193,6 +193,7 @@
                     <th>Open</th>
                     <th>Close</th>
                     <th>Pending</th>
+                    <th>In Progress</th>
                     <th>Overdue</th>
                 </tr>
             </thead>
@@ -206,6 +207,7 @@
                     <td>{{ $agent['open'] }}</td>
                     <td>{{ $agent['close'] }}</td>
                     <td>{{ $agent['pending'] }}</td>
+                    <td>{{ $agent['inprogress'] }}</td>
                     <td>{{$agent['overdue'] }}</td>
                 </tr>
                     

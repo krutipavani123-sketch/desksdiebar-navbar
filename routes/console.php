@@ -4,9 +4,9 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::command('app:checkslastatus')->everyFifteenSeconds();
-Schedule::command('app:generate-daily-report')->everyFifteenSeconds();
-Schedule::command('app:leader-daily-performance-report')->everyFifteenSeconds();
+Schedule::command('app:checkslastatus')->everyFiveSeconds();
+Schedule::command('app:generate-daily-report')->everyFiveSeconds();
+Schedule::command('app:leader-daily-performance-report')->everyFiveSeconds();
 
 
 Artisan::command('inspire', function () {
