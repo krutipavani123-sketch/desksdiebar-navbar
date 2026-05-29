@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         if ($user->hasRole('superadmin')) {
 
-            //key ,time ,function
+            //key ,time ,function            5 min
             $data = Cache::remember('dashboard_stats', 300,  function () {
                 return [
                     'totaluser' => User::count(),

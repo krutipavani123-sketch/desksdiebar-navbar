@@ -128,7 +128,7 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comment::findOrFail($id);
-
+        //    $tickets = Ticket::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             //'ticket_id' => 'required|exists:tickets,id',
@@ -137,6 +137,10 @@ class CommentController extends Controller
             "attachment" =>  'nullable|mimes:jpeg,png,jpg,pdf,xls,xlsx|max:10240',   //10mb
 
         ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', $validator->errors()->first());
+        }
 
         $ticket = Ticket::findOrFail($comment->ticket_id);
 
@@ -149,35 +153,64 @@ class CommentController extends Controller
         }
 
 
-        if ($validator->fails()) {
-            return back()->with('error', $validator->errors()->first());
-        } else {
-            $comment->comment = $request->comment;
-            //  $comment->is_internal = $request->has('is_internal') ? 1 : 0;
-            $comment->is_internal = $request->is_internal;
 
-            if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
-                if ($comment->attachment) {
-                    Storage::disk('public')->delete($comment->attachment);
-                }
-                $comment->attachment = null;
+        $oldcomment = $comment->comment;
+        $comment->comment = $request->comment;
+        //  $comment->is_internal = $request->has('is_internal') ? 1 : 0;
+        $comment->is_internal = $request->is_internal;
+
+        if ($request->has('remove_attachment') && $request->remove_attachment == 1) {
+            if ($comment->attachment) {
+                Storage::disk('public')->delete($comment->attachment);
             }
-
-            if ($request->hasFile('attachment')) {
-
-                if ($comment->attachment) {
-                    Storage::disk('public')->delete($comment->attachment);
-                    //replace old img with new img
-                }
-
-                $path = $request->file('attachment')->store('images', 'public');
-
-                $comment->attachment = $path;
-            }
-
-            $comment->save();
+            $comment->attachment = null;
         }
 
+        if ($request->hasFile('attachment')) {
+
+            if ($comment->attachment) {
+                Storage::disk('public')->delete($comment->attachment);
+                //replace old img with new img
+            }
+
+            $path = $request->file('attachment')->store('images', 'public');
+
+            $comment->attachment = $path;
+        }
+        $comment->save();
+
+        if ($ticket->customer_id) {
+
+            Notification::create([
+                'user_id' => $ticket->customer_id,
+                'title' => 'Comment Updated',
+                'message' => "Comment Updated For Ticket {$ticket->id}",
+                'type' => 'comment',
+                'is_read' => 0,
+            ]);
+        }
+
+        if ($ticket->assigned_agent_id) {
+
+            Notification::create([
+                'user_id' => $ticket->assigned_agent_id,
+                'title' => 'Comment Updated',
+                'message' => "Comment Updated For Ticket {$ticket->id}",
+                'type' => 'comment',
+                'is_read' => 0,
+            ]);
+        }
+        // ActivityLog::create([
+        //     'ticket_id' => $ticket->id,
+        //     'user_id' => auth()->id(),
+        //     'action' => 'Comment Updated',
+        //     'old_value' => $oldcomment,
+        //     'new_value' => $request->comment
+        // ]);
+
+
+
+        $comment->save();
         return redirect()->route('customer.commentlist', $comment->ticket_id)->with('success', 'Updated');
     }
 

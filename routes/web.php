@@ -240,3 +240,5 @@ Route::get('reports/download/{id}', [ReportController::class, 'download']);
 
 Route::get('monitor', [LeaderMonitorPerformanceController::class, 'index'])->name('monitor');
 Route::get('teamreport', [LeaderMonitorPerformanceController::class, 'teamreport'])->name('teamreport');
+
+

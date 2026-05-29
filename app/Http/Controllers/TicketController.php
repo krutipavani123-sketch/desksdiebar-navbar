@@ -159,24 +159,24 @@ class TicketController extends Controller
                     'new_value' => $request->priority
                 ]);
             }
-            if ($request->filled('comment')) {
-                // $latestComment = $tickets->comments();
-                $latestComment = $tickets->comments()->latest()->first();
+            // if ($request->filled('comment')) {
+            //     // $latestComment = $tickets->comments();
+            //     $latestComment = $tickets->comments()->latest()->first();
 
-                if ($latestComment) {
-                    $oldcomment = $latestComment->comment;
-                    $latestComment->update([
-                        'comment' => $request->comment
-                    ]);
-                    ActivityLog::create([
-                        'ticket_id' => $tickets->id,
-                        'user_id' => auth()->id(),
-                        'action' => 'Comment Updated',
-                        'old_value' => $oldcomment,
-                        'new_value' => $request->comment
-                    ]);
-                }
-            }
+            //     if ($latestComment) {
+            //         $oldcomment = $latestComment->comment;
+            //         $latestComment->update([
+            //             'comment' => $request->comment
+            //         ]);
+                    // ActivityLog::create([
+                    //     'ticket_id' => $tickets->id,
+                    //     'user_id' => auth()->id(),
+                    //     'action' => 'Comment Updated',
+                    //     'old_value' => $oldcomment,
+                    //     'new_value' => $request->comment
+                    // ]);
+            //     }
+            // }
             $this->clearDashboardCache();
             $tickets->save();
 

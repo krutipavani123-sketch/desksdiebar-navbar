@@ -23,7 +23,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $request->name,
-           // 'team_id' => $request->team_id,
+            // 'team_id' => $request->team_id,
         ]);
 
         return redirect()->route('categories.list')->with('success', 'Category created');
