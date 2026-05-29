@@ -168,13 +168,13 @@ class TicketController extends Controller
             //         $latestComment->update([
             //             'comment' => $request->comment
             //         ]);
-                    // ActivityLog::create([
-                    //     'ticket_id' => $tickets->id,
-                    //     'user_id' => auth()->id(),
-                    //     'action' => 'Comment Updated',
-                    //     'old_value' => $oldcomment,
-                    //     'new_value' => $request->comment
-                    // ]);
+            // ActivityLog::create([
+            //     'ticket_id' => $tickets->id,
+            //     'user_id' => auth()->id(),
+            //     'action' => 'Comment Updated',
+            //     'old_value' => $oldcomment,
+            //     'new_value' => $request->comment
+            // ]);
             //     }
             // }
             $this->clearDashboardCache();
@@ -399,7 +399,285 @@ class TicketController extends Controller
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Reopened successfully');
     }
 
-    // public function autoassignticket(Request $request,$id){
+    public function ticketchart(Request $request)
+    {
+        $data = Ticket::select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        return  view('chart', compact('data'));
+    }
+}
+
+
+
+
+
+
+
+
+// public function ticketHighchart()
+// {
+//     $data = Ticket::select('status', DB::raw('count(*) as total'))
+//         ->groupBy('status')
+//         ->pluck('total', 'status');
+
+//     return view('customer.ticket-chart', compact('data'));
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // public function autoassignticket(Request $request,$id){
 
     // $request->validate([
     //     'assigned_agent_id'=> '$required|exists:users,id',
@@ -412,18 +690,6 @@ class TicketController extends Controller
 
     //     return redirect()->route('customer.ticketlist')->with('success','Ticket Assigned Successfully');
     // }
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

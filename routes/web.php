@@ -22,6 +22,10 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LeaderMonitorPerformanceController;
+
+use App\Http\Controllers\ChartController;
+use PhpOffice\PhpSpreadsheet\Chart\Chart;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -242,3 +246,5 @@ Route::get('monitor', [LeaderMonitorPerformanceController::class, 'index'])->nam
 Route::get('teamreport', [LeaderMonitorPerformanceController::class, 'teamreport'])->name('teamreport');
 
 
+
+Route::get('chart', [TicketController::class, 'ticketchart'])->name('chart');

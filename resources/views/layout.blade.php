@@ -280,6 +280,11 @@
                 <span>Reports</span>
             </a>
 
+           <a href="{{ route('chart') }}">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>Charts</span>
+        </a>
+
         @endif
 
         {{-- @if($user->hasRole('admin')) --}}
@@ -304,7 +309,7 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Internal Notes</span>
             </a>
- <a href="{{ route('categories.list') }}">
+            <a href="{{ route('categories.list') }}">
                   <i class="bi bi-list-ul"></i>
                 <span>Category</span>
             </a>
@@ -313,7 +318,12 @@
                 <i class="bi bi-file-earmark-text"></i>
                 <span>Reports</span>
             </a>
-        @endif
+
+            <a href="{{ route('chart') }}">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>Charts</span>
+        </a>
+    @endif
 
         @if(auth()->check() && auth()->user()->hasRole('team_leader'))
 
