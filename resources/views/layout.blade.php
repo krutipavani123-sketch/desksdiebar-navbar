@@ -280,10 +280,10 @@
                 <span>Reports</span>
             </a>
 
-           <a href="{{ route('chart') }}">
+           {{-- <a href="{{ route('chart') }}">
             <i class="bi bi-bar-chart-line"></i>
             <span>Charts</span>
-        </a>
+        </a> --}}
 
         @endif
 
@@ -319,10 +319,10 @@
                 <span>Reports</span>
             </a>
 
-            <a href="{{ route('chart') }}">
+            {{-- <a href="{{ route('chart') }}">
             <i class="bi bi-bar-chart-line"></i>
             <span>Charts</span>
-        </a>
+        </a> --}}
     @endif
 
         @if(auth()->check() && auth()->user()->hasRole('team_leader'))

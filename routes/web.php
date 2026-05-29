@@ -30,10 +30,9 @@ use PhpOffice\PhpSpreadsheet\Chart\Chart;
 //     return view('welcome');
 // });
 
-Route::get('/dashboard', [WelcomeController::class, 'index'])
+Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');
-
 
 
 Route::get('/reset-password/{token}', function ($token, Request $request) {

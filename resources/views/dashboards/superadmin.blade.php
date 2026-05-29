@@ -144,4 +144,103 @@
 
 </div>
 
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div id="ticketchart" style="height:400px;">
+            </div>
+         </div>
+
+        <div class="col-md-6">
+            <div id="agentchart" style="height: 400px;">
+
+            </div>
+
+        </div>
+</div>
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script type="text/javascript">
+Highcharts.chart('ticketchart', {
+        chart: {
+            type: 'column'  // vertical bar chart 
+        },
+        title: {
+            text: 'Ticket Status Overview'   // main heading
+        },
+        subtitle: {
+            text:
+                "Ticket Charts"
+              
+        },
+        xAxis: {
+            categories: {!! json_encode($categories) !!},  //bottom label   data fetch from controller    
+            crosshair: true,      // hight where to hover on chart
+            accessibility: {
+                description: 'Tickets'
+            }
+        },
+        yAxis: {
+            min: 0,     // start from 0 
+            title: {    
+                text: 'Number Of Tickets'    //left side label
+            } 
+        },
+        tooltip: {
+            valueSuffix: ' tickets'      //hover chart show that 
+        },
+        plotOptions: {
+            column: {
+                // pointPadding: 0.2, space between bar
+                borderWidth: 0          // remove bar border
+            }
+        },
+        series: [   //actual data of chart
+            {
+                name: 'Tickets',
+                data: {!! json_encode($values) !!}
+            },
+            
+        ]
+});
+</script>
+
+<script>
+Highcharts.chart('agentchart',{
+    chart:{
+        type:'pie'
+    },
+    title:{
+        text:'Agent Performance'
+    },
+     tooltip: {
+            valueSuffix: ' tickets'      //hover chart show that 
+        },
+        plotOptions:{   //extra setting 
+            pie:{
+                allowPointSelect:true,  //click pie slice 
+
+                cursor: 'pointer',
+
+                  dataLabels:{ //show labels
+                    enabled:true,
+
+//                     format: '<b>{point.name}</b>: {point.y}'
+                }
+            }   
+        },
+        series:[{
+            name:"Tickets", 
+            colorByPoint:true,
+            data:{!! json_encode($pie) !!}
+        }]
+})
+    </script>
+
+
 @endsection

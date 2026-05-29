@@ -399,15 +399,44 @@ class TicketController extends Controller
         return redirect()->route('customer.ticketlist')->with('success', 'Ticket Reopened successfully');
     }
 
+    // public function ticketchart(Request $request)
+    // {
+    //     $data = Ticket::select('status', DB::raw('count(*) as total'))
+    //         ->groupBy('status')
+    //         ->pluck('total', 'status');
+
+    //     return  view('chart', compact('data'));
+    // }
+
     public function ticketchart(Request $request)
     {
+        // return view('chart');
+
         $data = Ticket::select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->pluck('total', 'status');
 
-        return  view('chart', compact('data'));
+        $categories = $data->keys();   // use for x label
+
+        $values = $data->values();    // use for y label
+
+        $series = [
+            'type' => 'column',
+            'name' => 'Tickets',
+            'data' => $values
+        ];
+
+        $pie = [];
+        foreach ($data as $status => $count) {    // key => value
+            $pie[] = [
+                'name' => $status,
+                'y' => $count
+            ];
+        }
+        return view('chart', compact('categories', 'series', 'pie'));
     }
 }
+
 
 
 

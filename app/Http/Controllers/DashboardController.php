@@ -10,6 +10,7 @@ use App\Models\Team;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -36,20 +37,56 @@ class DashboardController extends Controller
                 ];
             });
 
-            return view('dashboards.superadmin', $data);
-            // $totaluser = User::count();
-            // $totalrole = Role::count();
-            // $totalteam = Team::count();
-            // $totalpermission = Permission::count();
-            // $totalticket = Ticket::count();
-            // return view('dashboards.superadmin', compact(
-            //     'totaluser',
-            //     'totalrole',
-            //     'totalteam',
-            //     'totalpermission',
-            //     'totalticket'
-            // ));
+            $ticketchart = Ticket::select('status', DB::raw('count(*) as total'))
+                ->groupBy('status')
+                ->pluck('total', 'status');
+
+            $categories = $ticketchart->keys();   // use for x label
+
+            $values = $ticketchart->values();    // use for y label
+
+            $series = [
+                'type' => 'column',
+                'name' => 'Tickets',
+                'data' => $values
+            ];
+
+
+            $agentdata = User::role('support_agent')
+                ->withcount('assignedticket')
+                ->get();
+
+            $pie = [];
+
+            foreach ($agentdata as $agent) {
+                $pie[] = [
+                    'name' => $agent->name,
+                    'y' => $agent->assignedticket_count
+                ];
+            }
+            return view('dashboards.superadmin', array_merge(
+                $data,
+                [
+                    'values' => $values,
+                    'categories' => $categories,
+                    'series' => $series,
+                    'pie' => $pie,
+                ]
+            ));
         }
+        // $totaluser = User::count();
+        // $totalrole = Role::count();
+        // $totalteam = Team::count();
+        // $totalpermission = Permission::count();
+        // $totalticket = Ticket::count();
+        // return view('dashboards.superadmin', compact(
+        //     'totaluser',
+        //     'totalrole',
+        //     'totalteam',
+        //     'totalpermission',
+        //     'totalticket'
+        // ));
+
 
         if ($user->hasRole('admin')) {
 
@@ -66,27 +103,64 @@ class DashboardController extends Controller
                     'totalreopenticket' => Ticket::where('status', 'ReOpened')->count(),
                 ];
             });
-            return view('dashboards.admin', $admindata);
-            // $totalteam = Team::count();
-            // $totalticket = Ticket::count();
-            // $agents = User::role('support_agent')->count();
-            // $totalopenticket = Ticket::where('status', 'Open')->count();
-            // $totalcloseticket = Ticket::where('status', 'Closed')->count();
-            // $totalpendingticket = Ticket::where('status', 'Pending')->count();
-            // $totalprogressticket = Ticket::where('status', 'In Progress')->count();
-            // $totalreopenticket = Ticket::where('status', 'ReOpened')->count();
-            // return view('dashboards.admin', compact(
-            //     'totalteam',
-            //     'totalticket',
-            //     'agents',
-            //     'totalopenticket',
-            //     'totalcloseticket',
-            //     'totalpendingticket',
-            //     'totalprogressticket',
-            //     'totalreopenticket'
 
-            // ));
+            $ticketchart = Ticket::select('status', DB::raw('count(*) as total'))
+                ->groupBy('status')
+                ->pluck('total', 'status');
+
+            $categories = $ticketchart->keys();   // use for x label
+
+            $values = $ticketchart->values();    // use for y label
+
+            $series = [
+                'type' => 'column',
+                'name' => 'Tickets',
+                'data' => $values
+            ];
+
+
+            $agentdata = User::role('support_agent')
+                ->withcount('assignedticket')
+                ->get();
+
+            $pie = [];
+
+            foreach ($agentdata as $agent) {
+                $pie[] = [
+                    'name' => $agent->name,
+                    'y' => $agent->assignedticket_count
+                ];
+            }
+            return view('dashboards.admin', array_merge(
+                $admindata,
+                [
+                    'values' => $values,
+                    'categories' => $categories,
+                    'series' => $series,
+                    'pie' => $pie,
+                ]
+            ));
         }
+        // $totalteam = Team::count();
+        // $totalticket = Ticket::count();
+        // $agents = User::role('support_agent')->count();
+        // $totalopenticket = Ticket::where('status', 'Open')->count();
+        // $totalcloseticket = Ticket::where('status', 'Closed')->count();
+        // $totalpendingticket = Ticket::where('status', 'Pending')->count();
+        // $totalprogressticket = Ticket::where('status', 'In Progress')->count();
+        // $totalreopenticket = Ticket::where('status', 'ReOpened')->count();
+        // return view('dashboards.admin', compact(
+        //     'totalteam',
+        //     'totalticket',
+        //     'agents',
+        //     'totalopenticket',
+        //     'totalcloseticket',
+        //     'totalpendingticket',
+        //     'totalprogressticket',
+        //     'totalreopenticket'
+
+        // ));
+
 
         if ($user->hasRole('team_leader')) {
 
